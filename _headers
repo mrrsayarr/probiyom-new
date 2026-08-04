@@ -1,0 +1,25 @@
+# Cloudflare Pages başlık (header) kuralları
+# Sitenin dosyaları `?v=` ile sürümle (cache-busting) sunulduğundan uzun önbellek güvenlidir.
+
+# Statik görseller: uzun önbellek
+/images/*
+  Cache-Control: public, max-age=604800
+  Cache-Control: public, s-maxage=604800
+
+# Sürümlenmiş CSS/JS/veri: uzun önbellek
+/styles/*
+  Cache-Control: public, max-age=604800
+/scripts/*
+  Cache-Control: public, max-age=604800
+/data/*
+  Cache-Control: public, max-age=604800
+
+# HTML/kök ve diğerleri kısa önbellek (güncellemeler hızlı yayılsın)
+/index.html
+  Cache-Control: public, max-age=60
+
+# A site-wide gizlilik/UX başlıkları
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin

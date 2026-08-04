@@ -1,0 +1,15 @@
+/* ===== Probiyom – Main Style Entry Point ===== */
+/* Each component lives in its own file for maintainability. */
+
+@import url("base.css");
+@import url("layout.css");
+@import url("navbar.css");
+@import url("footer.css");
+@import url("slider.css");
+@import url("cards.css");
+@import url("products.css");
+@import url("contact.css");
+@import url("faq.css");
+@import url("blog.css");
+@import url("responsive.css");
+@import url("home.css");

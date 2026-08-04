@@ -1,0 +1,5 @@
+# SPA fallback — Cloudflare Pages ve Netlify için ortak kural
+# Gerçek bir dosya bulunamazsa tüm yolları index.html'e dönüştürür.
+# "200" = rewrite (proxy): adres çubuğundaki yol korunur, router gerçek yolu
+# okuyup doğru sayfayı çizer. 404 dönmez.
+/*  /index.html  200

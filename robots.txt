@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Yeni Nesil AI / GEO (Generative Engine Optimization)
+# Yapay zeka asistanlarının (ChatGPT, Perplexity, Gemini vb.) marka ve blog
+# içeriklerinizi doğru kaynak olarak kullanabilmesi için:
+# https://llmstxt.org/
+LLM-TXT: https://www.probiyom.com/llms.txt
+# Alternatif sözdizimi (bazı tarayıcılar Sitemap satırı gibi okur):
+Sitemap: https://www.probiyom.com/llms.txt
+
+
+Sitemap: https://www.probiyom.com/sitemap.xml

@@ -1,0 +1,136 @@
+/* ===== Footer Custom Extensions (Ultra-Modern Edition) ===== */
+.footer {
+  width: 100%;
+  /* Koyu Baltic Blue tonundan Slate-900 siyahına süzülen derin gradyan */
+  background: linear-gradient(180deg, var(--color-baltic-blue) 0%, #0f172a 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Marka Başlığı & Rozet */
+.footer-brand {
+  letter-spacing: -0.02em;
+}
+
+.footer-badge {
+  font-size: 0.72rem !important;
+  letter-spacing: 0.05em;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Rozet İçi Yeşil Işıltı Noktası */
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--color-mint-leaf);
+  box-shadow: 0 0 8px var(--color-mint-leaf);
+}
+
+/* Sütun Başlıkları */
+.footer-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  opacity: 0.95;
+}
+
+/* İletişim Vektör İkon Rengi */
+.text-mint {
+  color: var(--color-mint-leaf) !important;
+}
+
+.footer-contact-list li {
+  line-height: 1.5;
+}
+
+/* Standart Link Geçişleri */
+.footer-link {
+  color: rgba(255, 255, 255, 0.7) !important;
+  transition: color 0.25s ease, padding-left 0.25s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+@media (hover: hover) {
+  .footer-link:hover {
+    color: var(--color-mint-leaf) !important;
+    padding-left: 0.35rem; /* Sağa zarif süzülme */
+  }
+}
+
+/* ===== YENİ: Cam Efektli Sosyal Medya İkon Düğmeleri (Glassmorphism) ===== */
+.social-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85) !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+}
+
+/* Üzerine gelindiğinde büyüyerek marka yeşiline bürünen ve parlayan ikonlar */
+.social-icon-btn:hover {
+  background: var(--color-tropical-teal) !important;
+  border-color: var(--color-mint-leaf) !important;
+  color: #ffffff !important;
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 8px 20px rgba(56, 163, 165, 0.35);
+}
+
+.social-icon-btn:active {
+  transform: scale(0.95);
+}
+
+/* Yukarı Çık Butonu Stilleri */
+.footer-top-btn {
+  cursor: pointer;
+  padding: 0.35rem 0.75rem;
+  border-radius: 50px;
+  transition: all 0.25s ease;
+}
+
+.footer-top-btn:hover {
+  color: var(--color-mint-leaf) !important;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.footer-top-btn svg {
+  transition: transform 0.25s ease;
+}
+
+.footer-top-btn:hover svg {
+  transform: translateY(-3px); /* Ok yukarı süzülür */
+}
+
+/* ===== RESPONSIVE (MOBİL) DÜZENLEMELER ===== */
+@media (max-width: 576px) {
+  .footer .text-start,
+  .footer .text-center {
+    text-align: center !important;
+  }
+
+  .footer .footer-brand,
+  .footer .footer-badge {
+    justify-content: center !important;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .footer-contact-list li {
+    justify-content: center !important;
+  }
+
+  .footer-social-icons {
+    justify-content: center !important;
+  }
+
+  .footer-copy {
+    text-align: center;
+  }
+}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Probiyom</title>
+    <!--
+        SPA Fallback (Path Router / GitHub Pages)
+        ------------------------------------------------------------------
+        Tarayıcı /blog/<slug> gibi bir alt yola doğrudan girince veya sayfa
+        yenilenince statik sunucu bu dosyayı döndürür. İstenen gerçek yol
+        sessionStorage'e yazılıp ana sayfaya geçilir; router.js'teki
+        restoreDeepLink() bu yolu History API ile geri yükleyerek temiz
+        URL'yi (hash'siz) korur. Böylece bloglar ve ürün grupları ayrı
+        gerçek URL'ler olarak çalışır.
+    -->
+    <script>
+        (function () {
+            try {
+                sessionStorage.setItem('probiyom:redirect', location.href);
+            } catch (e) { /* gizlilik modu vb. — yoksay */ }
+            location.replace('/');
+        })();
+    </script>
+    <noscript>
+        <meta http-equiv="refresh" content="0; url=/">
+    </noscript>
+</head>
+<body></body>
+</html>
