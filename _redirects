@@ -1,5 +1,4 @@
-# SPA fallback — Cloudflare Pages ve Netlify için ortak kural
-# Gerçek bir dosya bulunamazsa tüm yolları index.html'e dönüştürür.
-# "200" = rewrite (proxy): adres çubuğundaki yol korunur, router gerçek yolu
-# okuyup doğru sayfayı çizer. 404 dönmez.
-/*  /index.html  200
+# SPA fallback is handled by wrangler.jsonc -> assets.not_found_handling = "single-page-application".
+# (Cloudflare WORKERS static assets.) The broad "/* /index.html 200" rule caused an
+# "infinite loop" error on Workers, so it was removed. It is only needed for
+# Cloudflare PAGES / Netlify. The /_headers file is still used for caching.

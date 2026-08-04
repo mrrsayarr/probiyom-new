@@ -1,0 +1,9 @@
+.git/
+.wrangler/
+serve.py
+start.bat
+nginx-probiyom.conf
+README.md
+site_analysis.md
+__pycache__/
+*.pyc
