@@ -9,5 +9,4 @@ LLM-TXT: https://www.probiyom.com/llms.txt
 # Alternatif sözdizimi (bazı tarayıcılar Sitemap satırı gibi okur):
 Sitemap: https://www.probiyom.com/llms.txt
 
-
 Sitemap: https://www.probiyom.com/sitemap.xml

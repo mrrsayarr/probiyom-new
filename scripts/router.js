@@ -8,10 +8,12 @@ var Router = (function () {
   var currentSlider = null;
   var pageCache = {};
 
+
+
   function init(container) {
     mainContainer = container;
     
-    // Sitenin ilk açılış gecikmesini önlemek için home.html şablonunu arka planda ön-çekim (prefetch) yapıyoruz
+    // Sitenin ilk aÃ§Ä±lÄ±ÅŸ gecikmesini Ã¶nlemek iÃ§in home.html ÅŸablonunu arka planda Ã¶n-Ã§ekim (prefetch) yapÄ±yoruz
     fetch('pages/home.html')
       .then(function (res) { return res.text(); })
       .then(function (html) { pageCache['pages/home.html'] = html; })
@@ -60,7 +62,7 @@ var Router = (function () {
         loadPage('pages/faq.html', initFaqPage);
         break;
       case 'blog':
-        /* DÜZELTİLDİ: blog/0 veya blog/1 gibi spesifik blog linklerini yakalar */
+        /* DÃœZELTÄ°LDÄ°: blog/0 veya blog/1 gibi spesifik blog linklerini yakalar */
         if (parts.length > 1 && parts[1] !== undefined && parts[1] !== '') {
           loadPage('pages/blog.html', function () {
             initBlogPage(parts[1]);
@@ -174,8 +176,8 @@ var Router = (function () {
     var target = currentUrl + window.location.search;
     var currentLocation = window.location.pathname + window.location.search;
 
-    // Adres çubuğunda HASH görürse (#home, #about vb.) onu her zaman siler.
-    // Böylece tarayıcı restorasyonu ya da eski bir sayfadan kalan hash kalıcı kalmaz;
+    // Adres çubuğunda HASH gerekirse (#home, #about vb.) onu her zaman siler.
+    // Böylece tarayıcı restorasyonu ya da eski bir sayfadan kalan hash kalÄ±cÄ± kalmaz;
     // URL her zaman temiz (hash'siz) gerçek yol olur.
     if (currentLocation !== target || window.location.hash) {
       window.history.replaceState({ route: currentRoute }, '', target);
@@ -205,14 +207,14 @@ var Router = (function () {
   }
 
   /* ===================================================================
-     Dinamik SEO, Meta Etiketleri ve Şema (Schema.org) Enjektörü
+     Dinamik SEO, Meta Etiketleri ve Şema (Schema.org) Enjektörleri
      =================================================================== */
 
   function updateSEO(title, description, path) {
-    // 1. Tarayıcı Başlığı
+    // 1. Ta BaÅŸlÄ±ÄŸÄ±
     document.title = title ? title + " | Probiyom" : "Probiyom - Probiyotik & Sinbiyotik Teknolojisi";
 
-    // 2. Meta Description (Google Arama Özeti)
+    // 2. Meta Description (Google Arama Ã–zeti)
     var metaDesc = document.querySelector('meta[name="description"]');
     if (!metaDesc) {
       metaDesc = document.createElement('meta');
@@ -223,7 +225,7 @@ var Router = (function () {
       metaDesc.setAttribute('content', description);
     }
 
-    // 3. Canonical Link (Dizinleme Kararlılığı)
+    // 3. Canonical Link (Dizinleme KararlÄ±lÄ±ÄŸÄ±)
     var canonical = document.querySelector('link[rel="canonical"]');
     if (!canonical) {
       canonical = document.createElement('link');
@@ -233,7 +235,7 @@ var Router = (function () {
     var cleanPath = normalizeRoute(path || '');
     canonical.setAttribute('href', window.location.origin + buildRouteUrl(cleanPath));
 
-    // 4. OpenGraph Sosyal Medya Kartları
+    // 4. OpenGraph Sosyal Medya KartlarÄ±
     updateMetaTag('og:title', title ? title + " | Probiyom" : "Probiyom");
     updateMetaTag('og:description', description || '');
     updateMetaTag('og:url', window.location.origin + buildRouteUrl(cleanPath));
@@ -272,12 +274,12 @@ var Router = (function () {
 
   /* ---- Page initializers ---- */
 
-  function initHomePage() {
-    updateSEO(
-      'Probiyotik & Sinbiyotik Temizlik Teknolojisi',
-      'Yüzde yüz doğal, patentli HeiQ VivoTech probiyotik ve sinbiyotik temizlik teknolojisi ile yaşam alanlarınızda 72 saate kadar kalıcı ve sürdürülebilir hijyen çözümleri.',
-      'home'
-    );
+    function initHomePage() {
+        updateSEO(
+          'Probiyotik & Sinbiyotik Temizlik Teknolojisi',
+          'Yüzde yüz doğal, patentli HeiQ VivoTech probiyotik ve sinbiyotik temizlik teknolojisi ile yaşam alanlarınızda 72 saate kadar kalıcı ve sürdürülebilir hijyen çözümleri.',
+          'home'
+        );
 
     var sliders = [];
     var homeSliderEl = document.getElementById('home-slider');
@@ -464,13 +466,13 @@ var Router = (function () {
       var slug = null;
 
       if (isNumeric) {
-        // Geriye dönük uyumluluk: eski sayısal linkler hâlâ çalışır
+        // Geriye dÃ¶nÃ¼k uyumluluk: eski sayÄ±sal linkler hÃ¢lÃ¢ Ã§alÄ±ÅŸÄ±r
         var idx = parseInt(postParam, 10);
         if (isNaN(idx) || idx < 0 || idx >= blogPosts.length) idx = 0;
         post = blogPosts[idx];
         slug = blogSlug(post);
       } else {
-        // Yeni slug tabanlı link: /blog/<slug>
+        // Yeni slug tabanlÄ± link: /blog/<slug>
         var found = findBlogIndexBySlug(postParam, blogPosts);
         if (found >= 0) {
           post = blogPosts[found];
@@ -481,18 +483,18 @@ var Router = (function () {
       if (post) {
         var snippet = post.text ? post.text.replace(/<\/?[^>]+(>|$)/g, "").substring(0, 150) + '...' : '';
 
-        // Bu spesifik makaleye özel SEO Başlığı ve Özeti (canonical slug ile)
+        // Bu spesifik makaleye Ã¶zel SEO BaÅŸlÄ±ÄŸÄ± ve Ã–zeti (canonical slug ile)
         updateSEO(post.title, snippet, 'blog/' + slug);
 
         if (listEl && typeof BlogList === 'function') {
-          // BlogList identifier'ı (sayı ya da slug) kendisi çözer
+          // BlogList identifier'Ä± (sayÄ± ya da slug) kendisi Ã§Ã¶zer
           BlogList(listEl, blogPosts, isNumeric ? parseInt(postParam, 10) : slug);
         }
         return;
       }
     }
 
-    // Genel Blog Listesi Görünümü (/blog) ya da bulunamayan slug
+    // Genel Blog Listesi GÃ¶rÃ¼nÃ¼mÃ¼ (/blog) ya da bulunamayan slug
     updateSEO(
       'Blog & Bilimsel Makaleler',
       'Probiyotik teknoloji, mikrobiyom sağlığı, sürdürülebilirlik ve biyolojik hijyen hakkında en güncel makaleler ve bilimsel yayınlar.',
