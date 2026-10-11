@@ -1,131 +1,80 @@
-var SLIDER_DURATION_MS = 4000;
+var SLIDER_DURATION_MS = 7000;
 
 var homeSlides = [
-
-  { // 1
+  {
     src: "images/homepage_sliders/hp_1.webp",
-    alt: "Probiyom, probiyotik bazlı ürünlerin çalışma şekli, mekanizması, probiyotikler nasıl çalışır, nası temzilik yapar, 72 saat canlı kalırlar",
+    alt: "Probiyom HeiQ VivoTech probiyotik temizlik teknolojisi - 72 saat kalıcı biyolojik hijyen",
     title: "",
   },
-  { // 2
+  {
     src: "images/homepage_sliders/hp_2.webp",
-    alt: "Probiyom, probiyotik bazlı ürünlerin çalışma şekli, mekanizması, probiyotikler nasıl çalışır, nası temzilik yapar, 72 saat canlı kalırlar",
+    alt: "Probiyom sinbiyotik teknoloji - doğal probiyotik ve prebiyotik bileşimi ile sürdürülebilir temizlik",
     title: "",
   },
-  { // 3
+  {
     src: "images/homepage_sliders/hp_3.webp",
-    alt: "Probiyom, probiyotik bazlı ürünlerin çalışma şekli, mekanizması, probiyotikler nasıl çalışır, nası temzilik yapar, 72 saat canlı kalırlar",
-    title: "",
-  },
-  { // 4.0
-    src: "images/homepage_sliders/hp_4.0.webp",
-    alt: "Probiyom, probiyotik bazlı ürünlerin çalışma şekli, mekanizması, probiyotikler nasıl çalışır, nası temzilik yapar, 72 saat canlı kalırlar",
-    title: "",
-  },
-  { // 4.1
-    src: "images/homepage_sliders/hp_4.webp",
-    alt: "Probiyom, probiyotik bazlı ürünlerin çalışma şekli, mekanizması, probiyotikler nasıl çalışır, nası temzilik yapar, 72 saat canlı kalırlar",
-    title: "",
-  },
-  { // 5
-    src: "images/homepage_sliders/hp_5.webp",
-    alt: "Probiyom, probiyotik bazlı ürünlerin çalışma şekli, mekanizması, probiyotikler nasıl çalışır, nası temzilik yapar, 72 saat canlı kalırlar",
-    title: "",
-  },
-  { // 6
-    src: "images/homepage_sliders/hp_6.webp",
-    alt: "Probiyom, probiyotik bazlı ürünlerin çalışma şekli, mekanizması, probiyotikler nasıl çalışır, nası temzilik yapar, 72 saat canlı kalırlar",
-    title: "",
-  },
-  { // 7
-    src: "images/homepage_sliders/hp_7.webp",
-    alt: "Probiyom, probiyotik bazlı ürünlerin çalışma şekli, mekanizması, probiyotikler nasıl çalışır, nası temzilik yapar, 72 saat canlı kalırlar",
-    title: "",
-  },
-  { // 8
-    src: "images/homepage_sliders/hp_8.webp",
-    alt: "Probiyom, probiyotik bazlı ürünlerin çalışma şekli, mekanizması, probiyotikler nasıl çalışır, nası temzilik yapar, 72 saat canlı kalırlar",
-    title: "",
-  },
-  { // 9
-    src: "images/homepage_sliders/hp_9.webp",
-    alt: "Probiyom, probiyotik bazlı ürünlerin çalışma şekli, mekanizması, probiyotikler nasıl çalışır, nası temzilik yapar, 72 saat canlı kalırlar",
-    title: "",
-  },
-  { // 10
-    src: "images/homepage_sliders/hp_10.webp",
-    alt: "Probiyom, probiyotik bazlı ürünlerin çalışma şekli, mekanizması, probiyotikler nasıl çalışır, nası temzilik yapar, 72 saat canlı kalırlar",
-    title: "",
-  },
-  { // 11
-    src: "images/homepage_sliders/hp_11.webp",
-    alt: "Probiyom, probiyotik bazlı ürünlerin çalışma şekli, mekanizması, probiyotikler nasıl çalışır, nası temzilik yapar, 72 saat canlı kalırlar",
+    alt: "Probiyom biyofilm parçalama teknolojisi - mikroskobik düzeyde derinlemesine organik kir temizliği",
     title: "",
   },
 ];
 
-// var productSlides = [
-//   {
-//     src: "images/products_pages/pp_1.webp",
-//     alt: ProductGroupLabels[ProductGroup.ProfessionalCleaning],
-//     title: ProductGroupLabels[ProductGroup.ProfessionalCleaning],
-//     link: "/products/professional_cleaning",
-//   },
-//   {
-//     src: "images/products_pages/pp_2.webp",
-//     alt: ProductGroupLabels[ProductGroup.HomeCleaning],
-//     title: ProductGroupLabels[ProductGroup.HomeCleaning],
-//     link: "/products/home_cleaning",
-//   },
-//   {
-//     src: "images/products_pages/pp_3.webp",
-//     alt: ProductGroupLabels[ProductGroup.PersonalCare],
-//     title: ProductGroupLabels[ProductGroup.PersonalCare],
-//     link: "/products/personal_care",
-//   },
-//   {
-//     src: "images/products_pages/pp_4.webp",
-//     alt: ProductGroupLabels[ProductGroup.ColdMistSpraying],
-//     title: ProductGroupLabels[ProductGroup.ColdMistSpraying],
-//     link: "/products/cold_mist_spraying",
-//   },
-//   {
-//     src: "images/products_pages/pp_4.webp",
-//     alt: ProductGroupLabels[ProductGroup.ColdMistSpraying],
-//     title: ProductGroupLabels[ProductGroup.ColdMistSpraying],
-//     link: "/products/cold_mist_spraying",
-//   },
-//   {
-//     src: "images/products_pages/pp_5.webp",
-//     alt: ProductGroupLabels[ProductGroup.IndustrialWaterTreatment],
-//     title: ProductGroupLabels[ProductGroup.IndustrialWaterTreatment],
-//     link: "/products/industrial_water_treatment",
-//   },
-//   {
-//     src: "images/products_pages/pp_6.webp",
-//     alt: ProductGroupLabels[ProductGroup.Livestock],
-//     title: ProductGroupLabels[ProductGroup.Livestock],
-//     link: "/products/livestock",
-//   },
-//   {
-//     src: "images/products_pages/pp_7.webp",
-//     alt: ProductGroupLabels[ProductGroup.Pet],
-//     title: ProductGroupLabels[ProductGroup.Pet],
-//     link: "/products/pet",
-//   }
-// ];
+var productSlides = [
+  {
+    src: "images/products_pages/pp_1.webp",
+    alt: "Profesyonel Temizlik Ürünleri",
+    title: "Profesyonel Temizlik Ürünleri",
+    link: "/products/professional_cleaning",
+  },
+  {
+    src: "images/products_pages/pp_2.webp",
+    alt: "Ev Temizlik Ürünleri",
+    title: "Ev Temizlik Ürünleri",
+    link: "/products/home_cleaning",
+  },
+  {
+    src: "images/products_pages/pp_3.webp",
+    alt: "Kişisel Bakım Ürünleri",
+    title: "Kişisel Bakım Ürünleri",
+    link: "/products/personal_care",
+  },
+  {
+    src: "images/products_pages/pp_4.webp",
+    alt: "Soğuk Sis ve Püskürtme Ürünleri",
+    title: "Soğuk Sis ve Püskürtme Ürünleri",
+    link: "/products/cold_mist_spraying",
+  },
+  {
+    src: "images/products_pages/pp_5.webp",
+    alt: "Endüstriyel Su Arıtma Ürünleri",
+    title: "Endüstriyel Su Arıtma Ürünleri",
+    link: "/products/industrial_water_treatment",
+  },
+  {
+    src: "images/products_pages/pp_6.webp",
+    alt: "Hayvancılık Ürünleri",
+    title: "Hayvancılık Ürünleri",
+    link: "/products/livestock",
+  },
+  {
+    src: "images/products_pages/pp_7.webp",
+    alt: "PET Ürünleri",
+    title: "PET Ürünleri",
+    link: "/products/pet",
+  }
+];
 
 
-// İLK AÇILIŞ GECİKMESİNİ (1 SN BEKLEMEYİ) SIFIRLAYAN ANINDA ÖN YÜKLEME
+// Performans optimizasyonu: Sadece ilk slayt (LCP) için eager preload, diğerleri lazy
 (function () {
   if (typeof window === 'undefined') return;
-  [homeSlides, productSlides].forEach(function (list) {
-    if (!list) return;
-    list.forEach(function (s, idx) {
-      if (s && s.src) {
-        var img = new Image();
-        img.src = s.src;
-      }
-    });
-  });
+  // Sadece ilk görseli ön yükle (LCP için kritik)
+  if (homeSlides[0] && homeSlides[0].src) {
+    var img = new Image();
+    img.src = homeSlides[0].src;
+  }
+  if (productSlides[0] && productSlides[0].src) {
+    var img2 = new Image();
+    img2.src = productSlides[0].src;
+  }
+  // Diğer görseller sayfa etkileşimine kadar ertelenir
 })();

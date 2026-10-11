@@ -5,6 +5,8 @@
 
 function Navbar(container) {
   var isOpen = false;
+  var modalOpener = null;
+  var previousBodyOverflow = '';
 
   // DÜZELTİLDİ: Eksik olan routeHref yardımcı fonksiyonu eklendi
   function routeHref(route) {
@@ -66,7 +68,7 @@ function Navbar(container) {
           '</a>' +
 
           /* Masaüstü Linkler */
-          '<ul class="navbar-links list-unstyled m-0 d-none d-md-flex align-items-center gap-4">' +
+          '<ul class="navbar-links list-unstyled m-0 align-items-center gap-4">' +
             '<li><a href="' + routeHref('home') + '" class="text-decoration-none fw-semibold">Ana Sayfa</a></li>' +
             '<li><a href="' + routeHref('about') + '" class="text-decoration-none fw-semibold">Hakkımızda</a></li>' +
             '<li class="nav-dropdown position-relative">' +
@@ -84,7 +86,7 @@ function Navbar(container) {
             '<li><a href="' + routeHref('faq') + '" class="text-decoration-none fw-semibold">SSS</a></li>' +
             '<li><a href="' + routeHref('contact') + '" class="text-decoration-none fw-semibold">İletişim</a></li>' +
             '<li>' +
-              '<a href="' + routeHref('contact') + '" class="nav-contact-btn text-decoration-none fw-bold small px-3 py-2 rounded-pill" id="nav-contact-trigger">' +
+              '<a href="' + routeHref('contact') + '" data-router-ignore="true" class="nav-contact-btn text-decoration-none fw-bold small px-3 py-2 rounded-pill" id="nav-contact-trigger">' +
                 'Bize Ulaşın' +
               '</a>' +
             '</li>' +
@@ -112,9 +114,16 @@ function Navbar(container) {
 
     /* Events */
     var btn = container.querySelector('.navbar-mobile-btn');
+    var mobileMenu = container.querySelector('.mobile-menu');
+    if (btn && mobileMenu) {
+      mobileMenu.id = 'mobile-navigation-menu';
+      btn.setAttribute('aria-controls', mobileMenu.id);
+      btn.setAttribute('aria-expanded', 'false');
+    }
     if (btn) {
       btn.addEventListener('click', function () {
         isOpen = !isOpen;
+        btn.setAttribute('aria-expanded', String(isOpen));
         var menu = container.querySelector('.mobile-menu');
         if (menu) {
           menu.classList.toggle('is-open', isOpen);
@@ -127,10 +136,28 @@ function Navbar(container) {
     for (var i = 0; i < mobileLinks.length; i++) {
       mobileLinks[i].addEventListener('click', function () {
         isOpen = false;
+        btn.setAttribute('aria-expanded', 'false');
         var menu = container.querySelector('.mobile-menu');
         if (menu) menu.classList.remove('is-open');
       });
     }
+
+    function closeMobileMenu(restoreFocus) {
+      if (!isOpen) return;
+      isOpen = false;
+      var menu = container.querySelector('.mobile-menu');
+      if (menu) menu.classList.remove('is-open');
+      if (btn) {
+        btn.setAttribute('aria-expanded', 'false');
+        if (restoreFocus) btn.focus();
+      }
+    }
+    document.addEventListener('click', function (event) {
+      if (isOpen && !container.contains(event.target)) closeMobileMenu(false);
+    });
+    container.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') closeMobileMenu(true);
+    });
 
     /* Masaüstü açılır menüdeki linklere tıklandığında menüyü anında kapatır */
     var dropdownLinks = container.querySelectorAll('.nav-dropdown-menu a');
@@ -164,18 +191,40 @@ function Navbar(container) {
 
     window.addEventListener('scroll', handleScroll);
     setTimeout(handleScroll, 50);
+
+    function syncActiveNav() {
+      if (isOpen) {
+        isOpen = false;
+        var mobileNav = container.querySelector('.mobile-menu');
+        if (mobileNav) mobileNav.classList.remove('is-open');
+        var mobileToggle = container.querySelector('.navbar-mobile-btn');
+        if (mobileToggle) mobileToggle.setAttribute('aria-expanded', 'false');
+      }
+      var currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+      var links = container.querySelectorAll('.navbar-links a, .mobile-menu a');
+      for (var n = 0; n < links.length; n++) {
+        var linkPath = new URL(links[n].href, window.location.href).pathname.replace(/\/$/, '') || '/';
+        var active = linkPath === currentPath || (linkPath !== '/' && currentPath.indexOf(linkPath + '/') === 0);
+        if (active) links[n].setAttribute('aria-current', 'page');
+        else links[n].removeAttribute('aria-current');
+        links[n].classList.toggle('is-active', active);
+      }
+    }
+    syncActiveNav();
+    document.addEventListener('routechange', syncActiveNav);
   }
 
-  /* Sayfa İçi Mobil FAB ve 2 Saniyede Bir Dönen İkon Değiştirici */
+  /* Mobile social and contact dock */
   function initMobileFab() {
     var existingFab = document.getElementById('mobile-fab-container');
     if (existingFab) existingFab.remove();
 
     var fabWrapper = document.createElement('div');
     fabWrapper.id = 'mobile-fab-container';
-    fabWrapper.className = 'mobile-fab-container d-flex d-md-none';
+    fabWrapper.className = 'mobile-fab-container';
     fabWrapper.innerHTML = 
-      '<div class="mobile-fab-menu" id="mobile-fab-menu">' +
+      '<div class="mobile-fab-menu" id="mobile-fab-menu" inert>' +
+        '<div class="social-dock-heading"><span class="social-dock-mark" aria-hidden="true"></span><span>Sosyalde buluşalım</span></div>' +
         '<button type="button" class="mobile-fab-cta-btn" id="nav-contact-trigger-mobile">' +
           '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>' +
           '<span>Bize Ulaşın</span>' +
@@ -189,33 +238,15 @@ function Navbar(container) {
         '</div>' +
       '</div>' +
 
-      '<button type="button" class="mobile-fab-trigger position-relative overflow-hidden" id="mobile-fab-trigger" aria-label="Hızlı erişim menüsü">' +
-        '<span class="fab-icon-switcher position-relative d-inline-flex align-items-center justify-content-center w-100 h-100">' +
-          '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="fab-rot-icon is-active"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>' +
-          '<svg viewBox="0 0 512 512" width="18" height="18" fill="#ffffff" class="fab-rot-icon"><path d="M256 109.3c47.8 0 53.4 0.2 72.3 1 17.4 0.8 26.9 3.7 33.2 6.2 8.4 3.2 14.3 7.1 20.6 13.4 6.3 6.3 10.1 12.2 13.4 20.6 2.5 6.3 5.4 15.8 6.2 33.2 0.9 18.9 1 24.5 1 72.3s-0.2 53.4-1 72.3c-0.8 17.4-3.7 26.9-6.2 33.2 -3.2 8.4-7.1 14.3-13.4 20.6 -6.3 6.3-12.2 10.1-20.6 13.4 -6.3 2.5-15.8 5.4-33.2 6.2 -18.9 0.9-24.5 1-72.3 1s-53.4-0.2-72.3-1c-17.4-0.8-26.9-3.7-33.2-6.2 -8.4-3.2-14.3-7.1-20.6-13.4 -6.3-6.3-10.1-12.2-13.4-20.6 -2.5-6.3-5.4-15.8-6.2-33.2 -0.9-18.9-1-24.5-1-72.3s0.2-53.4 1-72.3c0.8-17.4 3.7-26.9 6.2-33.2 3.2-8.4 7.1-14.3 13.4-20.6 6.3-6.3 12.2-10.1 20.6-13.4 6.3-2.5 15.8-5.4 33.2-6.2C202.6 109.5 208.2 109.3 256 109.3M256 77.1c-48.6 0-54.7 0.2-73.8 1.1 -19 0.9-32.1 3.9-43.4 8.3 -11.8 4.6-21.7 10.7-31.7 20.6 -9.9 9.9-16.1 19.9-20.6 31.7 -4.4 11.4-7.4 24.4-8.3 43.4 -0.9 19.1-1.1 25.2-1.1 73.8 0 48.6 0.2 54.7 1.1 73.8 0.9 19 3.9 32.1 8.3 43.4 4.6 11.8 10.7 21.7 20.6 31.7 9.9 9.9 19.9 16.1 31.7 20.6 11.4 4.4 24.4 7.4 43.4 8.3 19.1 0.9 25.2 1.1 73.8 1.1s54.7-0.2 73.8-1.1c19-0.9 32.1-3.9 43.4-8.3 11.8-4.6 21.7-10.7 31.7-20.6 9.9-9.9 19.9-16.1 31.7-20.6 -11.4-4.4-24.4-7.4-43.4-8.3C310.7 77.3 304.6 77.1 256 77.1L256 77.1z"/><path d="M256 164.1c-50.7 0-91.9 41.1-91.9 91.9s41.1 91.9 91.9 91.9 91.9-41.1 91.9-91.9S306.7 164.1 256 164.1zM256 315.6c-32.9 0-59.6-26.7-59.6-59.6s26.7-59.6 59.6-59.6 59.6 26.7 59.6 59.6S288.9 315.6 256 315.6z"/><circle cx="351.5" cy="160.5" r="21.5"/></svg>' +
-          '<svg viewBox="0 0 512 512" width="17" height="17" fill="#ffffff" class="fab-rot-icon"><g transform="translate(64, 64) scale(0.75, 0.75)"><path d="M403.2 48h78.643l-171.52 196.544L512 488h-158.016l-123.744-161.248L99.136 488H10.112l183.456-210.24L0 48h161.024l111.84 148.288L403.2 48zm-27.52 417.792h43.52L138.368 68.672H91.776z"/></g></svg>' +
-          '<svg viewBox="0 0 512 512" width="18" height="18" fill="#ffffff" class="fab-rot-icon"><path d="M186.4 142.4c0 19-15.3 34.5-34.2 34.5 -18.9 0-34.2-15.4-34.2-34.5 0-19 15.3-34.5 34.2-34.5C171.1 107.9 186.4 123.4 186.4 142.4zM181.4 201.3h-57.8V388.1h57.8V201.3zM273.8 201.3h-55.4V388.1h55.4c0 0 0-69.3 0-98 0-26.3 12.1-41.9 35.2-41.9 21.3 0 31.5 15 31.5 41.9 0 26.9 0 98 0 98h57.5c0 0 0-68.2 0-118.3 0-50-28.3-74.2-68-74.2 -39.6 0-56.3 30.9-56.3 30.9v-25.2H273.8z"/></svg>' +
+      '<button type="button" class="mobile-fab-trigger position-relative overflow-hidden" id="mobile-fab-trigger" aria-label="Sosyal medya ve iletişim menüsü" aria-expanded="false" aria-controls="mobile-fab-menu">' +
+        '<span class="fab-icon-switcher">' +
+          '<svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="12" r="2.5"/><circle cx="17" cy="5" r="2.5"/><circle cx="17" cy="19" r="2.5"/><path d="m8.2 10.6 6.6-4.2m-6.6 7 6.6 4.2"/></svg>' +
         '</span>' +
+        '<span class="fab-trigger-label">Bağlan</span>' +
         '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="fab-icon-close d-none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>' +
       '</button>';
 
     document.body.appendChild(fabWrapper);
-
-    // 2 Saniyede Bir İkon Döndüren Zamanlayıcı
-    var rotIcons = fabWrapper.querySelectorAll('.fab-rot-icon');
-    var currentRotIndex = 0;
-    
-    var iconTimer = setInterval(function () {
-      if (!document.body.contains(fabWrapper)) {
-        clearInterval(iconTimer);
-        return;
-      }
-      if (rotIcons.length > 0) {
-        rotIcons[currentRotIndex].classList.remove('is-active');
-        currentRotIndex = (currentRotIndex + 1) % rotIcons.length;
-        rotIcons[currentRotIndex].classList.add('is-active');
-      }
-    }, 2000);
 
     /* Sol Alt Yüzen Buton (FAB) Tıklama ve Dışarı Tıklayınca Kapanma Mantığı */
     var fabTrigger = document.querySelector('#mobile-fab-trigger');
@@ -227,13 +258,7 @@ function Navbar(container) {
         var switcher = fabTrigger.querySelector('.fab-icon-switcher');
         var closeIcon = fabTrigger.querySelector('.fab-icon-close');
         
-        if (fabMenu) {
-          var isFabOpen = fabMenu.classList.toggle('is-open');
-          if (switcher && closeIcon) {
-            switcher.classList.toggle('d-none', isFabOpen);
-            closeIcon.classList.toggle('d-none', !isFabOpen);
-          }
-        }
+        if (fabMenu) setFabMenuOpen(fabMenu, fabTrigger, switcher, closeIcon, !fabMenu.classList.contains('is-open'));
       });
 
       // Ekranda başka yere tıklandığında paneli kapatır
@@ -241,15 +266,31 @@ function Navbar(container) {
         var fabContainer = document.querySelector('#mobile-fab-container');
         var fabMenu = document.querySelector('#mobile-fab-menu');
         if (fabContainer && fabMenu && !fabContainer.contains(e.target)) {
-          fabMenu.classList.remove('is-open');
           var switcher = fabTrigger.querySelector('.fab-icon-switcher');
           var closeIcon = fabTrigger.querySelector('.fab-icon-close');
-          if (switcher && closeIcon) {
-            switcher.classList.remove('d-none');
-            closeIcon.classList.add('d-none');
-          }
+          setFabMenuOpen(fabMenu, fabTrigger, switcher, closeIcon, false);
         }
       });
+      document.addEventListener('keydown', function (e) {
+        var menu = document.querySelector('#mobile-fab-menu');
+        if (e.key === 'Escape' && menu && menu.classList.contains('is-open')) {
+          var switcher = fabTrigger.querySelector('.fab-icon-switcher');
+          var closeIcon = fabTrigger.querySelector('.fab-icon-close');
+          setFabMenuOpen(menu, fabTrigger, switcher, closeIcon, false);
+          fabTrigger.focus();
+        }
+      });
+    }
+  }
+
+  function setFabMenuOpen(menu, trigger, switcher, closeIcon, open) {
+    menu.classList.toggle('is-open', open);
+    if (open) menu.removeAttribute('inert');
+    else menu.setAttribute('inert', '');
+    trigger.setAttribute('aria-expanded', String(open));
+    if (switcher && closeIcon) {
+      switcher.classList.toggle('d-none', open);
+      closeIcon.classList.toggle('d-none', !open);
     }
   }
 
@@ -257,9 +298,10 @@ function Navbar(container) {
     var contactBtns = document.querySelectorAll('#nav-contact-trigger, #nav-contact-trigger-mobile');
     contactBtns.forEach(function(contactBtn) {
       contactBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (contactBtn.tagName === 'A') e.stopPropagation();
         try {
           if (typeof ContactForm === 'function') {
-            e.preventDefault();
             openContactModal();
           } else {
             if (window.Router && typeof window.Router.navigate === 'function') {
@@ -281,14 +323,17 @@ function Navbar(container) {
 
   /* Sayfa İçi Pop-Up Modal Oluşturucu ve Yöneticisi */
   function openContactModal() {
+    modalOpener = document.activeElement;
     var modal = document.getElementById('contact-modal');
     
     if (!modal) {
       modal = document.createElement('div');
       modal.id = 'contact-modal';
       modal.className = 'contact-modal-overlay';
+      modal.setAttribute('inert', '');
       modal.innerHTML = 
-        '<div class="contact-modal-dialog position-relative">' +
+        '<div class="contact-modal-dialog position-relative" role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="contact-modal-title">' +
+          '<h2 id="contact-modal-title" class="visually-hidden">İletişim formu</h2>' +
           '<button type="button" class="contact-modal-close" aria-label="Kapat">&times;</button>' +
           '<div id="modal-form-container"></div>' +
         '</div>';
@@ -304,10 +349,27 @@ function Navbar(container) {
         }
       });
 
-      window.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && modal.classList.contains('is-visible')) {
-          closeContactModal();
+      modal.addEventListener('transitionend', function (e) {
+        if (e.target === modal && modal.classList.contains('is-visible') &&
+            !modal.contains(document.activeElement)) {
+          modal.querySelector('[role="dialog"]').focus({ preventScroll: true });
         }
+      });
+
+      modal.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          closeContactModal();
+          return;
+        }
+        if (e.key !== 'Tab') return;
+        var focusable = modal.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])');
+        if (!focusable.length) { e.preventDefault(); modal.querySelector('.contact-modal-close').focus(); return; }
+        var first = focusable[0];
+        var last = focusable[focusable.length - 1];
+        if (document.activeElement === modal.querySelector('[role="dialog"]')) { e.preventDefault(); (e.shiftKey ? last : first).focus(); }
+        else if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
       });
     }
 
@@ -324,8 +386,16 @@ function Navbar(container) {
     }
 
     requestAnimationFrame(function () {
+      previousBodyOverflow = document.body.style.overflow;
+      modal.removeAttribute('inert');
       modal.classList.add('is-visible');
       document.body.style.overflow = 'hidden';
+      var dialog = modal.querySelector('[role="dialog"]');
+      requestAnimationFrame(function () {
+        if (dialog && modal.classList.contains('is-visible') && !modal.hasAttribute('inert')) {
+          dialog.focus({ preventScroll: true });
+        }
+      });
     });
   }
 
@@ -333,7 +403,9 @@ function Navbar(container) {
     var modal = document.getElementById('contact-modal');
     if (modal) {
       modal.classList.remove('is-visible');
-      document.body.style.overflow = '';
+      modal.setAttribute('inert', '');
+      document.body.style.overflow = previousBodyOverflow;
+      if (modalOpener && typeof modalOpener.focus === 'function') modalOpener.focus();
     }
   }
 
@@ -341,8 +413,17 @@ function Navbar(container) {
 
   /* Close mobile menu on desktop resize */
   window.addEventListener('resize', function () {
-    if (window.innerWidth >= 768 && isOpen) {
+    if (window.innerWidth >= 850) {
+      var fabMenu = document.querySelector('#mobile-fab-menu');
+      var fabButton = document.querySelector('#mobile-fab-trigger');
+      if (fabMenu && fabButton && fabMenu.classList.contains('is-open')) {
+        setFabMenuOpen(fabMenu, fabButton, fabButton.querySelector('.fab-icon-switcher'), fabButton.querySelector('.fab-icon-close'), false);
+      }
+    }
+    if (window.innerWidth >= 850 && isOpen) {
       isOpen = false;
+      var mobileBtn = container.querySelector('.navbar-mobile-btn');
+      if (mobileBtn) mobileBtn.setAttribute('aria-expanded', 'false');
       var menu = container.querySelector('.mobile-menu');
       if (menu) menu.classList.remove('is-open');
     }

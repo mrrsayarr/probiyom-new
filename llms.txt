@@ -31,10 +31,53 @@ URL: https://www.probiyom.com/blog/endustriyel-su-sistemlerinde-gorunmeyen-maliy
 Özet: Soğutma kuleleri ve eşanjörlerdeki biyofilm tabakası, kireçten bile daha güçlü bir ısı yalıtkanı olarak enerji verimliliğini dramatik şekilde düşürür; Legionella pneumophila (Lejyoner Hastalığı) için sığınak oluşturur ve Mikrobiyolojik Korozyon (MIC) ile metal boruları ve ekipmanları içten aşındırır. Geleneksel kimyasal biyositler biyofilmin koruyucu zırhını aşmakta yetersiz kalır.
 Çözüm: HeiQ VivoTech patentli probiyotik su arıtma teknolojisi, biyofilmi yüzeye bağlayan organik "tutkalı" moleküler düzeyde parçalayarak çözülmesini sağlar. Bağımsız endüstriyel testler enerji tüketiminde %10-15 tasarruf, Legionella koruması, korozyon önleme ve ciddi su/kimyasal tasarrufu doğrular.
 
+### 6. Alerjinizi Tetikleyen Şey Toz mu, PET mi yoksa Polen mi? Yoksa Görünmeyen Mikrobiyal Dengesizlik mi?
+URL: https://www.probiyom.com/blog/alerjinizi-tetikleyen-sey-toz-mu-pet-mi-yoksa-polen-mi-yoksa-gorunmeyen-mikrobiyal-dengesizlik-mi
+Özet: Her gün saatlerce evimizi süpürüyor, siliyor ve dezenfekte ediyoruz. Peki neden evlerde, okullarda, hastanelerde ve iş yerlerinde ev tozu akarları, polenler ve evcil hayvan (PET) döküntüleri bu kadar hızlı geri dönüyor? Çünkü geleneksel kimyasal dezenfektanlar sadece anlık bir yüzey temizliği sağlar; kuruduktan hemen sonra koruyucu etkisini kaybeder ve ortamdaki hem zararlı hem de yararlı mikroflorayı öldürerek biyolojik bir boşluk yaratır.
+Çözüm: Bilim ve mikrobiyom araştırmaları artık çok daha sürdürülebilir bir yaklaşım öneriyor: Yüzey mikrobiyomunu doğru yönetmek. Probiyotik bazlı temizlik teknolojileri yüzeylerde faydalı bakterilerden oluşan dengeli bir mikrobiyal ekosistem kurarak organik kirleri mikroskobik düzeyde parçalar, zararlı patojenlerin yeniden çoğalmasını biyolojik olarak baskılar ve 72 saate kadar kesintisiz bir koruma kalkanı elde eder.
+
+## Ürün Kategorileri
+
+### Profesyonel Temizlik Ürünleri
+URL: https://www.probiyom.com/products/professional_cleaning
+Açıklama: Profesyonel kullanım için yüksek performanslı probiyotik temizlik ürünleri; iç mekan, yağ çözücü, zemin, makina, yağ tutucu, köpük ekstra, sıhhi temizlik ve tuvalet jeli ürünleri.
+
+### Ev Temizlik Ürünleri
+URL: https://www.probiyom.com/products/home_cleaning
+Açıklama: Ev kullanımı için probiyotik bulaşık deterjanı, çamaşır deterjanı, alerjen spreyi, temizlik spreyi, tuvalet jeli ve hijyen ürünleri.
+
+### Kişisel Bakım Ürünleri
+URL: https://www.probiyom.com/products/personal_care
+Açıklama: Probiyotik ve prebiyotik içeren cilt dostu duş jeli, cilt yenileyici bakım kremi gibi kişisel bakım ürünleri.
+
+### Soğuk Sis ve Püskürtme Ürünleri
+URL: https://www.probiyom.com/products/cold_mist_spraying
+Açıklama: Ofis, otel ve kamusal alanlar için soğuk sisleme (fogging) ve püskürtme çözümleri; HVAC ve klima sistemleriyle uyumlu.
+
+### Endüstriyel Su Arıtma Ürünleri
+URL: https://www.probiyom.com/products/industrial_water_treatment
+Açıklama: Endüstriyel su sistemleri, göletler ve soğutma kuleleri için probiyotik su arıtma konsantreleri; biyofilm ve korozyon kontrolü.
+
+### Hayvancılık Ürünleri
+URL: https://www.probiyom.com/products/livestock
+Açıklama: Çiftlik temizleyici, ortam dengeleyici, su plus gibi hayvan barınak hijyeni ve sağlığı için probiyotik çözümler.
+
+### PET Ürünleri
+URL: https://www.probiyom.com/products/pet
+Açıklama: Evcil hayvan alerjen ve koku kontrolü için probiyotik pet sprey, şampuan ve yedek kartuş ürünleri.
+
 ## İletişim & Kurumsal Bilgi
 
 - Marka: Probiyom
 - Kurumsal Bağlılık: IDOL Invest
 - Web Sitesi: https://www.probiyom.com/
 - Teknoloji: HeiQ Chrisal, HeiQ VivoTech
-- Ürün Kategorileri: Temizlik, Kişisel Bakım, Endüstriyel Ürünler
+- Adres: Merdivenköy Mahallesi, Dikyol Sokak, B Blok, No 2/179, Kadıköy, İstanbul, Türkiye, 34732
+- Telefon: +90-532-346-48-84
+- E-posta: probiyom@idolinvest.com
+- Koordinatlar: 40.992680, 29.068512
+- Sosyal Medya:
+  - Instagram: https://www.instagram.com/probiyom/
+  - X (Twitter): https://x.com/probiyom
+  - LinkedIn: https://www.linkedin.com/company/probiyom
+  - YouTube: https://www.youtube.com/@Probiyom

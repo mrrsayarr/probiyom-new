@@ -31,9 +31,9 @@ function ProductGrid(container, groupProducts) {
 
     var imageHtml = '';
     if (p.imageDir) {
-      var src = p.imageDir.indexOf('/') === 0 ? p.imageDir : p.imageDir;
+      var src = escapeAttr(p.imageDir);
       imageHtml = '<div class="product-card-image overflow-hidden position-relative">' +
-                    '<img src="' + src + '" alt="' + escapeAttr(p.name) + '" class="w-100 h-100 transition-all">' +
+                    '<img src="' + src + '" alt="' + escapeAttr(p.name) + '" class="w-100 h-100 transition-all" loading="lazy">' +
                   '</div>';
     }
 

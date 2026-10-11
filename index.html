@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="tr">
 
 <head>
@@ -40,8 +40,6 @@
 
     <!-- Favicon & Mobil Uygulama Simgeleri -->
     <link rel="icon" type="image/svg+xml" href="images/logo.svg">
-    <link rel="icon" type="image/png" href="images/favicon.png">
-    <link rel="apple-touch-icon" href="images/favicon.png">
 
     <!-- Google Fonts – Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -52,51 +50,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap-grid.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap-utilities.min.css">
 
-    <!-- OpenLayers Harita Kütüphanesi -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@10.5.0/ol.css">
-    <script src="https://cdn.jsdelivr.net/npm/ol@10.5.0/dist/ol.js" defer></script>
+    <!-- DNS Prefetch for external resources -->
+    <link rel="dns-prefetch" href="https://api.web3forms.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
 
     <!-- App styles -->
-    <link rel="stylesheet" href="styles/main.css?v=20260706">
-
-    <!-- LOADER İÇİN MÜKEMMEL ORTALAMA VE ANİMASYON STİLLERİ -->
-    <style>
-        #app-loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: #ffffff;
-            z-index: 999999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.35s ease, visibility 0.35s ease;
-        }
-        #app-loader.loader-hidden {
-            opacity: 0 !important;
-            visibility: hidden !important;
-            pointer-events: none !important;
-        }
-        @keyframes pulseLogo {
-            0%, 100% { opacity: 0.8; transform: scale(0.98); }
-            50% { opacity: 1; transform: scale(1.02); }
-        }
-        @keyframes loaderBar {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-        .pulse-animation {
-            animation: pulseLogo 1.4s infinite ease-in-out;
-        }
-        .loader-progress-bar {
-            animation: loaderBar 1.2s infinite ease-in-out;
-        }
-    </style>
+    <link rel="stylesheet" href="styles/main.css?v=20261008-social">
 
     <!-- Google Kurumsal Kimlik & Yapay Zeka (GEO) Şeması -->
     <script type="application/ld+json">
@@ -134,6 +94,7 @@
 
     <!-- LCP Görsel Preload -->
     <link rel="preload" as="image" href="images/homepage_sliders/hp_1.webp">
+    <link rel="preload" as="image" href="images/logo.svg">
 </head>
 
 <body>
@@ -157,9 +118,15 @@
     </div>
 
     <!-- SAYFAYA SABİT SOL SOSYAL MEDYA MENÜSÜ -->
-    <div class="sticky-social-bar">
+    <nav class="sticky-social-bar" aria-label="Probiyom sosyal medya">
+        <div class="social-dock-heading">
+            <span class="social-dock-mark" aria-hidden="true"></span>
+            <span>Sosyalde buluşalım</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 18 18 6M6 6h12v12"/></svg>
+        </div>
+        <div class="social-dock-links">
         <!-- Instagram -->
-        <a href="https://instagram.com/probiyom" target="_blank" rel="noopener" aria-label="Instagram">
+        <a href="https://instagram.com/probiyom" target="_blank" rel="noopener" aria-label="Instagram" data-label="Instagram">
             <svg class="niftybutton-instagram" viewBox="0 0 512 512" width="22" height="22">
                 <title>Instagram social icon</title>
                 <path d="M256 109.3c47.8 0 53.4 0.2 72.3 1 17.4 0.8 26.9 3.7 33.2 6.2 8.4 3.2 14.3 7.1 20.6 13.4 6.3 6.3 10.1 12.2 13.4 20.6 2.5 6.3 5.4 15.8 6.2 33.2 0.9 18.9 1 24.5 1 72.3s-0.2 53.4-1 72.3c-0.8 17.4-3.7 26.9-6.2 33.2 -3.2 8.4-7.1 14.3-13.4 20.6 -6.3 6.3-12.2 10.1-20.6 13.4 -6.3 2.5-15.8 5.4-33.2 6.2 -18.9 0.9-24.5 1-72.3 1s-53.4-0.2-72.3-1c-17.4-0.8-26.9-3.7-33.2-6.2 -8.4-3.2-14.3-7.1-20.6-13.4 -6.3-6.3-10.1-12.2-13.4-20.6 -2.5-6.3-5.4-15.8-6.2-33.2 -0.9-18.9-1-24.5-1-72.3s0.2-53.4 1-72.3c0.8-17.4 3.7-26.9 6.2-33.2 3.2-8.4 7.1-14.3 13.4-20.6 6.3-6.3 12.2-10.1 20.6-13.4 6.3-2.5 15.8-5.4 33.2-6.2C202.6 109.5 208.2 109.3 256 109.3M256 77.1c-48.6 0-54.7 0.2-73.8 1.1 -19 0.9-32.1 3.9-43.4 8.3 -11.8 4.6-21.7 10.7-31.7 20.6 -9.9 9.9-16.1 19.9-20.6 31.7 -4.4 11.4-7.4 24.4-8.3 43.4 -0.9 19.1-1.1 25.2-1.1 73.8 0 48.6 0.2 54.7 1.1 73.8 0.9 19 3.9 32.1 8.3 43.4 4.6 11.8 10.7 21.7 20.6 31.7 9.9 9.9 19.9 16.1 31.7 20.6 11.4 4.4 24.4 7.4 43.4 8.3 19.1 0.9 25.2 1.1 73.8 1.1s54.7-0.2 73.8-1.1c19-0.9 32.1-3.9 43.4-8.3 11.8-4.6 21.7-10.7 31.7-20.6 9.9-9.9 16.1-19.9 20.6-31.7 4.4-11.4 7.4-24.4 8.3-43.4 0.9-19.1 1.1-25.2 1.1-73.8s-0.2-54.7-1.1-73.8c-0.9-19-3.9-32.1-8.3-43.4 -4.6-11.8-10.7-21.7-20.6-31.7 -9.9-9.9-19.9-16.1-31.7-20.6 -11.4-4.4-24.4-7.4-43.4-8.3C310.7 77.3 304.6 77.1 256 77.1L256 77.1z" fill="#ffffff"></path>
@@ -169,7 +136,7 @@
         </a>
 
         <!-- X / Twitter -->
-        <a href="https://x.com/probiyom" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <a href="https://x.com/probiyom" target="_blank" rel="noopener" aria-label="X (Twitter)" data-label="X / Twitter">
             <svg class="niftybutton-twitterx" viewBox="0 0 512 512" width="22" height="22">
                 <title>X (Twitter) social icon</title>
                 <g transform="translate(64, 64) scale(0.75, 0.75)" fill="#ffffff">
@@ -179,7 +146,7 @@
         </a>
 
         <!-- LinkedIn -->
-        <a href="https://linkedin.com/company/probiyom" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <a href="https://linkedin.com/company/probiyom" target="_blank" rel="noopener" aria-label="LinkedIn" data-label="LinkedIn">
             <svg class="niftybutton-linkedin" viewBox="0 0 512 512" width="22" height="22">
                 <title>LinkedIn social icon</title>
                 <path d="M186.4 142.4c0 19-15.3 34.5-34.2 34.5 -18.9 0-34.2-15.4-34.2-34.5 0-19 15.3-34.5 34.2-34.5C171.1 107.9 186.4 123.4 186.4 142.4zM181.4 201.3h-57.8V388.1h57.8V201.3zM273.8 201.3h-55.4V388.1h55.4c0 0 0-69.3 0-98 0-26.3 12.1-41.9 35.2-41.9 21.3 0 31.5 15 31.5 41.9 0 26.9 0 98 0 98h57.5c0 0 0-68.2 0-118.3 0-50-28.3-74.2-68-74.2 -39.6 0-56.3 30.9-56.3 30.9v-25.2H273.8z" fill="#ffffff"></path>
@@ -187,13 +154,14 @@
         </a>
 
         <!-- YouTube -->
-        <a href="https://youtube.com/@Probiyom" target="_blank" rel="noopener" aria-label="YouTube">
+        <a href="https://youtube.com/@Probiyom" target="_blank" rel="noopener" aria-label="YouTube" data-label="YouTube">
             <svg class="niftybutton-youtube" viewBox="0 0 512 512" width="22" height="22" style="fill: #ffffff;">
                 <title>YouTube social icon</title>
                 <path d="M424.4 113c-15.6-10-53.4-14-168.4-14s-152.8 4-168.4 14C56 133.5 48 190.5 48 256s8 122.5 39.6 143c15.6 10 53.4 14 168.4 14s152.8-4 168.4-14c31.6-20.5 39.6-77.5 39.6-143s-8-122.5-39.6-143zM212 334V178l128 78z" fill="#ffffff"></path>
             </svg>
         </a>
-    </div>
+        </div>
+    </nav>
 
     <div class="app-shell">
         <!-- Header -->
@@ -257,25 +225,61 @@
     </div>
 
     <!-- Data -->
-    <script src="data/site.js?v=20260706"></script>
-    <script src="data/products.js?v=20260706"></script>
-    <script src="data/slides.js?v=20260706"></script>
-    <script src="data/subjects.js?v=20260706"></script>
-    <script src="data/faqs.js?v=20260706"></script>
-    <script src="data/blogs.js?v=20260706"></script>
+    <script src="data/site.js?v=20261008"></script>
+    <script src="data/products.js?v=20261008"></script>
+    <script src="data/slides.js?v=20261008"></script>
+    <script src="data/subjects.js?v=20261008"></script>
+    <script src="data/faqs.js?v=20261008"></script>
+    <script src="data/blogs.js?v=20261008"></script>
 
-    <!-- App scripts -->
-    <script src="scripts/helpers.js?v=20260706"></script>
-    <script src="scripts/slider.js?v=20260706"></script>
-    <script src="scripts/navbar.js?v=20260706"></script>
-    <script src="scripts/footer.js?v=20260706"></script>
-    <script src="scripts/contact-map.js?v=20260706"></script>
-    <script src="scripts/contact-form.js?v=20260706"></script>
-    <script src="scripts/product-grid.js?v=20260706"></script>
-    <script src="scripts/faq.js?v=20260706"></script>
-    <script src="scripts/blog.js?v=20260706"></script>
-    <script src="scripts/router.js?v=20260706"></script>
-    <script src="scripts/app.js?v=20260706"></script>
+    <!-- App scripts - Critical scripts load first -->
+    <script src="scripts/helpers.js?v=20261008"></script>
+    <script src="scripts/slider.js?v=20261008"></script>
+    <script src="scripts/navbar.js?v=20261008-social"></script>
+    <script src="scripts/footer.js?v=20261008"></script>
+    <script src="scripts/product-grid.js?v=20261008"></script>
+    <script src="scripts/faq.js?v=20261008"></script>
+    <script src="scripts/blog.js?v=20261008"></script>
+    <script src="scripts/router.js?v=20261008-2"></script>
+    <script src="scripts/app.js?v=20261008"></script>
+
+    <!-- Non-critical scripts deferred -->
+    <script src="scripts/contact-form.js?v=20261008" defer></script>
+    <script src="scripts/contact-map.js?v=20261008" defer></script>
+
+    <!-- OpenLayers - Lazy loaded only when contact page is visited -->
+    <script>
+      // OpenLayers lazy loader - only loads when contact page is accessed
+      var openLayersPromise;
+      window.loadOpenLayers = function() {
+        if (window.ol) return Promise.resolve();
+        if (openLayersPromise) return openLayersPromise;
+        openLayersPromise = new Promise(function(resolve, reject) {
+          var css = document.createElement('link');
+          css.rel = 'stylesheet';
+          css.href = 'https://cdn.jsdelivr.net/npm/ol@10.5.0/ol.css';
+          document.head.appendChild(css);
+          var js = document.createElement('script');
+          js.src = 'https://cdn.jsdelivr.net/npm/ol@10.5.0/dist/ol.js';
+          var timer = setTimeout(fail, 15000);
+          function fail() {
+            clearTimeout(timer);
+            js.remove();
+            css.remove();
+            openLayersPromise = null;
+            reject(new Error('Harita yüklenemedi.'));
+          }
+          js.onload = function () {
+            if (!window.ol) { fail(); return; }
+            clearTimeout(timer);
+            resolve();
+          };
+          js.onerror = fail;
+          document.head.appendChild(js);
+        });
+        return openLayersPromise;
+      };
+    </script>
 
     <!-- LOADER'I OTOMATİK KAPATAN SCRIPT -->
     <script>
@@ -294,9 +298,10 @@
             setTimeout(hideAppLoader, 250);
         });
 
-        // Güvenlik Önlemi: Yavaş bağlantılarda en geç 1.5 sn sonra kapatır
-        setTimeout(hideAppLoader, 1500);
+        // Güvenlik Önlemi: Yavaş bağlantılarda en geç 1 sn sonra kapatır
+        setTimeout(hideAppLoader, 1000);
     </script>
 </body>
 
 </html>
+

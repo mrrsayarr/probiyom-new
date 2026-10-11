@@ -8,7 +8,8 @@ function ImageSlider(container, slides, durationMs) {
 
   var activeIndex = 0;
   var timer = null;
-  var isPaused = false;
+  var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var isPaused = !!prefersReducedMotion;
   var slideElements = [];
   var pauseBtn = null;
   var counterSpan = null;
@@ -38,25 +39,34 @@ function ImageSlider(container, slides, durationMs) {
       var slideDiv = document.createElement('div');
       slideDiv.className = 'slider-slide' + (index === 0 ? ' is-active' : '');
 
-      var imgAttrs = index === 0
-        ? 'loading="eager" fetchpriority="high" decoding="sync"'
-        : 'loading="eager" decoding="async"';
-
-      var imageContainer = '<div class="slider-image-container">' +
-        '<img src="' + slide.src + '" alt="' + (slide.alt || '') + '" ' + imgAttrs + '>' +
-        '</div>';
+      var imageContainer = document.createElement('div');
+      imageContainer.className = 'slider-image-container';
+      var image = document.createElement('img');
+      image.src = slide.src;
+      image.alt = slide.alt || '';
+      image.loading = index === 0 ? 'eager' : 'lazy';
+      image.decoding = index === 0 ? 'sync' : 'async';
+      if (index === 0) image.setAttribute('fetchpriority', 'high');
+      imageContainer.appendChild(image);
 
       // AKILLI KONTROL: Sadece başlık verisi (title) dolu olan slaytlara metin kutusu ekler
-      var titleHtml = (slide.title && slide.title.trim().length > 0)
-        ? '<div class="slider-title"><p>' + slide.title + '</p></div>'
-        : '';
-
-      var innerContent = imageContainer + titleHtml;
-
+      var content = document.createDocumentFragment();
+      content.appendChild(imageContainer);
+      if (slide.title && slide.title.trim().length > 0) {
+        var title = document.createElement('div');
+        title.className = 'slider-title';
+        var titleText = document.createElement('p');
+        titleText.textContent = slide.title;
+        title.appendChild(titleText);
+        content.appendChild(title);
+      }
       if (slide.link) {
-        slideDiv.innerHTML = '<a href="' + slide.link + '">' + innerContent + '</a>';
+        var link = document.createElement('a');
+        link.href = slide.link;
+        link.appendChild(content);
+        slideDiv.appendChild(link);
       } else {
-        slideDiv.innerHTML = innerContent;
+        slideDiv.appendChild(content);
       }
 
       track.appendChild(slideDiv);

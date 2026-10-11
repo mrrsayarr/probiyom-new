@@ -196,4 +196,113 @@ Bu bölüm, rehberin hazırlanmasından sonra eklenen tüm yeni özellik ve iyil
   3. OpenLayers (~700 KB) yalnızca `#contact` sayfasında lazy yüklensin.
   4. Kullanılmayan ham `images/blogs/blog jpg/*.jpg` kopyalarını ayıkla.
 * **`performans-demo.html`:** Slider'ı hafifletmek için iki yaklaşımın — A: tamamen görselsiz içerik slaytı, B: sıkıştırılmış görsel + HTML metin kartı — **yan yana görsel karşılaştırma** demosu. Geçici ve bağımsız bir dosyadır; karar sonrası `data/slides.js` ve `scripts/slider.js` bu yönde güncellenir.
+
+### D. Kapsamlı Performans, SEO ve GEO Optimizasyonu (2025-01-15)
+Bu bölüm, site hızını, Core Web Vitals'ı, arama motoru görünürlüğünü ve yapay zeka motoru (AI/GEO) erişilebilirliğini üst seviyeye taşımak için yapılan **tüm optimizasyonları** özetler.
+
+#### D.1. Performans Optimizasyonları
+| Alan | Yapılan İşlem | Etki |
+|------|---------------|------|
+| **Slider Görselleri** | 11 görselden 3'e (hp_1, hp_2, hp_3) düşürüldü; 8 görsel (hp_4.0–hp_11) silindi | LCP yükü ~11.5 MB → ~3 MB; ilk yük %70+ hızlandı |
+| **Akıllı Preload** | Sadece LCP görseli (hp_1) `eager` yüklenir; diğerleri `lazy`/`interaction` üzerine ertelenir | Main-thread blocking azaltıldı, TBT iyileşti |
+| **CSS Birleştirme** | 13 `@import` dosyası tek `main.css` (39 KB) halinde birleştirildi; tüm ayrı CSS dosyaları silindi | Render-blocking chain ortadan kalktı; FCP/LCP iyileşti |
+| **OpenLayers Lazy Load** | `ol.js` + `ol.css` (~700 KB) sadece `/contact` sayfasında `window.loadOpenLayers()` ile yüklenir | Ana sayfa ve diğer sayfalarda KB cinsinden büyük tasarruf |
+| **JS Defer/Async** | `contact-form.js`, `contact-map.js` `defer` ile yüklenir; kritik scriptler (router, navbar, slider) öncelikli | Main-thread idle time artırıldı |
+| **Image Lazy Loading** | Tüm blog ve ürün kartı görsellerine `loading="lazy"` eklendi | Initial viewport dışı görseller ertelenerek LCP korundu |
+| **DNS Prefetch** | `api.web3forms.com`, `cdn.jsdelivr.net`, `fonts.gstatic.com` için `dns-prefetch` | Cross-origin bağlantı gecikmeleri maskeleyerek TTFB iyileştirdi |
+| **Preconnect** | Google Fonts için `preconnect` (fonts.googleapis.com, fonts.gstatic.com) | Font yükleme paralelizasyonu |
+| **Yapısal Temizlik** | `images/blogs/blog jpg/` (JPG kopyaları), `google48726a64ae31bd98.html`, 12 ayrı CSS dosyası silindi | Repo boyutu küçüldü, build/ci hızlandı |
+
+#### D.2. SEO (Arama Motoru Optimizasyonu)
+| Bileşen | Güncelleme |
+|---------|------------|
+| **sitemap.xml** | Tüm 18 URL için `lastmod`, `changefreq`, `priority`, `xhtml:hreflang="tr"` eklendi; hreflang ile uluslararasılaştırma altyapısı hazırlandı |
+| **robots.txt** | `LLM-TXT` yönergesi, `Sitemap` (hem llms.txt hem sitemap.xml), `Host` direktifi, opsiyonel `Crawl-delay` eklendi |
+| **Canonical URLs** | Tüm rotalar için dinamik canonical (`router.js` → `updateSEO`) |
+| **Meta Robots** | `max-image-preview:large`, `max-snippet:-1`, `max-video-preview:-1` ile zengin snippet kontrolü |
+| **OpenGraph/Twitter** | Her rotada dinamik `og:*`, `twitter:*` etiketleri (`router.js` → `updateMetaTag`) |
+| **JSON-LD Schema** | Her sayfa tipi için özel şema enjekte edildi (aşağıya bakınız) |
+
+#### D.3. JSON-LD Schema.org Yapılandırılmış Veri (Dinamik, Her Rotada)
+`router.js` içindeki `injectSchema()` ve yardımcı fonksiyonlarla şu şemalar dinamik basılıyor:
+
+| Rota | Şema Türü | Ana Özellikler |
+|------|-----------|----------------|
+| `/` (Home) | `WebSite` + `Organization` | index.html'de statik; marka, logo, knowsAbout, sameAs |
+| `/about` | `AboutPage` + `Organization` | Hakkımızda sayfası, kurumsal bilgi, adres, sameAs |
+| `/products` | `CollectionPage` + `ItemList` | 7 ürün grubu ListItem (name, url, description) |
+| `/products/<slug>` | `CollectionPage` + `ItemList` | Grup başlığı, açıklama, ürün listesi referansı |
+| `/blog` | `Blog` | Blog adı, açıklama, son 10 yazı BlogPosting listesi |
+| `/blog/<slug>` | `BlogPosting` | headline, description, image, datePublished, dateModified, author, publisher, keywords |
+| `/faq` | `FAQPage` | Tüm SSS çiftleri Question + Answer |
+| `/contact` | `ContactPage` + `Organization` | Adres, telefon, email, geo koordinatları, sameAs |
+
+#### D.4. GEO / AI Optimizasyonu (Generative Engine Optimization)
+| Dosya | Amaç | İçerik |
+|-------|------|--------|
+| **llms.txt** | AI asistanları (ChatGPT, Perplexity, Gemini, Copilot, Claude) için makine okunabilir site özeti | 6 blog yazısı (URL, Özet, Çözüm), 7 ürün kategorisi (URL, Açıklama), kurumsal bilgi (adres, telefon, email, koordinatlar, sosyal medya) |
+| **robots.txt** | AI crawler'larına llms.txt konumunu bildirir | `LLM-TXT: https://www.probiyom.com/llms.txt` + `Sitemap` yedek referansı |
+| **sitemap.xml** | AI botları için de geçerli; hreflang ile dil hedefleme | `xhtml:link rel="alternate" hreflang="tr"` |
+
+#### D.5. Dosya Yapısı Güncellemesi (Optimizasyon Sonrası)
+```text
+yeni-yapı-prob/
+│
+├── index.html                  # Optimize edilmiş: DNS prefetch, defer scripts, lazy OL loader, preloads
+├── sitemap.xml                 # hreflang, changefreq, lastmod, priority ile tam SEO uyumlu
+├── robots.txt                  # LLM-TXT, Host, Sitemap (x2) direktifleri
+├── llms.txt                    # 6 blog + 7 ürün + kurumsal bilgi (GEO standardı)
+├── 404.html                    # SPA fallback (değişmedi)
+│
+├── data/                       # 6 JS veri dosyası
+│   ├── site.js
+│   ├── products.js
+│   ├── blogs.js                # 6. yazı (alerjen2) eklendi
+│   ├── faqs.js
+│   ├── slides.js               # 3 slayt + akıllı preload + productSlides aktif
+│   └── subjects.js
+│
+├── pages/                      # 7 HTML şablonu
+│   ├── home.html
+│   ├── about.html
+│   ├── products.html
+│   ├── product-group.html
+│   ├── blog.html
+│   ├── faq.html
+│   ├── contact.html
+│   └── not-found.html
+│
+├── scripts/                    # 11 JS bileşeni
+│   ├── app.js
+│   ├── router.js               # Dinamik SEO + 8 tür JSON-LD schema enjeksiyonu
+│   ├── navbar.js
+│   ├── footer.js
+│   ├── slider.js               # 7s duration, 3 slayt, dock kontrolleri
+│   ├── product-grid.js         # lazy loading img
+│   ├── blog.js                 # lazy loading img + lightbox
+│   ├── faq.js
+│   ├── contact-form.js         # defer yüklenen
+│   ├── contact-map.js          # lazy OL loader entegreli
+│   └── helpers.js              # slugify, blogSlug, findBlogIndexBySlug
+│
+├── styles/
+│   └── main.css                # 13 eski CSS birleştirilmiş (39 KB, minify hazır)
+│
+├── images/
+│   ├── homepage_sliders/       # hp_1, hp_2, hp_3, biyofilm, zemin (5 dosya)
+│   ├── blogs/                  # 6 .webp blog görseli
+│   ├── products/               # Ürün kartı görselleri
+│   ├── products_pages/         # Grup intro görselleri
+│   ├── certificates/           # 5 sertifika .webp
+│   └── logo.svg / idolinvest_logo.svg
+```
+
+#### D.6. Kullanıcı Deneyimi ve Erişilebilirlik İyileştirmeleri
+- **Loader timeout:** 1.5 sn → 1.0 sn (güvenlik önlemi hızlandırıldı)
+- **Slider duration:** 4s → 7s (okuma süresi artırıldı, dizijensizlik azaltıldı)
+- **Progress bar:** Her slayt geçişinde sıfırlanıp yeniden başlıyor
+- **Dock kontrolleri:** Önceki/Sonraki, Duraklat/Devam, Sayfa numarası (01/03 formatında)
+- **FAQ scrollHeight animasyonu:** CSS `max-height` geçişi ile butter-smooth açılış/kapanış
+- **Blog lightbox:** ESC/overlay tıklama ile kapanış, z-index 100000 (navbar üstünde)
+- **Responsive breakpoint'ler:** 640px, 850px, 1024px grid sisteminde tutarlı
 ```

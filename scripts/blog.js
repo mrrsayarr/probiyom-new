@@ -2,6 +2,8 @@
    BlogList – Switches between list overview and dedicated reading view
    =================================================================== */
 
+var activeBlogLightbox = null;
+
 function BlogList(container, posts, initialIdentifier) {
   if (!posts || posts.length === 0) {
     container.innerHTML = '<div class="empty-state">Henüz blog yazısı eklenmedi.</div>';
@@ -37,18 +39,23 @@ function BlogList(container, posts, initialIdentifier) {
       var imageAlt = post.imageName || post.title || '';
 
       var snippet = getSnippet(post.text, 140);
+      var postSlug = blogSlug(post);
+      var postRoute = 'blog/' + postSlug;
+      var postHref = window.Router && typeof window.Router.getRouteHref === 'function'
+        ? window.Router.getRouteHref(postRoute)
+        : '/' + postRoute;
 
       var imageHtml = '';
       if (post.imageDir) {
         imageHtml =
           '<div class="blog-post-image position-relative overflow-hidden bg-white">' +
-          '<img src="' + escapeAttr(post.imageDir) + '" alt="' + escapeAttr(imageAlt) + '" class="w-100 h-100 object-fit-contain p-2 transition-all">' +
+          '<img src="' + escapeAttr(post.imageDir) + '" alt="' + escapeAttr(imageAlt) + '" class="w-100 h-100 object-fit-contain p-2 transition-all" loading="lazy">' +
           '</div>';
       }
 
       html +=
         '<div class="col">' +
-        '<article class="blog-post h-100 border border-light-subtle rounded-3 overflow-hidden d-flex flex-column shadow-sm bg-white cursor-pointer" data-index="' + i + '" data-slug="' + blogSlug(post) + '">' +
+        '<article class="blog-post h-100 border border-light-subtle rounded-3 overflow-hidden d-flex flex-column shadow-sm bg-white cursor-pointer" data-index="' + i + '" data-slug="' + escapeAttr(postSlug) + '">' +
         imageHtml +
         '<div class="blog-post-body p-4 d-flex flex-column justify-content-between flex-grow-1">' +
         '<div>' +
@@ -56,9 +63,9 @@ function BlogList(container, posts, initialIdentifier) {
         '<p class="blog-post-text text-muted small lh-relaxed mb-4">' + escapeHtml(snippet) + '</p>' +
         '</div>' +
         '<div class="text-start mt-auto">' +
-        '<span class="read-more-link text-decoration-none fw-bold small text-brand d-inline-flex align-items-center gap-1 transition-all">' +
+        '<a href="' + escapeAttr(postHref) + '" aria-label="' + escapeAttr('Devamını oku: ' + post.title) + '" class="read-more-link text-decoration-none fw-bold small text-brand d-inline-flex align-items-center gap-1 transition-all">' +
         'Devamını Oku <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>' +
-        '</span>' +
+        '</a>' +
         '</div>' +
         '</div>' +
         '</article>' +
@@ -71,7 +78,9 @@ function BlogList(container, posts, initialIdentifier) {
     // Karta tıklandığında adres satırındaki route değerini SEO dostu slug ile günceller
     var cards = container.querySelectorAll('.blog-post');
     cards.forEach(function (card) {
-      card.addEventListener('click', function () {
+      card.addEventListener('click', function (event) {
+        if (!event || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        if (event.target && event.target.closest && event.target.closest('a, button, input, select, textarea, summary, [contenteditable="true"]')) return;
         var slug = this.getAttribute('data-slug');
         if (slug) {
           if (window.Router && typeof window.Router.navigate === 'function') {
@@ -99,7 +108,7 @@ function BlogList(container, posts, initialIdentifier) {
     if (post.imageDir) {
       imageHtml =
         '<div class="blog-detail-image rounded-3 overflow-hidden mb-4 shadow-sm bg-white text-center">' +
-        '<img src="' + escapeAttr(post.imageDir) + '" alt="' + escapeAttr(imageAlt) + '" class="img-fluid object-fit-contain p-2" style="max-height: 480px; width: auto; margin: 0 auto;">' +
+        '<img src="' + escapeAttr(post.imageDir) + '" alt="' + escapeAttr(imageAlt) + '" class="img-fluid object-fit-contain p-2" style="max-height: 480px; width: auto; margin: 0 auto;" loading="lazy">' +
         '</div>';
     }
 
@@ -136,24 +145,85 @@ function BlogList(container, posts, initialIdentifier) {
     var detailImg = container.querySelector('.blog-detail-image img');
     if (detailImg) {
       detailImg.style.cursor = 'zoom-in';
+      detailImg.setAttribute('tabindex', '0');
+      detailImg.setAttribute('role', 'button');
+      detailImg.setAttribute('aria-label', 'Görseli büyüt: ' + imageAlt);
+      detailImg.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          detailImg.click();
+        }
+      });
       detailImg.addEventListener('click', function () {
+        if (activeBlogLightbox) return;
         var lightbox = document.createElement('div');
         lightbox.className = 'blog-lightbox';
-        lightbox.innerHTML = '<img src="' + escapeAttr(post.imageDir) + '" alt="' + escapeAttr(imageAlt) + '">';
+        lightbox.setAttribute('role', 'dialog');
+        lightbox.setAttribute('aria-modal', 'true');
+        lightbox.setAttribute('aria-label', 'Büyük görsel görünümü');
+        var closeButton = document.createElement('button');
+        closeButton.type = 'button';
+        closeButton.className = 'blog-lightbox-close';
+        closeButton.setAttribute('aria-label', 'Görseli kapat');
+        closeButton.textContent = '×';
+        closeButton.style.position = 'fixed';
+        closeButton.style.top = '1rem';
+        closeButton.style.right = '1rem';
+        closeButton.style.zIndex = '1';
+        closeButton.style.fontSize = '2rem';
+        closeButton.style.lineHeight = '1';
+        closeButton.style.color = '#fff';
+        closeButton.style.background = 'transparent';
+        closeButton.style.border = '1px solid currentColor';
+        closeButton.style.borderRadius = '50%';
+        closeButton.style.width = '2.75rem';
+        closeButton.style.height = '2.75rem';
+        var lightboxImage = document.createElement('img');
+        lightboxImage.src = post.imageDir;
+        lightboxImage.alt = imageAlt;
+        lightbox.appendChild(closeButton);
+        lightbox.appendChild(lightboxImage);
         document.body.appendChild(lightbox);
+        activeBlogLightbox = lightbox;
+        var previousBodyOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+
+        var closeTimer = null;
+        function closeLightbox(immediate, restoreFocus) {
+          if (activeBlogLightbox !== lightbox) return;
+          document.removeEventListener('keydown', onKeyDown);
+          lightbox.classList.remove('is-active');
+          if (closeTimer !== null) clearTimeout(closeTimer);
+          var removeLightbox = function () {
+            if (lightbox.parentNode) lightbox.parentNode.removeChild(lightbox);
+            document.body.style.overflow = previousBodyOverflow;
+            document.removeEventListener('routechange', onRouteChange);
+            activeBlogLightbox = null;
+            if (restoreFocus) detailImg.focus();
+          };
+          if (immediate) removeLightbox();
+          else closeTimer = setTimeout(removeLightbox, 300);
+        }
+        function onKeyDown(event) {
+          if (event.key === 'Escape') closeLightbox(false, true);
+          else if (event.key === 'Tab') {
+            event.preventDefault();
+            closeButton.focus();
+          }
+        }
+        function onRouteChange() { closeLightbox(true, false); }
+        function onBackdropClick(event) {
+          if (event.target === lightbox) closeLightbox(false, true);
+        }
+        closeButton.addEventListener('click', function () { closeLightbox(false, true); });
+        lightbox.addEventListener('click', onBackdropClick);
+        document.addEventListener('keydown', onKeyDown);
+        document.addEventListener('routechange', onRouteChange);
 
         requestAnimationFrame(function () {
           lightbox.classList.add('is-active');
         });
-
-        lightbox.addEventListener('click', function () {
-          lightbox.classList.remove('is-active');
-          setTimeout(function () {
-            if (lightbox.parentNode) {
-              lightbox.parentNode.removeChild(lightbox);
-            }
-          }, 300);
-        });
+        closeButton.focus();
       });
     }
 
@@ -193,14 +263,14 @@ function BlogList(container, posts, initialIdentifier) {
           var line = lines[j].trim();
           if (line.indexOf('-') === 0) {
             var cleanLine = line.substring(1).trim();
-            listHtml += '<li class="mb-2 text-muted">' + cleanLine + '</li>';
+            listHtml += '<li class="mb-2 text-muted">' + formatText(cleanLine) + '</li>';
             inList = true;
           } else if (line) {
             if (inList) {
               listHtml += '</ul>';
               inList = false;
             }
-            listHtml += '<p class="mb-3">' + line + '</p>';
+            listHtml += '<p class="mb-3">' + formatText(line) + '</p>';
           }
         }
         if (inList) {
@@ -208,7 +278,7 @@ function BlogList(container, posts, initialIdentifier) {
         }
         result += listHtml;
       } else {
-        result += '<p class="mb-4">' + pText + '</p>';
+        result += '<p class="mb-4">' + formatText(pText) + '</p>';
       }
     }
     return result;

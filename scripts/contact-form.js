@@ -26,7 +26,10 @@ function ContactForm(container) {
 
   function formatPhoneInput(raw) {
     var digits = raw.replace(/\D/g, '');
-    var rest = digits.indexOf('90') === 0 ? digits.slice(2, 12) : digits.slice(0, 10);
+    if (digits.indexOf('0090') === 0) digits = digits.slice(4);
+    else if (digits.indexOf('90') === 0 && (raw.indexOf('+') === 0 || digits.length > 10)) digits = digits.slice(2);
+    if (digits.charAt(0) === '0') digits = digits.slice(1);
+    var rest = digits.slice(0, 10);
 
     var a = rest.slice(0, 3);
     var b = rest.slice(3, 6);
@@ -46,7 +49,8 @@ function ContactForm(container) {
   function isValid() {
     return (
       form.fullName.trim().length > 0 &&
-      form.email.trim().length > 0 &&
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim()) &&
+      (form.phone === '+90' || form.phone.replace(/\D/g, '').length === 12) &&
       form.productGroup !== '' &&
       form.subject !== ''
     );
@@ -87,9 +91,9 @@ function ContactForm(container) {
 
     var feedbackHtml = '';
     if (submitStatus === 'success') {
-      feedbackHtml = '<div class="form-success mt-3"><p class="text-success fw-bold m-0">✓ Mesajınız başarıyla iletildi. En kısa sürede sizinle iletişime geçeceğiz.</p></div>';
+      feedbackHtml = '<div class="form-success mt-3" role="status"><p class="text-success fw-bold m-0">✓ Mesajınız başarıyla iletildi. En kısa sürede sizinle iletişime geçeceğiz.</p></div>';
     } else if (submitStatus === 'error') {
-      feedbackHtml = '<div class="form-error mt-3 p-3 bg-danger bg-opacity-10 border border-danger-subtle rounded-3"><p class="text-danger fw-semibold m-0" style="font-size: 0.9rem;">' + statusMessage + '</p></div>';
+      feedbackHtml = '<div class="form-error mt-3 p-3 bg-danger bg-opacity-10 border border-danger-subtle rounded-3" role="alert"><p class="text-danger fw-semibold m-0" style="font-size: 0.9rem;">' + escapeHtml(statusMessage) + '</p></div>';
     }
 
     container.innerHTML =
@@ -144,6 +148,16 @@ function ContactForm(container) {
       '</section>';
 
     bindEvents();
+    if (submitStatus === 'submitting') {
+      container.querySelectorAll('input, select, textarea').forEach(function (el) { el.disabled = true; });
+    }
+  }
+
+  function clearFeedback() {
+    if (submitStatus !== 'error' && submitStatus !== 'success') return;
+    submitStatus = 'idle';
+    statusMessage = '';
+    container.querySelectorAll('.form-success, .form-error').forEach(function (el) { el.remove(); });
   }
 
   function bindEvents() {
@@ -155,9 +169,7 @@ function ContactForm(container) {
 
       input.addEventListener('input', (function (f, el) {
         return function () {
-          if (submitStatus === 'error' || submitStatus === 'success') {
-            submitStatus = 'idle';
-          }
+          clearFeedback();
           if (f === 'phone') {
             form[f] = formatPhoneInput(el.value);
             el.value = form[f];
@@ -171,9 +183,7 @@ function ContactForm(container) {
       if (input.tagName === 'SELECT') {
         input.addEventListener('change', (function (f, el) {
           return function () {
-            if (submitStatus === 'error' || submitStatus === 'success') {
-              submitStatus = 'idle';
-            }
+            clearFeedback();
             form[f] = el.value;
             updateSubmitButton();
           };
@@ -185,7 +195,7 @@ function ContactForm(container) {
     if (formEl) {
       formEl.addEventListener('submit', function (e) {
         e.preventDefault();
-        if (!isValid() || submitStatus === 'submitting') return;
+        if (!isValid() || submitStatus === 'submitting' || !formEl.reportValidity()) return;
 
         submitStatus = 'submitting';
         render();
@@ -203,8 +213,8 @@ function ContactForm(container) {
 
         var payload = {
           access_key: ACCESS_KEY,
-          name: form.fullName,
-          email: form.email,
+          name: form.fullName.trim(),
+          email: form.email.trim(),
           phone: form.phone,
           product_group: selectedGroup,
           subject: form.subject,
@@ -212,19 +222,26 @@ function ContactForm(container) {
           from_name: "Probiyom Web İletişim Formu"
         };
 
+        var controller = new AbortController();
+        var timeout = setTimeout(function () { controller.abort(); }, 15000);
         fetch("https://api.web3forms.com/submit", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             "Accept": "application/json"
           },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(payload),
+          signal: controller.signal
         })
         .then(function (response) {
-          return response.json();
+          return response.json().then(function (data) {
+            if (!response.ok) data.success = false;
+            return data;
+          });
         })
         .then(function (data) {
-          if (data.success) {
+          clearTimeout(timeout);
+          if (data.success === true) {
             submitStatus = 'success';
             form = {
               fullName: '',
@@ -236,11 +253,12 @@ function ContactForm(container) {
             };
           } else {
             submitStatus = 'error';
-            statusMessage = data.message || "Mesaj gönderilirken bir sorun oluştu. Lütfen tekrar deneyin.";
+            statusMessage = typeof data.message === 'string' ? data.message : "Mesaj gönderilirken bir sorun oluştu. Lütfen tekrar deneyin.";
           }
           render();
         })
         .catch(function (error) {
+          clearTimeout(timeout);
           submitStatus = 'error';
           statusMessage = "İnternet bağlantısı kurulamadı. Lütfen bağlantınızı kontrol edip tekrar deneyin.";
           render();

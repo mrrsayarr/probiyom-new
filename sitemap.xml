@@ -1,85 +1,150 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-   <!-- Ana Sayfa -->
-   <url>
-      <loc>https://www.probiyom.com/</loc>
-      <lastmod>2026-07-26</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1.0</priority>
-   </url>
-   <!-- Genel Sayfalar -->
-   <url>
-      <loc>https://www.probiyom.com/about</loc>
-      <priority>0.8</priority>
-   </url>
-   <url>
-      <loc>https://www.probiyom.com/products</loc>
-      <priority>0.8</priority>
-   </url>
-   <url>
-      <loc>https://www.probiyom.com/blog</loc>
-      <priority>0.8</priority>
-   </url>
-   <url>
-      <loc>https://www.probiyom.com/faq</loc>
-      <priority>0.7</priority>
-   </url>
-   <url>
-      <loc>https://www.probiyom.com/contact</loc>
-      <priority>0.8</priority>
-   </url>
-   <!-- Ürün Grupları (Google'ın Doğrudan İndekslemesi İçin) -->
-   <url>
-      <loc>https://www.probiyom.com/products/professional_cleaning</loc>
-      <priority>0.9</priority>
-   </url>
-   <url>
-      <loc>https://www.probiyom.com/products/home_cleaning</loc>
-      <priority>0.9</priority>
-   </url>
-   <url>
-      <loc>https://www.probiyom.com/products/personal_care</loc>
-      <priority>0.9</priority>
-   </url>
-   <url>
-      <loc>https://www.probiyom.com/products/cold_mist_spraying</loc>
-      <priority>0.9</priority>
-   </url>
-   <url>
-      <loc>https://www.probiyom.com/products/industrial_water_treatment</loc>
-      <priority>0.9</priority>
-   </url>
-   <url>
-      <loc>https://www.probiyom.com/products/livestock</loc>
-      <priority>0.9</priority>
-   </url>
-   <url>
-      <loc>https://www.probiyom.com/products/pet</loc>
-      <priority>0.9</priority>
-   </url>
-   <!-- Blog Yazıları -->
-   <url>
-      <loc>https://www.probiyom.com/blog/alerjinizi-tetikleyen-sey-toz-mu-pet-mi-yoksa-polen-mi-yoksa-gorunmeyen-mikrobiyal-dengesizlik-mi</loc>
-      <priority>0.8</priority>
-   </url>
-   <url>
-      <loc>https://www.probiyom.com/blog/camasir-yikarken-gizli-tehlike-yumusaticilar-kalp-sagligimizi-nasil-etkiliyor</loc>
-      <priority>0.8</priority>
-   </url>
-   <url>
-      <loc>https://www.probiyom.com/blog/gorunmez-kuresel-tehdit-antibiyotik-direnci-amr-gelecegimizin-en-buyuk-tehdidi-mi</loc>
-      <priority>0.8</priority>
-   </url>
-   <url>
-      <loc>https://www.probiyom.com/blog/alerjinize-karsi-yeni-nesil-simbiyotik-guc</loc>
-      <priority>0.8</priority>
-   </url>
-   <url>
-      <loc>https://www.probiyom.com/blog/bir-ciftlikte-hijyen-sadece-temizlik-midir-yoksa-hastaliklari-onleyen-gorunmez-bir-savunma-hatti-mi</loc>
-      <priority>0.8</priority>
-   </url>
-   <url>
-      <loc>https://www.probiyom.com/blog/endustriyel-su-sistemlerinde-gorunmeyen-maliyet-biyofilm</loc>
-      <priority>0.8</priority>
-   </url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <!-- Ana Sayfa -->
+  <url>
+    <loc>https://www.probiyom.com/</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://www.probiyom.com/" />
+  </url>
+
+  <!-- Hakkımızda -->
+  <url>
+    <loc>https://www.probiyom.com/about</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://www.probiyom.com/about" />
+  </url>
+
+  <!-- Ürünler Genel -->
+  <url>
+    <loc>https://www.probiyom.com/products</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://www.probiyom.com/products" />
+  </url>
+
+  <!-- Ürün Grupları -->
+  <url>
+    <loc>https://www.probiyom.com/products/professional_cleaning</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://www.probiyom.com/products/professional_cleaning" />
+  </url>
+  <url>
+    <loc>https://www.probiyom.com/products/home_cleaning</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://www.probiyom.com/products/home_cleaning" />
+  </url>
+  <url>
+    <loc>https://www.probiyom.com/products/personal_care</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://www.probiyom.com/products/personal_care" />
+  </url>
+  <url>
+    <loc>https://www.probiyom.com/products/cold_mist_spraying</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://www.probiyom.com/products/cold_mist_spraying" />
+  </url>
+  <url>
+    <loc>https://www.probiyom.com/products/industrial_water_treatment</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://www.probiyom.com/products/industrial_water_treatment" />
+  </url>
+  <url>
+    <loc>https://www.probiyom.com/products/livestock</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://www.probiyom.com/products/livestock" />
+  </url>
+  <url>
+    <loc>https://www.probiyom.com/products/pet</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://www.probiyom.com/products/pet" />
+  </url>
+
+  <!-- Blog -->
+  <url>
+    <loc>https://www.probiyom.com/blog</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://www.probiyom.com/blog" />
+  </url>
+  <url>
+    <loc>https://www.probiyom.com/blog/alerjinizi-tetikleyen-sey-toz-mu-pet-mi-yoksa-polen-mi-yoksa-gorunmeyen-mikrobiyal-dengesizlik-mi</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://www.probiyom.com/blog/alerjinizi-tetikleyen-sey-toz-mu-pet-mi-yoksa-polen-mi-yoksa-gorunmeyen-mikrobiyal-dengesizlik-mi" />
+  </url>
+  <url>
+    <loc>https://www.probiyom.com/blog/camasir-yikarken-gizli-tehlike-yumusaticilar-kalp-sagligimizi-nasil-etkiliyor</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://www.probiyom.com/blog/camasir-yikarken-gizli-tehlike-yumusaticilar-kalp-sagligimizi-nasil-etkiliyor" />
+  </url>
+  <url>
+    <loc>https://www.probiyom.com/blog/gorunmez-kuresel-tehdit-antibiyotik-direnci-amr-gelecegimizin-en-buyuk-tehdidi-mi</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://www.probiyom.com/blog/gorunmez-kuresel-tehdit-antibiyotik-direnci-amr-gelecegimizin-en-buyuk-tehdidi-mi" />
+  </url>
+  <url>
+    <loc>https://www.probiyom.com/blog/alerjinize-karsi-yeni-nesil-sinbiyotik-guc</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://www.probiyom.com/blog/alerjinize-karsi-yeni-nesil-sinbiyotik-guc" />
+  </url>
+  <url>
+    <loc>https://www.probiyom.com/blog/bir-ciftlikte-hijyen-sadece-temizlik-midir-yoksa-hastaliklari-onleyen-gorunmez-bir-savunma-hatti-mi</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://www.probiyom.com/blog/bir-ciftlikte-hijyen-sadece-temizlik-midir-yoksa-hastaliklari-onleyen-gorunmez-bir-savunma-hatti-mi" />
+  </url>
+  <url>
+    <loc>https://www.probiyom.com/blog/endustriyel-su-sistemlerinde-gorunmeyen-maliyet-biyofilm</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://www.probiyom.com/blog/endustriyel-su-sistemlerinde-gorunmeyen-maliyet-biyofilm" />
+  </url>
+
+  <!-- SSS -->
+  <url>
+    <loc>https://www.probiyom.com/faq</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://www.probiyom.com/faq" />
+  </url>
+
+  <!-- İletişim -->
+  <url>
+    <loc>https://www.probiyom.com/contact</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://www.probiyom.com/contact" />
+  </url>
 </urlset>

@@ -12,6 +12,11 @@
 
 A single-page application built with plain HTML/CSS/JS, requiring no framework or build step. Page transitions are managed by a path-based router.
 
+Routes use URLs without a trailing slash: `/contact/` normalizes to `/contact`.
+Legacy page hashes such as `/#contact` and `/#/products/home_cleaning` migrate to path URLs.
+Each route has its own content template under `pages/`, loaded into the shared `index.html` shell.
+Real content fragments (for example `/faq#faq-answer-0`) remain intact.
+
 Framework veya build adımı gerektirmeyen, saf HTML/CSS/JS ile geliştirilmiş tek sayfalı bir uygulamadır. Sayfa geçişleri path tabanlı bir router ile yönetilir.
 
 ## Pages / Sayfalar

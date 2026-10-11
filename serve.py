@@ -21,8 +21,9 @@ import sys
 from urllib.parse import urlparse
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-DEFAULT_PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 7076
-HOST = "0.0.0.0"
+DEFAULT_PORT = 7076
+# This is a local development server; binding loopback keeps it off the LAN.
+HOST = "127.0.0.1"
 
 
 def find_free_port(preferred, probes=100):
@@ -43,11 +44,8 @@ class SPAHandler(http.server.SimpleHTTPRequestHandler):
         super().__init__(*args, directory=ROOT, **kwargs)
 
     def local_full_path(self):
-        """İstek yolunu kök dizine göre gerçek dosya yoluna çevirir."""
-        path = urlparse(self.path).path
-        # Sorgu dizesi yok; güvenli normalizasyon
-        rel = path.lstrip("/")
-        return os.path.normpath(os.path.join(ROOT, rel))
+        """Use the same decoding and traversal handling as the static handler."""
+        return self.translate_path(self.path)
 
     def has_extension(self):
         p = urlparse(self.path).path
@@ -72,6 +70,21 @@ class SPAHandler(http.server.SimpleHTTPRequestHandler):
         # 3) Var olmayan bir varlık (ör. kayıp görsel) -> gerçek 404 döndür
         super().send_error(404, "Not Found")
 
+    def do_HEAD(self):
+        """Match GET routing while allowing the base handler to omit the body."""
+        full = self.local_full_path()
+
+        if os.path.isfile(full):
+            super().do_HEAD()
+            return
+
+        if not self.has_extension():
+            self.path = "/"
+            super().do_HEAD()
+            return
+
+        super().send_error(404, "Not Found")
+
     # Basit log çıktısı (hangi isteğin fallback yediğini görebilmek için)
     def log_message(self, fmt, *args):
         sys.stderr.write("[serve] %s - %s\n" % (self.address_string(), fmt % args))
@@ -79,13 +92,14 @@ class SPAHandler(http.server.SimpleHTTPRequestHandler):
 
 if __name__ == "__main__":
     os.chdir(ROOT)
+    default_port = int(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_PORT
     handler = SPAHandler
     # İstenen port doluysa (ör. eski python -m http.server hâlâ çalışıyorsa)
     # otomatik olarak bir sonraki BOŞ portu seçip kullanır.
-    target = find_free_port(DEFAULT_PORT)
+    target = find_free_port(default_port)
     http.server.ThreadingHTTPServer.allow_reuse_address = True
     with http.server.ThreadingHTTPServer((HOST, target), handler) as httpd:
-        note = "" if target == DEFAULT_PORT else "  [istenen %d portu dolu -> %d kullanıldı]" % (DEFAULT_PORT, target)
+        note = "" if target == default_port else "  [istenen %d portu dolu -> %d kullanıldı]" % (default_port, target)
         print("=" * 60)
         print(" Probiyom yerel sunucusu calisiyor (%s)" % note)
         print("    Ana Sayfa      : http://localhost:%d/" % target)

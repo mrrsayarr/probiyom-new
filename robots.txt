@@ -1,12 +1,23 @@
+# Probiyom - robots.txt
+# Arama motoru tarama talimatları ve AI/GEO optimizasyonu
+
 User-agent: *
 Allow: /
 
+# Disallow admin/private paths (none currently)
+# Disallow: /admin/
+# Disallow: /private/
+
 # Yeni Nesil AI / GEO (Generative Engine Optimization)
-# Yapay zeka asistanlarının (ChatGPT, Perplexity, Gemini vb.) marka ve blog
-# içeriklerinizi doğru kaynak olarak kullanabilmesi için:
+# Yapay zeka asistanlarının (ChatGPT, Perplexity, Gemini, Copilot, Claude vb.)
+# marka ve blog içeriklerinizi doğru kaynak olarak kullanabilmesi için:
 # https://llmstxt.org/
 LLM-TXT: https://www.probiyom.com/llms.txt
-# Alternatif sözdizimi (bazı tarayıcılar Sitemap satırı gibi okur):
-Sitemap: https://www.probiyom.com/llms.txt
-
+# XML Site Haritası
 Sitemap: https://www.probiyom.com/sitemap.xml
+
+# Crawl-delay for polite crawling (optional)
+# Crawl-delay: 10
+
+# Host directive (preferred domain)
+Host: https://www.probiyom.com
