@@ -58,6 +58,18 @@ test('blog read-more controls are links and card navigation respects interaction
   assert.deepEqual(app.navigations, ['blog/a-hostile-slug']);
 });
 
+test('imported headings and clean product links render without allowing unsafe HTML', () => {
+  const app = createListContext();
+  app.context.BlogList(app.container, [{
+    title: 'Yeni yazı',
+    text: '<h2>Yeni bölüm</h2>\r\n \r\n<a href="/products/pet">Evcil hayvan ürünleri</a>\r\n\r\n<a href="javascript:alert(1)">Zararlı</a> <img src=x onerror=alert(1)>'
+  }], 0);
+  assert.match(app.container.innerHTML, /<h2>Yeni bölüm<\/h2>/);
+  assert.match(app.container.innerHTML, /<a href="\/products\/pet">Evcil hayvan ürünleri<\/a>/);
+  assert.doesNotMatch(app.container.innerHTML, /<p[^>]*><h2/);
+  assert.doesNotMatch(app.container.innerHTML, /<a href="javascript:|<img src=x/);
+});
+
 function createDetailContext() {
   const documentListeners = {};
   const overlays = [];

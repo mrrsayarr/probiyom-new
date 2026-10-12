@@ -10,14 +10,14 @@
 
 ## Technical Structure / Teknik Yapı
 
-A single-page application built with plain HTML/CSS/JS, requiring no framework or build step. Page transitions are managed by a path-based router.
+A plain HTML/CSS/JS application with path-based navigation. Production builds pre-render each route to HTML for visitors, search engines and social previews.
 
 Routes use URLs without a trailing slash: `/contact/` normalizes to `/contact`.
 Legacy page hashes such as `/#contact` and `/#/products/home_cleaning` migrate to path URLs.
 Each route has its own content template under `pages/`, loaded into the shared `index.html` shell.
 Real content fragments (for example `/faq#faq-answer-0`) remain intact.
 
-Framework veya build adımı gerektirmeyen, saf HTML/CSS/JS ile geliştirilmiş tek sayfalı bir uygulamadır. Sayfa geçişleri path tabanlı bir router ile yönetilir.
+Saf HTML/CSS/JS ile geliştirilmiştir. Yayın öncesi derleme her rota için içerik ve SEO etiketlerini içeren HTML üretir; sayfa içi gezinme mevcut router ile devam eder.
 
 ## Pages / Sayfalar
 
@@ -46,7 +46,7 @@ probiyom-website/
 
 ## Running Locally / Yerel Geliştirme
 
-The router loads page partials via `fetch()` and uses clean path URLs (no hash), so the site must be served over HTTP and unknown routes must fall back to `index.html`. Use the provided SPA-fallback server so deep links (`/contact`, `/blog/<slug>`) work on refresh and direct open.
+Run `npm run build` after content changes, then `python serve.py 7076` for preview. Each clean URL receives ready HTML from `seo-pages/`; browser navigation retains the existing router. Unknown routes return HTTP 404. Deploy the generated `dist/` package. See [SEO build instructions](docs/seo-build.md) for dependencies and hosting setup.
 
 Router, sayfa parçalarını `fetch()` ile yüklediği ve hash'siz gerçek yol kullandığı için dosyanın doğrudan tarayıcıda açılması çalışmaz. Derin bağlantıların 404 vermemesi için SPA fallback'li sunucuyu kullanın:
 

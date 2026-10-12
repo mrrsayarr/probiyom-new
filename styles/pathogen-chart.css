@@ -1,0 +1,256 @@
+.pathogen-trend {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin: 0 0 4.25rem -50vw;
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+.pathogen-trend__header {
+  max-width: 54rem;
+}
+
+.pathogen-trend__eyebrow {
+  color: #a83d3b;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+.pathogen-trend__header p {
+  max-width: 42rem;
+  font-size: 0.98rem;
+  line-height: 1.65;
+}
+
+.pathogen-trend__panel {
+  border-radius: 1.25rem !important;
+  box-shadow: 0 1rem 3rem rgb(44 29 27 / 7%) !important;
+}
+
+.pathogen-trend__insights {
+  display: grid;
+  height: 100%;
+  gap: 1rem;
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+}
+
+.pathogen-trend__insight {
+  padding: 1.2rem 1.25rem;
+  border: 1px solid #eadfda;
+  border-left: 4px solid #bd4845;
+  border-radius: 0.9rem;
+  background: linear-gradient(135deg, #fff 0%, #fff8f5 100%);
+  box-shadow: 0 0.5rem 1.5rem rgb(44 29 27 / 5%);
+}
+
+.pathogen-trend__insight--rebound {
+  border-left-color: #d56c43;
+  background: linear-gradient(135deg, #fff 0%, #fff8ef 100%);
+}
+
+.pathogen-trend__insight--probiotic {
+  border-left-color: #32866b;
+  background: linear-gradient(135deg, #fff 0%, #f2faf5 100%);
+}
+
+.pathogen-trend__insight-kicker {
+  display: block;
+  margin-bottom: 0.55rem;
+  color: #8e625b;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+}
+
+.pathogen-trend__insight h3 {
+  margin: 0 0 0.45rem;
+  color: #332725;
+  font-size: 1.02rem;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.pathogen-trend__insight p {
+  margin: 0;
+  color: #675b58;
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.pathogen-chart {
+  --chart-text: #334155;
+  --chart-muted: #64748b;
+  display: grid;
+  gap: 0.875rem;
+  width: 100%;
+  min-width: 0;
+  color: var(--chart-text);
+}
+
+.pathogen-chart__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.pathogen-chart__filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid #dbe3ec;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--chart-text);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease, opacity 160ms ease;
+}
+
+.pathogen-chart__filter[aria-pressed="false"] {
+  background: #f1f5f9;
+  border-style: dashed;
+}
+
+.pathogen-chart__filter:focus-visible,
+.pathogen-chart__point:focus-visible {
+  outline: 3px solid #0f766e;
+  outline-offset: 3px;
+}
+
+.pathogen-chart__swatch {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 2px rgb(15 23 42 / 10%);
+}
+
+.pathogen-chart__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  font-family: inherit;
+}
+
+.pathogen-chart__grid {
+  stroke: #cbd5e1;
+  stroke-width: 1.5;
+  stroke-dasharray: 5 6;
+}
+
+.pathogen-chart__axis {
+  stroke: #64748b;
+  stroke-width: 1.75;
+}
+
+.pathogen-chart__axis-label {
+  fill: var(--chart-muted);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.pathogen-chart__line {
+  fill: none;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.pathogen-chart__area {
+  stroke: none;
+  pointer-events: none;
+}
+
+.pathogen-chart__point {
+  stroke: #fff;
+  stroke-width: 2.5;
+  cursor: pointer;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: r 140ms ease, stroke-width 140ms ease, filter 140ms ease;
+}
+
+.pathogen-chart__point:hover,
+.pathogen-chart__point.is-hovered,
+.pathogen-chart__point.is-selected {
+  stroke-width: 3.5;
+  filter: drop-shadow(0 2px 3px rgb(15 23 42 / 22%));
+}
+
+.pathogen-chart__point.is-selected {
+  stroke: #0f172a;
+}
+
+.pathogen-chart__detail {
+  min-height: 3.5rem;
+  padding: 0.875rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.pathogen-chart__note {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 575.98px) {
+  .pathogen-trend__header h2 {
+    font-size: clamp(1.8rem, 8vw, 2.35rem) !important;
+  }
+
+  .pathogen-trend__insight {
+    padding: 1rem;
+  }
+
+  .pathogen-chart {
+    gap: 0.65rem;
+  }
+
+  .pathogen-chart__filters {
+    justify-content: flex-start;
+  }
+
+  .pathogen-chart__filter {
+    min-height: 2.75rem;
+    padding-inline: 0.7rem;
+    font-size: 0.8rem;
+  }
+
+  .pathogen-chart__axis-label {
+    font-size: 28px;
+  }
+
+  .pathogen-chart__axis-label--x {
+    font-size: 32px;
+  }
+
+  .pathogen-chart__point {
+    r: 11px;
+  }
+
+  .pathogen-chart__detail {
+    font-size: 0.875rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pathogen-chart__filter,
+  .pathogen-chart__point {
+    transition: none;
+  }
+}

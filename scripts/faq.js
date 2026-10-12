@@ -5,7 +5,7 @@
 function FaqList(container, items) {
   if (!items || items.length === 0) {
     container.innerHTML = '<div class="empty-state">Henüz soru eklenmedi.</div>';
-    return;
+    return { destroy: function () {} };
   }
 
   var html = '<ul class="faq-list list-unstyled m-0 d-flex flex-column gap-3">';
@@ -57,4 +57,13 @@ function FaqList(container, items) {
     }
   }
   window.addEventListener('resize', refreshOpenAnswers);
+
+  var destroyed = false;
+  return {
+    destroy: function () {
+      if (destroyed) return;
+      destroyed = true;
+      window.removeEventListener('resize', refreshOpenAnswers);
+    }
+  };
 }

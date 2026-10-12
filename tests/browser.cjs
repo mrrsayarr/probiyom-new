@@ -7,11 +7,15 @@ const fs = require('node:fs');
   const browser = await chromium.launch({ headless: true, channel: 'chrome' });
   try {
     const page = await browser.newPage();
+    // Keep local regression runs out of production analytics.
+    await page.route(/https:\/\/(?:www\.)?googletagmanager\.com\//, route => route.abort());
     const errors = [];
     const missing = [];
+    const notFoundRoutes = ['/blog/nonexistent', '/blog/999999', '/about/extra', '/products/home_cleaning/extra'];
     page.on('pageerror', error => errors.push(error.message));
     page.on('response', response => {
-      if (response.url().startsWith('http://localhost:7076/') && response.status() >= 400) missing.push(response.url());
+      if (response.url().startsWith('http://localhost:7076/') && response.status() >= 400 &&
+          !(response.status() === 404 && notFoundRoutes.includes(new URL(response.url()).pathname))) missing.push(response.url());
     });
     const routes = ['/', '/about', '/products', '/contact', '/faq', '/blog'];
     await page.goto('http://localhost:7076/');
@@ -61,8 +65,9 @@ const fs = require('node:fs');
     await page.waitForSelector('.form-success');
     assert.equal(await page.locator('[data-field="fullName"]').inputValue(), '');
     assert.equal(requests, 2);
-    for (const route of ['/blog/nonexistent', '/blog/999999', '/about/extra', '/products/home_cleaning/extra']) {
-      await page.goto('http://localhost:7076' + route);
+    for (const route of notFoundRoutes) {
+      const response = await page.goto('http://localhost:7076' + route);
+      assert.equal(response.status(), 404, 'Unknown routes must return a real HTTP 404');
       await page.waitForSelector('#page-content .seo-initial-content', { state: 'detached' });
       assert.match(await page.locator('#page-content').innerText(), /404|bulunamadı/i, route);
     }

@@ -296,10 +296,6 @@ header.app-header, .app-header { position: sticky !important; top: 0 !important;
 #home-slider .slider-image-container { aspect-ratio: 16/9; background: #fff; }
 #home-slider .slider-image-container img { object-fit: contain; }
 
-/* Products Slider - 2:1, object-fit: cover */
-#products-slider .slider-image-container { aspect-ratio: 2/1; background: #fff; }
-#products-slider .slider-image-container img { object-fit: cover; }
-
 /* Group Intro Slider - 3:4 for vertical images */
 #group-intro-slider .slider-frame { border-radius: 1.25rem; border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); background: #fff; }
 #group-intro-slider .slider-image-container { aspect-ratio: 3/4; background: #fff; display: flex; align-items: center; justify-content: center; }
@@ -327,7 +323,6 @@ header.app-header, .app-header { position: sticky !important; top: 0 !important;
 /* Mobile Slider */
 @media (max-width: 768px) {
   #home-slider .slider-image-container { aspect-ratio: 16/10; }
-  #products-slider .slider-image-container { aspect-ratio: 16/9; }
   .slider-control-dock { padding: 0.35rem 0.5rem; gap: 0.45rem; }
   .dock-btn { width: 1.85rem; height: 1.85rem; }
   .dock-counter { font-size: 0.75rem; min-width: 2.8rem; }
@@ -467,6 +462,10 @@ header.app-header, .app-header { position: sticky !important; top: 0 !important;
 .blog-detail-title { line-height: 1.35; letter-spacing: -0.015em; color: var(--color-baltic-blue); }
 .blog-detail-text p { font-size: 1.1rem; line-height: 1.8; color: #334155; margin-bottom: 1.75rem; }
 .blog-detail-text strong { color: var(--color-text); font-weight: 700; }
+.blog-detail-text h2, .blog-detail-text h3, .blog-detail-text h4, .blog-detail-text h5, .blog-detail-text h6 { color: var(--color-baltic-blue); margin: 2rem 0 1rem; line-height: 1.35; }
+.blog-detail-text h2 { font-size: clamp(1.35rem, 3vw, 1.75rem); }
+.blog-detail-text a { color: var(--color-baltic-blue); text-decoration: underline; text-underline-offset: 0.2em; }
+.blog-detail-text a:hover, .blog-detail-text a:focus-visible { color: #236c6e; }
 
 /* ===== Home Specific ===== */
 .slogan-section { cursor: pointer; }

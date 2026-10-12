@@ -245,14 +245,30 @@ function BlogList(container, posts, initialIdentifier) {
     return cleanText.substring(0, maxLength).trim() + '...';
   }
 
+  function formatBlogInline(text) {
+    // Keep authored links to local pages, without allowing scripts or arbitrary attributes.
+    return formatText(text).replace(
+      /&lt;a href=&quot;(\/[a-z0-9/_-]+)&quot;&gt;([\s\S]*?)&lt;\/a&gt;/gi,
+      function (match, href, label) {
+        return '<a href="' + escapeAttr(href) + '">' + label + '</a>';
+      }
+    );
+  }
+
   function formatBlogText(text) {
     if (!text) return '';
-    var paragraphs = text.split('\n\n');
+    var paragraphs = text.split(/\r?\n[ \t]*\r?\n/);
     var result = '';
 
     for (var i = 0; i < paragraphs.length; i++) {
       var pText = paragraphs[i].trim();
       if (!pText) continue;
+
+      var heading = pText.match(/^<h([2-6])>([\s\S]*?)<\/h\1>$/i);
+      if (heading) {
+        result += '<h' + heading[1] + '>' + formatBlogInline(heading[2]) + '</h' + heading[1] + '>';
+        continue;
+      }
 
       if (pText.indexOf('\n-') !== -1 || pText.indexOf('- ') === 0) {
         var lines = pText.split('\n');
@@ -263,14 +279,14 @@ function BlogList(container, posts, initialIdentifier) {
           var line = lines[j].trim();
           if (line.indexOf('-') === 0) {
             var cleanLine = line.substring(1).trim();
-            listHtml += '<li class="mb-2 text-muted">' + formatText(cleanLine) + '</li>';
+            listHtml += '<li class="mb-2 text-muted">' + formatBlogInline(cleanLine) + '</li>';
             inList = true;
           } else if (line) {
             if (inList) {
               listHtml += '</ul>';
               inList = false;
             }
-            listHtml += '<p class="mb-3">' + formatText(line) + '</p>';
+            listHtml += '<p class="mb-3">' + formatBlogInline(line) + '</p>';
           }
         }
         if (inList) {
@@ -278,7 +294,7 @@ function BlogList(container, posts, initialIdentifier) {
         }
         result += listHtml;
       } else {
-        result += '<p class="mb-4">' + formatText(pText) + '</p>';
+        result += '<p class="mb-4">' + formatBlogInline(pText) + '</p>';
       }
     }
     return result;

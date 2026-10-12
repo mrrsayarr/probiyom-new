@@ -4,12 +4,12 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 
-const routerSource = fs.readFileSync(path.join(__dirname, '../scripts/router.js'), 'utf8');
+const modules = ['site-routes', 'page-seo', 'category-grid', 'home-page', 'page-controllers', 'router'];
 
 function createRouter(initialPath, fetchImpl, initialHash) {
   const events = [];
   const listeners = {};
-  const container = { innerHTML: '' };
+  const container = { innerHTML: '', querySelector(selector) { return document.getElementById(selector.slice(1)); } };
   const state = { dynamicSchema: null, title: '', metas: [], events };
   const document = {
     set title(value) { state.title = value; },
@@ -74,7 +74,9 @@ function createRouter(initialPath, fetchImpl, initialHash) {
     console
   };
   vm.createContext(context);
-  vm.runInContext(routerSource, context, { filename: 'router.js' });
+  for (const name of modules) {
+    vm.runInContext(fs.readFileSync(path.join(__dirname, '../scripts/' + name + '.js'), 'utf8'), context, { filename: name + '.js' });
+  }
   context.Router.init(container);
   return { context, container, state, window, listeners };
 }
@@ -134,7 +136,7 @@ test('non-success HTTP responses render a useful load error state', async () => 
 test('links with queries, fragments, and file extensions are left to the browser', () => {
   const app = createRouter('/about');
   const click = app.listeners.click[0];
-  for (const href of ['/about?source=nav', '/about#team', '/asset.unknown']) {
+  for (const href of ['/about?source=nav', '/about#team', '/asset.unknown', '/st/']) {
     let prevented = false;
     const anchor = {
       target: '',
@@ -202,4 +204,41 @@ test('inherited object properties are not valid product category routes', async 
     await flush();
     assert.match(app.state.title, /404/);
   }
+});
+
+test('homepage prefetch and navigation share a single in-flight request', async () => {
+  const requests = [];
+  const app = createRouter('/', url => {
+    requests.push(url);
+    return Promise.resolve({ ok: true, text: () => Promise.resolve('<main>home</main>') });
+  });
+  app.context.Router.navigate('home');
+  await flush();
+  assert.deepEqual(requests, ['pages/home.html']);
+  assert.equal(app.container.innerHTML, '<main>home</main>');
+});
+
+test('router disposes each mounted FAQ before replacing the page', async () => {
+  const app = createRouter('/faq');
+  let mounted = 0;
+  let disposed = 0;
+  app.context.document.getElementById = id => id === 'faq-list' ? {} : null;
+  app.context.FaqList = () => { mounted++; return { destroy() { disposed++; } }; };
+  await flush();
+  app.context.Router.navigate('about');
+  await flush();
+  assert.equal(disposed, 1);
+  app.context.Router.navigate('faq');
+  await flush();
+  app.context.Router.navigate('home');
+  await flush();
+  assert.equal(mounted, 2);
+  assert.equal(disposed, 2);
+});
+
+test('router initialization is idempotent', async () => {
+  const app = createRouter('/about');
+  app.context.Router.init(app.container);
+  await flush();
+  for (const event of ['click', 'popstate', 'hashchange']) assert.equal(app.listeners[event].length, 1);
 });

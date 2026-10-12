@@ -1,136 +1,262 @@
-/* ===== Footer Custom Extensions (Ultra-Modern Edition) ===== */
-.footer {
-  width: 100%;
-  /* Koyu Baltic Blue tonundan Slate-900 siyahına süzülen derin gradyan */
-  background: linear-gradient(180deg, var(--color-baltic-blue) 0%, #0f172a 100%);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+/* Footer presentation: keep the existing navy-and-mint identity, with a real responsive grid. */
+.app-footer > #footer-container > .footer {
+  padding-block: clamp(2.75rem, 5vw, 4.5rem) 2rem !important;
+  color: rgba(255, 255, 255, 0.76);
 }
 
-/* Marka Başlığı & Rozet */
+.footer-container {
+  width: min(100% - 2.5rem, 80rem);
+  margin-inline: auto;
+}
+
+.footer .text-white-50 {
+  color: #c5dbe5 !important;
+}
+
+.footer-grid {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.8fr) minmax(0, 1.2fr) minmax(0, 1.15fr);
+  gap: clamp(1.75rem, 3vw, 3.25rem);
+  margin: 0 0 2rem !important;
+}
+
+.footer-grid > .footer-column {
+  width: auto;
+  max-width: none;
+  padding: 0 !important;
+  min-width: 0;
+  text-align: left;
+}
+
 .footer-brand {
-  letter-spacing: -0.02em;
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  margin-inline: 0 !important;
+  color: #fff;
+  text-decoration: none;
 }
 
-.footer-badge {
-  font-size: 0.72rem !important;
-  letter-spacing: 0.05em;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+.footer-brand img {
+  width: auto;
+  height: 48px;
+  object-fit: contain;
 }
 
-/* Rozet İçi Yeşil Işıltı Noktası */
-.badge-dot {
-  width: 6px;
-  height: 6px;
-  background-color: var(--color-mint-leaf);
-  box-shadow: 0 0 8px var(--color-mint-leaf);
+.footer-brand-column > p,
+.footer-social-column > p {
+  max-width: 34ch;
+  line-height: 1.7;
 }
 
-/* Sütun Başlıkları */
+.footer-brand-column > .d-flex,
+.footer-social-icons {
+  justify-content: flex-start !important;
+}
+
 .footer-label {
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  opacity: 0.95;
+  margin-bottom: 0.85rem !important;
+  color: #fff;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
 }
 
-/* İletişim Vektör İkon Rengi */
-.text-mint {
-  color: var(--color-mint-leaf) !important;
+.footer-nav-list {
+  gap: 0.25rem !important;
+}
+
+.footer-link {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  padding-block: 0.35rem;
+  color: rgba(255, 255, 255, 0.76) !important;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.footer-link:hover {
+  color: #9af0d1 !important;
+  transform: translateX(2px);
+}
+
+.footer-link:focus-visible,
+.social-icon-btn:focus-visible,
+.footer-top-btn:focus-visible {
+  outline: 3px solid #9af0d1;
+  outline-offset: 3px;
+}
+
+.footer-contact-list {
+  gap: 0.75rem !important;
 }
 
 .footer-contact-list li {
+  align-items: flex-start !important;
+  min-width: 0;
+  line-height: 1.65;
+}
+
+.footer-contact-list li > span,
+.footer-contact-list li > a {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.footer-contact-list li > svg {
+  width: 18px;
+  height: 18px;
+  margin-top: 0.2rem;
+}
+
+.social-icon-btn {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.18);
+  transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.social-icon-btn:hover {
+  transform: translateY(-2px);
+  background: #287f8a !important;
+  border-color: #9af0d1 !important;
+}
+
+.footer-copy {
+  min-height: 64px;
+  margin-top: 1rem !important;
+  padding-top: 1rem !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+}
+
+.footer-copy small {
   line-height: 1.5;
 }
 
-/* Standart Link Geçişleri */
-.footer-link {
-  color: rgba(255, 255, 255, 0.7) !important;
-  transition: color 0.25s ease, padding-left 0.25s ease;
-  text-decoration: none;
-  display: inline-block;
-}
-
-@media (hover: hover) {
-  .footer-link:hover {
-    color: var(--color-mint-leaf) !important;
-    padding-left: 0.35rem; /* Sağa zarif süzülme */
-  }
-}
-
-/* ===== YENİ: Cam Efektli Sosyal Medya İkon Düğmeleri (Glassmorphism) ===== */
-.social-icon-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.85) !important;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  text-decoration: none;
-}
-
-/* Üzerine gelindiğinde büyüyerek marka yeşiline bürünen ve parlayan ikonlar */
-.social-icon-btn:hover {
-  background: var(--color-tropical-teal) !important;
-  border-color: var(--color-mint-leaf) !important;
-  color: #ffffff !important;
-  transform: translateY(-4px) scale(1.08);
-  box-shadow: 0 8px 20px rgba(56, 163, 165, 0.35);
-}
-
-.social-icon-btn:active {
-  transform: scale(0.95);
-}
-
-/* Yukarı Çık Butonu Stilleri */
 .footer-top-btn {
-  cursor: pointer;
-  padding: 0.35rem 0.75rem;
-  border-radius: 50px;
-  transition: all 0.25s ease;
+  min-width: 44px;
+  min-height: 44px;
+  justify-content: center;
+  padding: 0.55rem 0.9rem;
+  color: rgba(255, 255, 255, 0.82) !important;
+  border-radius: 999px;
 }
 
 .footer-top-btn:hover {
-  color: var(--color-mint-leaf) !important;
-  background: rgba(255, 255, 255, 0.06);
+  color: #9af0d1 !important;
+  background: rgba(255, 255, 255, 0.08);
 }
 
-.footer-top-btn svg {
-  transition: transform 0.25s ease;
-}
-
-.footer-top-btn:hover svg {
-  transform: translateY(-3px); /* Ok yukarı süzülür */
-}
-
-/* ===== RESPONSIVE (MOBİL) DÜZENLEMELER ===== */
-@media (max-width: 576px) {
-  .footer .text-start,
-  .footer .text-center {
-    text-align: center !important;
+@media (min-width: 576px) and (max-width: 991.98px) {
+  .footer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 2.5rem;
   }
 
-  .footer .footer-brand,
-  .footer .footer-badge {
-    justify-content: center !important;
-    margin-left: auto;
-    margin-right: auto;
+  .footer-brand-column {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .app-footer > #footer-container > .footer {
+    padding-top: 2.25rem !important;
+    padding-bottom: calc(6.5rem + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .footer-container {
+    width: calc(100% - 2rem);
+  }
+
+  .footer-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .footer-grid > .footer-brand-column,
+  .footer-grid > .footer-nav-column,
+  .footer-grid > .footer-contact-column,
+  .footer-grid > .footer-social-column {
+    text-align: left !important;
+  }
+
+  .footer-brand-column > .footer-brand {
+    justify-content: flex-start !important;
+  }
+
+  .footer-brand-column > p,
+  .footer-social-column > p {
+    max-width: 42ch;
+  }
+
+  .footer-brand-column > .d-flex,
+  .footer-social-icons {
+    justify-content: flex-start !important;
+  }
+
+  .footer-brand-column > .d-flex .footer-badge {
+    margin-inline: 0 !important;
+  }
+
+  .footer-nav-list {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.25rem 0.75rem !important;
+  }
+
+  .footer-nav-list li,
+  .footer-nav-list a {
+    min-width: 0;
+  }
+
+  .footer-link {
+    min-height: 44px;
+    padding-block: 0.5rem;
   }
 
   .footer-contact-list li {
-    justify-content: center !important;
+    justify-content: flex-start !important;
+  }
+
+  .footer-contact-list li > a {
+    min-height: 44px;
+    align-items: center;
   }
 
   .footer-social-icons {
-    justify-content: center !important;
+    gap: 0.65rem !important;
   }
 
   .footer-copy {
-    text-align: center;
+    min-height: 0;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 0.75rem !important;
+    text-align: left !important;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .footer-copy small {
+    max-width: 24ch;
+  }
+
+  .footer-top-btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-link,
+  .social-icon-btn,
+  .footer-top-btn {
+    transition: none !important;
   }
 }

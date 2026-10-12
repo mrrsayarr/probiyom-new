@@ -1,28 +1,13 @@
-<section class="page-section py-5 my-5 d-flex flex-column align-items-center justify-content-center text-center">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-8 col-lg-6">
-                
-                <!-- Degrade (Gradient) Geçişli Büyük 404 Başlığı -->
-                <h1 class="mb-3" style="font-size: clamp(5rem, 15vw, 8rem); line-height: 1; letter-spacing: -0.03em; font-weight: 900; background: linear-gradient(135deg, var(--color-baltic-blue), var(--color-tropical-teal)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                    404
-                </h1>
-                
-                <!-- Alt Başlık ve Açıklama Metni -->
-                <h2 class="fs-4 fw-bold text-dark mb-2">Aradığınız sayfa bulunamadı.</h2>
-                <p class="text-muted mb-5 small lh-relaxed max-w-md mx-auto">
-                    Ulaşmaya çalıştığınız sayfa silinmiş, adı değiştirilmiş veya geçici olarak kullanım dışı bırakılmış olabilir.
-                </p>
-                
-                <!-- Modern İkonlu Yönlendirme Butonu -->
-                <div class="d-flex justify-content-center">
-                    <a href="/" class="btn-404-home d-inline-flex align-items-center gap-2 px-4 py-3 rounded-pill text-white fw-semibold text-decoration-none shadow-sm" style="background-color: var(--color-baltic-blue); font-size: 0.95rem;">
-                        <span>Ana Sayfaya Dön</span>
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" class="btn-404-arrow"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                    </a>
-                </div>
-
-            </div>
+<section class="page-section not-found" aria-labelledby="not-found-title">
+    <div class="not-found-content">
+        <p class="not-found-code" aria-label="Hata kodu 404">404</p>
+        <h1 id="not-found-title">Bu sayfayı bulamadık.</h1>
+        <p class="not-found-description">Bağlantı değişmiş veya sayfa kaldırılmış olabilir. Anasayfadan devam edebilir ya da blog yazılarımıza göz atabilirsiniz.</p>
+        <div class="not-found-actions">
+            <a href="/" class="btn-404-home">Anasayfaya dön
+                <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+            <a href="/blog" class="not-found-blog">Blog yazılarını incele</a>
         </div>
     </div>
 </section>

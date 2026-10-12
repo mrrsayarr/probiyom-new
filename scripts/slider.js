@@ -2,8 +2,9 @@
    ImageSlider – GPU-Accelerated Dynamic Sliding Carousel
    =================================================================== */
 
-function ImageSlider(container, slides, durationMs) {
+function ImageSlider(container, slides, durationMs, options) {
   if (!slides || slides.length === 0) return;
+  options = options || {};
   durationMs = durationMs || 7000; // Slayt geçiş hızı 7 saniye
 
   var activeIndex = 0;
@@ -14,20 +15,15 @@ function ImageSlider(container, slides, durationMs) {
   var pauseBtn = null;
   var counterSpan = null;
   var progressBar = null;
-
-  // HIZ OPTİMİZASYONU: Görselleri slider başlatılır başlatılmaz arka planda önbelleğe çeker
-  function preloadImages() {
-    slides.forEach(function (slide, idx) {
-      if (slide && slide.src) {
-        var img = new Image();
-        img.src = slide.src;
-      }
-    });
-  }
+  var destroyed = false;
 
   function init() {
     var wrapper = document.createElement('div');
     wrapper.className = 'slider-wrapper';
+    if (options.controls === 'top-right') wrapper.classList.add('slider-wrapper--controls-top-right');
+    wrapper.setAttribute('role', 'region');
+    wrapper.setAttribute('aria-roledescription', 'slayt gösterisi');
+    wrapper.setAttribute('aria-label', options.label || 'Görsel slaytlar');
 
     var frame = document.createElement('div');
     frame.className = 'slider-frame';
@@ -38,6 +34,8 @@ function ImageSlider(container, slides, durationMs) {
     slides.forEach(function (slide, index) {
       var slideDiv = document.createElement('div');
       slideDiv.className = 'slider-slide' + (index === 0 ? ' is-active' : '');
+      slideDiv.setAttribute('role', 'group');
+      slideDiv.setAttribute('aria-label', (index + 1) + ' / ' + slides.length);
 
       var imageContainer = document.createElement('div');
       imageContainer.className = 'slider-image-container';
@@ -87,7 +85,8 @@ function ImageSlider(container, slides, durationMs) {
     // Birleşik Cam Kontrol Paneli (Control Dock)
     if (slides.length > 1) {
       var dockContainer = document.createElement('div');
-      dockContainer.className = 'slider-dock-container d-flex justify-content-center mt-3';
+      dockContainer.className = 'slider-dock-container d-flex justify-content-center' +
+        (options.controls === 'top-right' ? '' : ' mt-3');
 
       var controlDock = document.createElement('div');
       controlDock.className = 'slider-control-dock';
@@ -137,14 +136,14 @@ function ImageSlider(container, slides, durationMs) {
       controlDock.appendChild(pauseBtn);
 
       dockContainer.appendChild(controlDock);
-      wrapper.appendChild(dockContainer);
+      if (options.controls === 'top-right') frame.appendChild(dockContainer);
+      else wrapper.appendChild(dockContainer);
     }
 
     container.innerHTML = '';
     container.appendChild(wrapper);
     
     updateDOM();
-    preloadImages(); // Slayt başlatılınca diğer resimleri arka planda indirir
   }
 
   function updatePauseButton() {
@@ -177,8 +176,12 @@ function ImageSlider(container, slides, durationMs) {
     slideElements.forEach(function (slide, idx) {
       if (idx === activeIndex) {
         slide.classList.add('is-active');
+        slide.removeAttribute('inert');
+        slide.setAttribute('aria-hidden', 'false');
       } else {
         slide.classList.remove('is-active');
+        slide.setAttribute('inert', '');
+        slide.setAttribute('aria-hidden', 'true');
       }
     });
 
@@ -208,6 +211,7 @@ function ImageSlider(container, slides, durationMs) {
   }
 
   function togglePause() {
+    if (destroyed) return;
     isPaused = !isPaused;
     if (isPaused) {
       clearTimeout(timer);
@@ -226,6 +230,7 @@ function ImageSlider(container, slides, durationMs) {
   }
 
   function goTo(idx) {
+    if (destroyed) return;
     activeIndex = idx;
     clearTimeout(timer);
     timer = null;
@@ -236,6 +241,7 @@ function ImageSlider(container, slides, durationMs) {
   }
 
   function scheduleNext() {
+    if (destroyed) return;
     if (slides.length <= 1) return;
     if (isPaused) return;
     
@@ -251,7 +257,9 @@ function ImageSlider(container, slides, durationMs) {
 
   return {
     destroy: function () {
+      destroyed = true;
       clearTimeout(timer);
+      timer = null;
     },
   };
 }

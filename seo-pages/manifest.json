@@ -1,0 +1,35 @@
+{
+  "routes": [
+    "/",
+    "/about",
+    "/products",
+    "/contact",
+    "/faq",
+    "/blog",
+    "/products/professional_cleaning",
+    "/products/home_cleaning",
+    "/products/personal_care",
+    "/products/cold_mist_spraying",
+    "/products/industrial_water_treatment",
+    "/products/pet",
+    "/products/livestock",
+    "/blog/probiyotik-temizligin-gucu-uzun-sureli-ve-mikrobiyom-dostu-hijyen",
+    "/blog/temizlikte-enzimler-probiyotiklerin-yerine-gecmez",
+    "/blog/alerjinizi-tetikleyen-sey-toz-mu-pet-mi-yoksa-polen-mi-yoksa-gorunmeyen-mikrobiyal-dengesizlik-mi",
+    "/blog/camasir-yikarken-gizli-tehlike-yumusaticilar-kalp-sagligimizi-nasil-etkiliyor",
+    "/blog/gorunmez-kuresel-tehdit-antibiyotik-direnci-amr-gelecegimizin-en-buyuk-tehdidi-mi",
+    "/blog/alerjinize-karsi-yeni-nesil-sinbiyotik-guc",
+    "/blog/bir-ciftlikte-hijyen-sadece-temizlik-midir-yoksa-hastaliklari-onleyen-gorunmez-bir-savunma-hatti-mi",
+    "/blog/endustriyel-su-sistemlerinde-gorunmeyen-maliyet-biyofilm"
+  ],
+  "aliases": {
+    "/blog/0": "/blog/probiyotik-temizligin-gucu-uzun-sureli-ve-mikrobiyom-dostu-hijyen",
+    "/blog/1": "/blog/temizlikte-enzimler-probiyotiklerin-yerine-gecmez",
+    "/blog/2": "/blog/alerjinizi-tetikleyen-sey-toz-mu-pet-mi-yoksa-polen-mi-yoksa-gorunmeyen-mikrobiyal-dengesizlik-mi",
+    "/blog/3": "/blog/camasir-yikarken-gizli-tehlike-yumusaticilar-kalp-sagligimizi-nasil-etkiliyor",
+    "/blog/4": "/blog/gorunmez-kuresel-tehdit-antibiyotik-direnci-amr-gelecegimizin-en-buyuk-tehdidi-mi",
+    "/blog/5": "/blog/alerjinize-karsi-yeni-nesil-sinbiyotik-guc",
+    "/blog/6": "/blog/bir-ciftlikte-hijyen-sadece-temizlik-midir-yoksa-hastaliklari-onleyen-gorunmez-bir-savunma-hatti-mi",
+    "/blog/7": "/blog/endustriyel-su-sistemlerinde-gorunmeyen-maliyet-biyofilm"
+  }
+}
