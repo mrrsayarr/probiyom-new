@@ -1,4 +1,0 @@
-# SPA fallback is handled by wrangler.jsonc -> assets.not_found_handling = "single-page-application".
-# (Cloudflare WORKERS static assets.) The broad "/* /index.html 200" rule caused an
-# "infinite loop" error on Workers, so it was removed. It is only needed for
-# Cloudflare PAGES / Netlify. The /_headers file is still used for caching.

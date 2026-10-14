@@ -44,7 +44,7 @@ async function build() {
     await page.route('**/*', route => route.request().url().startsWith(base + '/') ? route.continue() : route.abort());
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
-    const output = path.join(root, 'seo-pages');
+    const output = path.join(root, 'dist', 'seo-pages');
     await fs.mkdir(output, { recursive: true });
     let previous = { routes: [] };
     try { previous = JSON.parse(await fs.readFile(path.join(output, 'manifest.json'), 'utf8')); } catch {}
@@ -52,9 +52,7 @@ async function build() {
     for (const route of [...previous.routes, ...Object.keys(previous.aliases || {})].filter(route => !desired.has(route.replace(/\/+$/, '')))) {
       if (!/^\/[a-z0-9_/-]*$/.test(route) || route.includes('..')) throw new Error('Unsafe generated route');
       // Remove only obsolete generated HTML, never user assets or source files.
-      for (const directory of [output, path.join(root, 'dist', 'seo-pages')]) {
-        await fs.rm(path.join(directory, route.slice(1), 'index.html'), { force: true });
-      }
+      await fs.rm(path.join(output, route.slice(1), 'index.html'), { force: true });
     }
     for (const route of [...routes, '/404/']) {
       await page.goto(base + route, { waitUntil: 'load' });
@@ -89,8 +87,7 @@ async function build() {
       await fs.writeFile(file, html, 'utf8');
     }
     await fs.writeFile(path.join(output, 'manifest.json'), JSON.stringify({ routes, aliases }, null, 2) + '\n');
-    // Static Apache installations also retain legacy numeric blog URLs.
-    // Their HTML has the slug canonical; the Worker and local server redirect them.
+    // Legacy numeric blog URLs share the canonical article document.
     for (const [alias, canonical] of Object.entries(aliases)) {
       const file = path.join(output, alias.slice(1), 'index.html');
       await fs.mkdir(path.dirname(file), { recursive: true });
@@ -103,20 +100,18 @@ async function build() {
     const dist = path.join(root, 'dist');
     await fs.mkdir(dist, { recursive: true });
     // Allowlist excludes tests, private tooling, source-server files and local caches.
-    for (const name of ['data', 'images', 'pages', 'st', 'styles', 'seo-pages']) {
+    for (const name of ['data', 'images', 'pages', 'st', 'styles']) {
       await fs.cp(path.join(root, name), path.join(dist, name), { recursive: true, force: true });
     }
     await fs.mkdir(path.join(dist, 'scripts'), { recursive: true });
     for (const name of await fs.readdir(path.join(root, 'scripts'))) {
       if (name.endsWith('.js')) await fs.copyFile(path.join(root, 'scripts', name), path.join(dist, 'scripts', name));
     }
-    for (const name of ['robots.txt', 'sitemap.xml', 'llms.txt', '_headers', '.htaccess', 'google48726a64ae31bd98.html']) {
+    for (const name of ['robots.txt', 'sitemap.xml', 'llms.txt', '_headers', 'google48726a64ae31bd98.html']) {
       await fs.copyFile(path.join(root, name), path.join(dist, name));
     }
     await fs.copyFile(path.join(output, 'index.html'), path.join(dist, 'index.html'));
     await fs.copyFile(path.join(output, '404.html'), path.join(dist, '404.html'));
-    // Keep native hosting fallbacks consistent with the public 404 screen.
-    await fs.copyFile(path.join(output, '404.html'), path.join(root, '404.html'));
     console.log('Built ' + routes.length + ' pages, true 404 document, sitemap and dist/ deployment package.');
   } finally {
     if (browser) await browser.close();

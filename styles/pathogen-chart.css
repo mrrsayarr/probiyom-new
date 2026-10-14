@@ -38,23 +38,30 @@
 }
 
 .pathogen-trend__insight {
+  position: relative;
+  padding-left: 5.8rem !important;
   padding: 1.2rem 1.25rem;
   border: 1px solid #eadfda;
   border-left: 4px solid #bd4845;
   border-radius: 0.9rem;
-  background: linear-gradient(135deg, #fff 0%, #fff8f5 100%);
+  background: #fff;
   box-shadow: 0 0.5rem 1.5rem rgb(44 29 27 / 5%);
 }
 
 .pathogen-trend__insight--rebound {
-  border-left-color: #d56c43;
-  background: linear-gradient(135deg, #fff 0%, #fff8ef 100%);
+  border-left-color: #ff4048;
+  background: #fff;
 }
 
 .pathogen-trend__insight--probiotic {
-  border-left-color: #32866b;
-  background: linear-gradient(135deg, #fff 0%, #f2faf5 100%);
+  border-left-color: #10b981;
+  background: #fff;
 }
+.pathogen-trend__insight--chemical { border-left: 1px solid #eadfda; }
+.pathogen-trend__icon { position: absolute; top: 24px; left: 24px; width: 52px; height: 52px; display: grid; place-items: center; border-radius: 9px; background: #0ea5e9; color: #fff; box-shadow: 0 2px 4px rgb(15 23 42 / 10%); }
+.pathogen-trend__icon svg { width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.pathogen-trend__insight--rebound .pathogen-trend__icon { background: #ef4444; }
+.pathogen-trend__insight--probiotic .pathogen-trend__icon { background: #10b981; }
 
 .pathogen-trend__insight-kicker {
   display: block;

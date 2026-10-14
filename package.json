@@ -4,7 +4,7 @@
   "scripts": {
     "prebuild": "playwright install --only-shell chromium",
     "build": "node scripts/build-seo.cjs",
-    "test:seo": "node --test tests/seo-worker.test.mjs && node tests/seo.browser.cjs"
+    "start": "node serve.mjs"
   },
   "devDependencies": {
     "playwright": "1.62.1"

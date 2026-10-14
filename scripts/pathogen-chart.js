@@ -233,13 +233,9 @@ var PathogenChart = (function () {
       svg.appendChild(group);
     });
 
-    var note = document.createElement('p');
-    note.className = 'pathogen-chart__note';
-    note.textContent = 'Temsili şema; sayısal ölçüm veya bilimsel deney sonucu değildir. Açıklamalar mevcut sayfa metnindeki iddiaları yansıtır.';
     chart.appendChild(controls);
     chart.appendChild(svg);
     chart.appendChild(detail);
-    chart.appendChild(note);
     host.appendChild(chart);
 
     function updateDetail(pointInfo) {

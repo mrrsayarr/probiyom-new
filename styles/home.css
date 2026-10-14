@@ -25,6 +25,53 @@
 }
 .home-opening h1 { font-size: clamp(1.5rem, 3vw, 2.5rem); line-height: 1.2; margin: 1.5rem 0 .75rem; color: var(--color-baltic-blue); }
 .home-opening__intro { max-width: 70ch; color: #475569; line-height: 1.7; margin: 0; }
+
+/* Restored comparison section, with a single-column reading order on small screens. */
+.protection-comparison { padding: clamp(32px, 5vw, 64px) 0; }
+.protection-comparison > header { text-align: center; margin-bottom: 40px; }
+.protection-comparison > header > span { font-size: .8rem; text-transform: uppercase; font-weight: 700; letter-spacing: .15em; color: #52647a; }
+.protection-comparison h2 { margin: 14px 0 20px; font-size: clamp(1.8rem, 3vw, 2.5rem); color: var(--color-baltic-blue); }
+.protection-comparison header p { font-size: 1rem; color: #52647a; }
+.protection-comparison__scroll { max-width: 1050px; margin: auto; overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 16px; box-shadow: 0 2px 5px rgb(15 23 42 / 6%); }
+.protection-comparison table { width: 100%; min-width: 640px; border-collapse: collapse; background: #fff; }
+.protection-comparison th, .protection-comparison td { padding: 20px 18px; text-align: left; font-size: .95rem; line-height: 1.65; vertical-align: middle; }
+.protection-comparison thead th { background: var(--color-baltic-blue); color: #fff; text-align: center; border-right: 1px solid #fff; }
+.protection-comparison thead th:last-child { color: #80edb9; border: 0; }
+.protection-comparison tbody th { width: 18%; color: #0f172a; }
+.protection-comparison td { width: 41%; color: #52647a; }
+.protection-comparison td:last-child { font-weight: 600; color: #0f172a; }
+.protection-comparison tbody tr + tr { border-top: 1px solid #f1f5f9; }
+
+.biofilm-comparison {
+  position: relative;
+  left: 50%;
+  width: 100vw;
+  margin-inline: -50vw;
+  padding: clamp(32px, 4vw, 64px) clamp(16px, 2vw, 40px);
+  background: #f8fafc;
+}
+.biofilm-comparison__heading { max-width: 1100px; margin: 0 auto 48px; text-align: center; }
+.biofilm-comparison__label { display: inline-block; padding: 3px 14px; margin-bottom: 16px; border: 1px solid #dce5eb; border-radius: 24px; background: #fff; color: #52647a; font-size: .8rem; font-weight: 600; text-transform: uppercase; }
+.biofilm-comparison__heading h2 { font-size: clamp(1.65rem, 2.4vw, 2.5rem); color: #0f172a; line-height: 1.25; margin-bottom: 20px; text-wrap: balance; }
+.biofilm-comparison__heading > p { max-width: 72ch; margin: auto; font-size: .95rem; color: #52647a; line-height: 1.7; }
+.biofilm-comparison__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; max-width: 1800px; margin: auto; align-items: center; }
+.biofilm-comparison__card { --comparison-accent: #dc3545; --comparison-tint: #fff1f2; --comparison-ink: #b42332; align-self: stretch; display: flex; flex-direction: column; min-width: 0; padding: clamp(24px, 3vw, 48px); border-top: 4px solid var(--comparison-accent); border-radius: 20px; background: #fff; box-shadow: 0 8px 24px rgba(15,23,42,.045); }
+.biofilm-comparison__card--biological { --comparison-accent: #10b981; --comparison-tint: #ecfdf5; --comparison-ink: #00695b; }
+.biofilm-comparison__card-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; font-size: .85rem; color: #52647a; }
+.biofilm-comparison__badge { padding: 10px 16px; border-radius: 24px; background: var(--comparison-tint); color: var(--comparison-ink); font-size: .8rem; font-weight: 700; text-transform: uppercase; }
+.biofilm-comparison__card h3 { font-size: 1.25rem; color: #0f172a; margin-bottom: 24px; }
+.biofilm-comparison__card ul { display: flex; flex-direction: column; gap: 16px; margin: 0 0 32px; padding: 0; list-style: none; }
+.biofilm-comparison__card li { display: flex; align-items: flex-start; gap: 14px; }
+.biofilm-comparison__card li svg { flex: 0 0 26px; width: 26px; height: 26px; margin-top: 2px; border-radius: 50%; background: var(--comparison-tint); color: var(--comparison-accent); fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.biofilm-comparison__card li p { margin: 0; font-size: .95rem; line-height: 1.6; color: #425b76; }
+.biofilm-comparison__card li strong { color: #0f172a; }
+.biofilm-comparison__result { margin: auto 0 0; padding: 16px 20px; border-radius: 8px; background: var(--comparison-tint); color: var(--comparison-ink); font-size: .9rem; line-height: 1.65; }
+.biofilm-comparison__image { min-width: 0; margin: 0; }
+.biofilm-comparison__image img { display: block; width: 100%; height: auto; border-radius: 20px; box-shadow: 0 18px 36px rgba(15,23,42,.14); }
+@media (min-width: 1200px) {
+  .biofilm-comparison__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
 #home-slider .slider-wrapper--controls-top-right .slider-frame {
   padding: 0;
   border-radius: 16px;
