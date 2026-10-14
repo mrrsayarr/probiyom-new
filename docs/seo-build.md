@@ -2,7 +2,7 @@
 
 İçerik kaynakları `data/` ve `pages/` altında kalır. Hazır HTML dosyalarını elle düzenlemeyin.
 
-1. İlk kurulum: `npm install`. `npm run build` öncesinde `prebuild` adımı Chromium headless shell ve gerekli sistem bağımlılıklarını otomatik kurar; Cloudflare build komutu `npm run build` olarak kalabilir. İlk kurulum tarayıcı indirmesi için internet erişimi gerektirir.
+1. İlk kurulum: `npm install`. `npm run build` öncesinde `prebuild` adımı Chromium headless shell tarayıcısını otomatik indirir; Cloudflare build komutu `npm run build` olarak kalabilir. İlk kurulum internet erişimi gerektirir. Cloudflare ortamında root yetkisi olmadığı için `--with-deps` kullanılmaz. Kendi Linux sunucunuzda eksik sistem kütüphanesi hatası alırsanız yetkili bir oturumda `npx playwright install-deps chromium` çalıştırın.
 2. Her içerik değişikliğinden sonra `npm run build` çalıştırın. Chrome kuruluysa Chromium yerine `CHROME_CHANNEL=chrome` ortam değişkeni kullanılabilir.
 3. `dist/` yayın paketidir. Kaynak klasörü yerine bu paketi yayınlayın. Cloudflare Workers için kökteki `wrangler.jsonc` ve `scripts/seo-worker.mjs` kullanılır; derlemeden sonra normal yayın komutunuzla ilerleyin. Otomatik yayın yapılmaz.
 4. Yerelde `python serve.py 7076` kullanın. Sunucu `seo-pages/` HTML dosyalarını sonunda `/` bulunan URL'lerinde verir; `/blog` gibi eski adresler `/blog/` adresine kalıcı olarak yönlenir; bilinmeyen rotalar gerçek HTTP 404 döndürür. Apache için `dist/.htaccess` kullanın.

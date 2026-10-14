@@ -2,7 +2,7 @@
   "name": "probiyom-site",
   "private": true,
   "scripts": {
-    "prebuild": "playwright install --with-deps --only-shell chromium",
+    "prebuild": "playwright install --only-shell chromium",
     "build": "node scripts/build-seo.cjs",
     "test:seo": "node --test tests/seo-worker.test.mjs && node tests/seo.browser.cjs"
   },
