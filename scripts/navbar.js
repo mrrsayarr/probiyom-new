@@ -13,8 +13,7 @@ function Navbar(container) {
     if (window.Router && typeof window.Router.getRouteHref === 'function') {
       return window.Router.getRouteHref(route);
     }
-    var normalized = (route || 'home').replace(/^\/+/, '').replace(/\/?$/, '');
-    return normalized === 'home' ? '/' : '/' + normalized;
+    return SiteRoutes.href(route);
   }
 
   var groupItems = Object.keys(GroupSlugToEnum).map(function (slug) {
@@ -224,7 +223,7 @@ function Navbar(container) {
     fabWrapper.className = 'mobile-fab-container';
     fabWrapper.innerHTML = 
       '<div class="mobile-fab-menu" id="mobile-fab-menu" inert>' +
-        '<div class="social-dock-heading"><span class="social-dock-mark" aria-hidden="true"></span><span>Sosyalde buluşalım</span></div>' +
+        '<div class="social-dock-heading"><span>Bizi takip edin</span></div>' +
         '<button type="button" class="mobile-fab-cta-btn" id="nav-contact-trigger-mobile">' +
           '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>' +
           '<span>Bize Ulaşın</span>' +
@@ -242,7 +241,6 @@ function Navbar(container) {
         '<span class="fab-icon-switcher">' +
           '<svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="12" r="2.5"/><circle cx="17" cy="5" r="2.5"/><circle cx="17" cy="19" r="2.5"/><path d="m8.2 10.6 6.6-4.2m-6.6 7 6.6 4.2"/></svg>' +
         '</span>' +
-        '<span class="fab-trigger-label">Bağlan</span>' +
         '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="fab-icon-close d-none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>' +
       '</button>';
 
@@ -314,7 +312,7 @@ function Navbar(container) {
           if (window.Router && typeof window.Router.navigate === 'function') {
             window.Router.navigate('contact');
           } else {
-            window.location.href = '/contact';
+            window.location.href = '/contact/';
           }
         }
       });
@@ -380,7 +378,7 @@ function Navbar(container) {
       if (window.Router && typeof window.Router.navigate === 'function') {
         window.Router.navigate('contact');
       } else {
-        window.location.href = '/contact';
+        window.location.href = '/contact/';
       }
       return;
     }

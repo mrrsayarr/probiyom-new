@@ -6,8 +6,7 @@ function Footer(container) {
   var year = new Date().getFullYear();
 
   function routeHref(route) {
-    var normalized = route.replace(/^\/+/, '').replace(/\/?$/, '');
-    return normalized === 'home' ? '/' : '/' + normalized;
+    return SiteRoutes.href(route);
   }
 
   container.innerHTML =

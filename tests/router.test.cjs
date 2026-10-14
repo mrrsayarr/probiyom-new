@@ -164,24 +164,27 @@ test('legacy page hashes migrate to path URLs and load the intended page', async
   for (const hash of ['#contact', '#/contact', '#contact/']) {
     const app = createRouter('/', undefined, hash);
     await flush();
-    assert.equal(app.window.location.pathname, '/contact');
+    assert.equal(app.window.location.pathname, '/contact/');
     assert.equal(app.window.location.hash, '');
     assert.match(app.container.innerHTML, /pages\/contact\.html/);
   }
-  const blog = createRouter('/index.html', undefined, '#/blog/birinci-yazi');
-  await flush();
-  assert.equal(blog.window.location.pathname, '/blog/birinci-yazi');
-  assert.match(blog.state.title, /Birinci yazı/);
+  for (const hash of ['#blog/birinci-yazi', '#/blog/birinci-yazi', '#blog/birinci-yazi/']) {
+    const blog = createRouter('/index.html', undefined, hash);
+    await flush();
+    assert.equal(blog.window.location.pathname, '/blog/birinci-yazi/');
+    assert.equal(blog.window.location.hash, '');
+    assert.match(blog.state.title, /Birinci yazı/);
+  }
 });
 
 test('trailing slashes normalize on initial load and back/forward navigation', async () => {
-  const app = createRouter('/contact/');
+  const app = createRouter('/contact');
   await flush();
-  assert.equal(app.window.location.pathname, '/contact');
-  app.window.location.pathname = '/faq/';
+  assert.equal(app.window.location.pathname, '/contact/');
+  app.window.location.pathname = '/faq';
   app.listeners.popstate[0]();
   await flush();
-  assert.equal(app.window.location.pathname, '/faq');
+  assert.equal(app.window.location.pathname, '/faq/');
   assert.match(app.container.innerHTML, /pages\/faq\.html/);
 });
 
@@ -191,7 +194,7 @@ test('hash changes migrate legacy routes but preserve content fragments', async 
   app.window.location.hash = '#/contact';
   app.listeners.hashchange[0]();
   await flush();
-  assert.equal(app.window.location.pathname, '/contact');
+  assert.equal(app.window.location.pathname, '/contact/');
   app.window.location.hash = '#fragment-target';
   app.listeners.hashchange[0]();
   assert.equal(app.window.location.hash, '#fragment-target');

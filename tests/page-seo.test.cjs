@@ -22,11 +22,11 @@ function createSEO() {
     document,
     URL,
     window: { location: { origin: 'http://localhost:4173' } },
-    SiteRoutes: { normalize: (value) => value, href: (value) => '/' + value },
     blogPosts: [], blogSlug: (post) => post.slug,
     console
   };
   vm.createContext(context);
+  vm.runInContext(fs.readFileSync(path.join(__dirname, '../scripts/site-routes.js'), 'utf8'), context);
   vm.runInContext(fs.readFileSync(path.join(__dirname, '../scripts/page-seo.js'), 'utf8'), context);
   return { seo: context.PageSEO, document, tags };
 }
@@ -35,8 +35,8 @@ test('SEO metadata uses production URLs and synchronizes social fields', () => {
   const { seo, document } = createSEO();
   seo.update('Başlık', 'Açıklama', 'blog/yazi');
   const meta = (name, key = 'property') => document.querySelector(`meta[${key}="${name}"]`).content;
-  assert.equal(document.querySelector('link[rel="canonical"]').href, 'https://www.probiyom.com/blog/yazi');
-  assert.equal(meta('og:url'), 'https://www.probiyom.com/blog/yazi');
+  assert.equal(document.querySelector('link[rel="canonical"]').href, 'https://www.probiyom.com/blog/yazi/');
+  assert.equal(meta('og:url'), 'https://www.probiyom.com/blog/yazi/');
   assert.equal(meta('twitter:title', 'name'), 'Başlık | Probiyom');
   assert.equal(meta('twitter:description', 'name'), 'Açıklama');
   assert.equal(meta('twitter:url', 'name'), meta('og:url'));

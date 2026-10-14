@@ -136,8 +136,7 @@ function ImageSlider(container, slides, durationMs, options) {
       controlDock.appendChild(pauseBtn);
 
       dockContainer.appendChild(controlDock);
-      if (options.controls === 'top-right') frame.appendChild(dockContainer);
-      else wrapper.appendChild(dockContainer);
+      wrapper.appendChild(dockContainer);
     }
 
     container.innerHTML = '';

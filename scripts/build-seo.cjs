@@ -15,11 +15,11 @@ async function build() {
   for (const file of ['scripts/helpers.js', 'scripts/site-routes.js', 'data/products.js', 'data/blogs.js']) {
     vm.runInContext(await fs.readFile(path.join(root, file), 'utf8'), data);
   }
-  const routes = ['/', ...Object.keys(data.SiteRoutes.pages).filter(key => key !== 'home').map(key => '/' + key),
-    ...Object.keys(data.GroupSlugToEnum).map(slug => '/products/' + slug),
-    ...data.blogPosts.map(post => '/blog/' + data.blogSlug(post))];
+  const routes = ['/', ...Object.keys(data.SiteRoutes.pages).filter(key => key !== 'home').map(key => data.SiteRoutes.href(key)),
+    ...Object.keys(data.GroupSlugToEnum).map(slug => data.SiteRoutes.href('products/' + slug)),
+    ...data.blogPosts.map(post => data.SiteRoutes.href('blog/' + data.blogSlug(post)))];
   if (new Set(routes).size !== routes.length) throw new Error('Duplicate route: check blog slugs.');
-  const aliases = Object.fromEntries(data.blogPosts.map((post, index) => ['/blog/' + index, '/blog/' + data.blogSlug(post)]));
+  const aliases = Object.fromEntries(data.blogPosts.map((post, index) => [data.SiteRoutes.href('blog/' + index), data.SiteRoutes.href('blog/' + data.blogSlug(post))]));
   const server = http.createServer(async (req, res) => {
     try {
       const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
@@ -48,18 +48,18 @@ async function build() {
     await fs.mkdir(output, { recursive: true });
     let previous = { routes: [] };
     try { previous = JSON.parse(await fs.readFile(path.join(output, 'manifest.json'), 'utf8')); } catch {}
-    const desired = new Set([...routes, ...Object.keys(aliases)]);
-    for (const route of [...previous.routes, ...Object.keys(previous.aliases || {})].filter(route => !desired.has(route))) {
+    const desired = new Set([...routes, ...Object.keys(aliases)].map(route => route.replace(/\/+$/, '')));
+    for (const route of [...previous.routes, ...Object.keys(previous.aliases || {})].filter(route => !desired.has(route.replace(/\/+$/, '')))) {
       if (!/^\/[a-z0-9_/-]*$/.test(route) || route.includes('..')) throw new Error('Unsafe generated route');
       // Remove only obsolete generated HTML, never user assets or source files.
       for (const directory of [output, path.join(root, 'dist', 'seo-pages')]) {
         await fs.rm(path.join(directory, route.slice(1), 'index.html'), { force: true });
       }
     }
-    for (const route of [...routes, '/404']) {
+    for (const route of [...routes, '/404/']) {
       await page.goto(base + route, { waitUntil: 'load' });
       await page.waitForFunction(() => document.querySelector('#page-content h1') && document.title.includes(' | Probiyom'));
-      if (route.startsWith('/blog/')) await page.waitForSelector('.blog-detail-container');
+      if (route.startsWith('/blog/') && route !== '/blog/') await page.waitForSelector('.blog-detail-container');
       await page.waitForFunction(() => document.querySelector('#navbar-container a') && document.querySelector('#footer-container a'));
       if (errors.length) throw new Error(route + ': ' + errors.join('; '));
       const html = await page.evaluate(({ route }) => {
@@ -78,18 +78,18 @@ async function build() {
           if (/^https?:/.test(script.getAttribute('src'))) script.remove();
         });
         const robots = doc.querySelector('meta[name="robots"]');
-        if (route === '/404') {
+        if (route === '/404/') {
           robots.setAttribute('content', 'noindex, follow');
           doc.querySelector('link[rel="canonical"]')?.remove();
         }
         return '<!DOCTYPE html>\n' + doc.outerHTML;
       }, { route });
-      const file = route === '/404' ? path.join(output, '404.html') : path.join(output, route.slice(1), 'index.html');
+      const file = route === '/404/' ? path.join(output, '404.html') : path.join(output, route.slice(1), 'index.html');
       await fs.mkdir(path.dirname(file), { recursive: true });
       await fs.writeFile(file, html, 'utf8');
     }
     await fs.writeFile(path.join(output, 'manifest.json'), JSON.stringify({ routes, aliases }, null, 2) + '\n');
-    // Static Apache/nginx installations also retain legacy numeric blog URLs.
+    // Static Apache installations also retain legacy numeric blog URLs.
     // Their HTML has the slug canonical; the Worker and local server redirect them.
     for (const [alias, canonical] of Object.entries(aliases)) {
       const file = path.join(output, alias.slice(1), 'index.html');

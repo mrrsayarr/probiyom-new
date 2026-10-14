@@ -43,7 +43,7 @@ function BlogList(container, posts, initialIdentifier) {
       var postRoute = 'blog/' + postSlug;
       var postHref = window.Router && typeof window.Router.getRouteHref === 'function'
         ? window.Router.getRouteHref(postRoute)
-        : '/' + postRoute;
+        : '/' + postRoute + '/';
 
       var imageHtml = '';
       if (post.imageDir) {

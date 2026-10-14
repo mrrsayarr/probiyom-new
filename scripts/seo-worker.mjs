@@ -42,20 +42,24 @@ export default {
       return Response.redirect(url, 308);
     }
 
-    // The standalone demo is a real directory index, so keep /st/ usable with html_handling:none.
-    if (path === '/st' || path === '/st/') {
+    // All page URLs use one trailing slash, including the standalone document.
+    const pagePath = path.replace(/\/+$/, '') + '/';
+    if (pagePath === '/st/') {
+      if (path !== pagePath) {
+        url.pathname = pagePath;
+        return Response.redirect(url, 308);
+      }
       return env.ASSETS.fetch(assetRequest(request, '/st/index.html'));
     }
 
-    if (path.length > 1 && path.endsWith('/')) {
-      url.pathname = path.replace(/\/+$/, '');
-      return Response.redirect(url, 308);
-    }
-
     const manifest = await loadManifest(request, env);
-    const canonical = Object.hasOwn(manifest.aliases, path) ? manifest.aliases[path] : null;
+    const canonical = Object.hasOwn(manifest.aliases, pagePath) ? manifest.aliases[pagePath] : null;
     if (canonical) {
       url.pathname = canonical;
+      return Response.redirect(url, 308);
+    }
+    if (manifest.routes.includes(pagePath) && path !== pagePath) {
+      url.pathname = pagePath;
       return Response.redirect(url, 308);
     }
 
@@ -64,7 +68,7 @@ export default {
     if (asset.ok) return asset;
 
     if (manifest.routes.includes(path)) {
-      const generatedPath = path === '/' ? '/seo-pages/index.html' : `/seo-pages${path}/index.html`;
+      const generatedPath = path === '/' ? '/seo-pages/index.html' : `/seo-pages${path}index.html`;
       return env.ASSETS.fetch(assetRequest(request, generatedPath));
     }
 

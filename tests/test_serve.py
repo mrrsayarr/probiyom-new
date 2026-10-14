@@ -65,8 +65,8 @@ class SPAServerTests(unittest.TestCase):
 
         home_status, _, _, home_body = self.request("GET", "/")
 
-        get_status, get_length, _, get_body = self.request("GET", "/about")
-        head_status, head_length, _, head_body = self.request("HEAD", "/about")
+        get_status, get_length, _, get_body = self.request("GET", "/about/")
+        head_status, head_length, _, head_body = self.request("HEAD", "/about/")
 
         self.assertEqual((get_status, head_status), (200, 200))
         self.assertEqual(home_status, 200)
@@ -83,30 +83,30 @@ class SPAServerTests(unittest.TestCase):
               <url><loc>https://www.probiyom.com/blog/sample</loc></url>
             </urlset>""")
 
-        known_status, _, _, known_body = self.request("GET", "/about")
+        known_status, _, _, known_body = self.request("GET", "/about/")
         unknown_status, _, _, _ = self.request("GET", "/unlisted")
 
         self.assertEqual(known_status, 200)
         self.assertEqual(known_body, b"<main>home shell</main>")
         self.assertEqual(unknown_status, 404)
 
-    def test_trailing_slash_redirects_to_clean_public_route(self):
-        status, length, location, body = self.request("GET", "/about/?campaign=one")
+    def test_missing_trailing_slash_redirects_to_canonical_public_route(self):
+        status, length, location, body = self.request("GET", "/about?campaign=one")
         self.assertEqual(status, 301)
-        self.assertEqual(location, "/about?campaign=one")
+        self.assertEqual(location, "/about/?campaign=one")
         self.assertEqual(length, "0")
         self.assertEqual(body, b"")
 
     def test_manifest_blog_aliases_redirect_to_canonical_slug_and_preserve_query(self):
         status, length, location, body = self.request("GET", "/blog/0?source=legacy")
         self.assertEqual(status, 301)
-        self.assertEqual(location, "/blog/sample?source=legacy")
+        self.assertEqual(location, "/blog/sample/?source=legacy")
         self.assertEqual(length, "0")
         self.assertEqual(body, b"")
 
         slash_status, _, slash_location, _ = self.request("GET", "/blog/0/?source=legacy")
         self.assertEqual(slash_status, 301)
-        self.assertEqual(slash_location, "/blog/sample?source=legacy")
+        self.assertEqual(slash_location, "/blog/sample/?source=legacy")
 
     def test_index_html_redirects_home_and_explicit_404_has_404_status(self):
         index_status, index_length, index_location, index_body = self.request("GET", "/index.html?source=legacy")
@@ -142,7 +142,7 @@ class SPAServerTests(unittest.TestCase):
         self.write_manifest(["/", "/about", "/blog/sample", "/blog/other", "/contact"])
         self.write_page("/contact", "<main>newly generated</main>")
 
-        status, _, _, body = self.request("GET", "/contact")
+        status, _, _, body = self.request("GET", "/contact/")
 
         self.assertEqual(status, 200)
         self.assertEqual(body, b"<main>newly generated</main>")

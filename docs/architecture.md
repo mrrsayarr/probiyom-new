@@ -31,7 +31,7 @@ Ana sayfa slaytları `data/slides.js` içindedir. Seçilen sıra, ilk 12 slaytl�
 
 Grafik eğrileri temsili anlatımdır, ölçüm verisi değildir. Yeni bilimsel iddia ya da ölçüm eklenirken kaynak verisi ayrıca sağlanmalıdır.
 
-Kategori başlıkları, kullanım alanı fotoğrafları ve açıklamaları `data/categories.js` içinden güncellenir. Ana sayfa ve `/products`, `[data-category-grid]` hedeflerini aynı `CategoryGrid` bileşeniyle doldurur; kartları şablonlara ayrı ayrı kopyalamayın.
+Kategori başlıkları, kullanım alanı fotoğrafları ve açıklamaları `data/categories.js` içinden güncellenir. Ana sayfa ve `/products/`, `[data-category-grid]` hedeflerini aynı `CategoryGrid` bileşeniyle doldurur; kartları şablonlara ayrı ayrı kopyalamayın.
 
 ## Doğrulama
 

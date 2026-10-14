@@ -11,17 +11,17 @@ const fs = require('node:fs');
     await page.route(/https:\/\/(?:www\.)?googletagmanager\.com\//, route => route.abort());
     const errors = [];
     const missing = [];
-    const notFoundRoutes = ['/blog/nonexistent', '/blog/999999', '/about/extra', '/products/home_cleaning/extra'];
+    const notFoundRoutes = ['/blog/nonexistent/', '/blog/999999/', '/about/extra/', '/products/home_cleaning/extra/'];
     page.on('pageerror', error => errors.push(error.message));
     page.on('response', response => {
       if (response.url().startsWith('http://localhost:7076/') && response.status() >= 400 &&
           !(response.status() === 404 && notFoundRoutes.includes(new URL(response.url()).pathname))) missing.push(response.url());
     });
-    const routes = ['/', '/about', '/products', '/contact', '/faq', '/blog'];
+    const routes = ['/', '/about/', '/products/', '/contact/', '/faq/', '/blog/'];
     await page.goto('http://localhost:7076/');
     await page.waitForSelector('#page-content .seo-initial-content', { state: 'detached' });
-    routes.push(...await page.evaluate(() => Object.keys(GroupSlugToEnum).map(slug => '/products/' + slug)));
-    routes.push(...await page.evaluate(() => blogPosts.map(post => '/blog/' + blogSlug(post))));
+    routes.push(...await page.evaluate(() => Object.keys(GroupSlugToEnum).map(slug => '/products/' + slug + '/')));
+    routes.push(...await page.evaluate(() => blogPosts.map(post => '/blog/' + blogSlug(post) + '/')));
     fs.mkdirSync('tests/screenshots', { recursive: true });
     for (const width of (process.argv.includes('--interactions-only') ? [] : [1440, 390])) {
       await page.setViewportSize({ width, height: 900 });
@@ -37,11 +37,11 @@ const fs = require('node:fs');
         assert.ok(result.h1, `Missing heading ${width} ${route}`);
         assert.ok(result.overflow <= 1, `Horizontal overflow ${width} ${route}: ${result.overflow}`);
         assert.deepEqual(result.brokenImages, [], `Broken images ${route}`);
-        if (['/', '/contact', '/products'].includes(route)) await page.screenshot({ path: `tests/screenshots/${width}-${route.slice(1) || 'home'}.png`, fullPage: true });
+        if (['/', '/contact/', '/products/'].includes(route)) await page.screenshot({ path: `tests/screenshots/${width}-${route.replace(/^\/|\/$/g, '') || 'home'}.png`, fullPage: true });
       }
     }
     // Never send a real email; intercept the service for failure and recovery checks.
-    await page.goto('http://localhost:7076/contact');
+    await page.goto('http://localhost:7076/contact/');
     await page.waitForSelector('#contact-form');
     let requests = 0;
     await page.route('https://api.web3forms.com/submit', async route => {
@@ -71,7 +71,7 @@ const fs = require('node:fs');
       await page.waitForSelector('#page-content .seo-initial-content', { state: 'detached' });
       assert.match(await page.locator('#page-content').innerText(), /404|bulunamadı/i, route);
     }
-    await page.goto('http://localhost:7076/faq');
+    await page.goto('http://localhost:7076/faq/');
     await page.waitForSelector('.faq-question');
     await page.locator('.faq-question').first().click();
     assert.equal(await page.locator('.faq-question').first().getAttribute('aria-expanded'), 'true');
@@ -90,7 +90,7 @@ const fs = require('node:fs');
     await page.setViewportSize({width:1440,height:900});
     await page.locator('#nav-contact-trigger').click();
     await page.waitForSelector('#contact-modal.is-visible');
-    assert.equal(new URL(page.url()).pathname, '/faq', 'Contact popup should not also navigate');
+    assert.equal(new URL(page.url()).pathname, '/faq/', 'Contact popup should not also navigate');
     assert.equal(await page.locator('#contact-modal [role="dialog"]').getAttribute('aria-modal'), 'true');
     await page.waitForFunction(() => document.querySelector('#contact-modal').contains(document.activeElement));
     await page.keyboard.press('Escape');
@@ -100,7 +100,7 @@ const fs = require('node:fs');
     assert.ok(await page.locator('.navbar-mobile-btn').isVisible());
     assert.ok(!await page.locator('.navbar-links').isVisible());
     await page.locator('.navbar-mobile-btn').click();
-    await page.locator('.mobile-menu a[href="/blog"]').click();
+    await page.locator('.mobile-menu a[href="/blog/"]').click();
     await page.waitForSelector('.read-more-link');
     assert.equal(await page.locator('.navbar-mobile-btn').getAttribute('aria-expanded'), 'false');
     await page.locator('.read-more-link').first().focus();
@@ -115,7 +115,7 @@ const fs = require('node:fs');
     await page.waitForSelector('.blog-lightbox', {state:'detached'});
     assert.ok(await page.locator('.blog-detail-image img').evaluate(el => el === document.activeElement));
     await page.route('https://cdn.jsdelivr.net/npm/ol@*/**', route => route.abort());
-    await page.goto('http://localhost:7076/contact');
+    await page.goto('http://localhost:7076/contact/');
     await page.waitForFunction(() => document.querySelector('#contact-map')?.textContent.includes('Harita yüklenemedi'));
     // Reduced motion must leave a visible illustration and manual carousel controls.
     await page.setViewportSize({width:1440,height:900});

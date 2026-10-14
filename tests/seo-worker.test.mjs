@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import worker from '../scripts/seo-worker.mjs';
 
 const manifest = {
-  routes: ['/', '/about', '/blog/example'],
-  aliases: { '/blog/0': '/blog/example' }
+  routes: ['/', '/about/', '/blog/example/'],
+  aliases: { '/blog/0/': '/blog/example/' }
 };
 const documents = new Map([
   ['/seo-pages/manifest.json', JSON.stringify(manifest)],
@@ -28,7 +28,7 @@ function envFor(fetchLog = []) {
 }
 
 test('serves generated clean routes as HTML with their SEO head', async () => {
-  const response = await worker.fetch(new Request('https://site.test/about'), envFor());
+  const response = await worker.fetch(new Request('https://site.test/about/'), envFor());
   const html = await response.text();
   assert.equal(response.status, 200);
   assert.match(response.headers.get('content-type'), /text\/html/);
@@ -61,16 +61,16 @@ test('the public 404 document also returns HTTP 404', async () => {
   assert.equal(response.headers.get('x-robots-tag'), 'noindex, follow');
 });
 
-test('redirects trailing slashes to the clean URL and preserves query strings', async () => {
-  const response = await worker.fetch(new Request('https://site.test/about/?ref=mail'), envFor());
+test('adds a trailing slash to page URLs and preserves query strings', async () => {
+  const response = await worker.fetch(new Request('https://site.test/about?ref=mail'), envFor());
   assert.equal(response.status, 308);
-  assert.equal(response.headers.get('location'), 'https://site.test/about?ref=mail');
+  assert.equal(response.headers.get('location'), 'https://site.test/about/?ref=mail');
 });
 
 test('redirects numeric blog aliases to their canonical slug', async () => {
   const response = await worker.fetch(new Request('https://site.test/blog/0?ref=old'), envFor());
   assert.equal(response.status, 308);
-  assert.equal(response.headers.get('location'), 'https://site.test/blog/example?ref=old');
+  assert.equal(response.headers.get('location'), 'https://site.test/blog/example/?ref=old');
 });
 
 test('does not expose generated documents through the seo-pages namespace', async () => {
@@ -83,7 +83,7 @@ test('does not expose generated documents through the seo-pages namespace', asyn
 
 test('serves generated routes to HEAD requests without fetching the manifest as HEAD', async () => {
   const calls = [];
-  const response = await worker.fetch(new Request('https://site.test/about', { method: 'HEAD' }), envFor(calls));
+  const response = await worker.fetch(new Request('https://site.test/about/', { method: 'HEAD' }), envFor(calls));
   assert.equal(response.status, 200);
   assert.equal(await response.text(), '');
   assert.equal(calls.includes('/seo-pages/manifest.json'), true);
@@ -102,7 +102,8 @@ test('keeps the standalone directory index reachable and redirects /index.html',
   const cleanRoute = await worker.fetch(new Request('https://site.test/st'), env);
   const homeAlias = await worker.fetch(new Request('https://site.test/index.html?x=1'), env);
   assert.equal(slashRoute.status, 200);
-  assert.equal(cleanRoute.status, 200);
+  assert.equal(cleanRoute.status, 308);
+  assert.equal(cleanRoute.headers.get('location'), 'https://site.test/st/');
   assert.equal(homeAlias.status, 308);
   assert.equal(homeAlias.headers.get('location'), 'https://site.test/?x=1');
 });
@@ -110,4 +111,23 @@ test('keeps the standalone directory index reachable and redirects /index.html',
 test('does not treat inherited object names as aliases', async () => {
   const response = await worker.fetch(new Request('https://site.test/toString'), envFor());
   assert.equal(response.status, 404);
+});
+
+test('canonicalizes every page and numeric alias in one redirect for GET and HEAD', async () => {
+  for (const method of ['GET', 'HEAD']) {
+    for (const route of manifest.routes.filter(route => route !== '/')) {
+      for (const oldPath of [route.slice(0, -1), route + '/']) {
+        const response = await worker.fetch(new Request('https://site.test' + oldPath + '?source=test', { method }), envFor());
+        assert.equal(response.status, 308, oldPath);
+        assert.equal(response.headers.get('location'), 'https://site.test' + route + '?source=test');
+        const finalResponse = await worker.fetch(new Request(response.headers.get('location'), { method }), envFor());
+        assert.equal(finalResponse.status, 200, route);
+      }
+    }
+    for (const oldPath of ['/blog/0', '/blog/0/']) {
+      const response = await worker.fetch(new Request('https://site.test' + oldPath + '?source=test', { method }), envFor());
+      assert.equal(response.status, 308);
+      assert.equal(response.headers.get('location'), 'https://site.test/blog/example/?source=test');
+    }
+  }
 });

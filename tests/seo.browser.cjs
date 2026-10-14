@@ -22,8 +22,13 @@ const manifest = JSON.parse(fs.readFileSync('seo-pages/manifest.json', 'utf8'));
       assert.equal(canonical, 'https://www.probiyom.com' + route);
       assert.equal(await page.locator('meta[name="twitter:url"]').getAttribute('content'), canonical);
       assert.equal(await page.locator('meta[property="og:url"]').getAttribute('content'), canonical);
-      if (route === '/faq') assert.ok(await page.locator('.faq-answer-inner p').first().isVisible(), 'FAQ answers must be readable without JS');
-      if (route.startsWith('/blog/')) {
+      const nonCanonicalLinks = await page.locator('a[href]').evaluateAll(links => links
+        .map(link => link.getAttribute('href'))
+        .filter(href => /^\/(?:about|products|contact|faq|blog)(?:\/|$)/.test(href))
+        .filter(href => !new URL(href, location.origin).pathname.endsWith('/')));
+      assert.deepEqual(nonCanonicalLinks, [], route + ' internal page links must use a trailing slash');
+      if (route === '/faq/') assert.ok(await page.locator('.faq-answer-inner p').first().isVisible(), 'FAQ answers must be readable without JS');
+      if (route.startsWith('/blog/') && route !== '/blog/') {
         assert.ok((await page.locator('.blog-detail-text').innerText()).length > 500);
         assert.equal(await page.locator('meta[property="og:type"]').getAttribute('content'), 'article');
         const schema = JSON.parse(await page.locator('#dynamic-schema').textContent());
@@ -39,14 +44,14 @@ const manifest = JSON.parse(fs.readFileSync('seo-pages/manifest.json', 'utf8'));
     await context.close();
     const interactive = await browser.newPage();
     await interactive.route(/googletagmanager/, route => route.abort());
-    const blog = manifest.routes.find(route => route.startsWith('/blog/'));
+    const blog = manifest.routes.find(route => route.startsWith('/blog/') && route !== '/blog/');
     await interactive.goto('http://localhost:7076/#' + blog.slice(1));
     await interactive.waitForSelector('.blog-detail-container');
     assert.equal(new URL(interactive.url()).pathname, blog);
     assert.equal(new URL(interactive.url()).hash, '');
     await interactive.locator('.back-to-blog-btn').first().click();
     await interactive.waitForSelector('.blog-post');
-    assert.equal(new URL(interactive.url()).pathname, '/blog');
+    assert.equal(new URL(interactive.url()).pathname, '/blog/');
     await interactive.goto('http://localhost:7076/no-such-page');
     await interactive.waitForFunction(() => document.title.startsWith('404'));
     await interactive.locator('.btn-404-home').click();

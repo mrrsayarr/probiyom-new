@@ -7,7 +7,7 @@ function CategoryGrid(container) {
     category.iconPolylines.forEach(function (points) { icon += '<polyline points="' + escapeAttr(points) + '"/>'; });
     icon += '</svg>';
     return '<div class="col">' +
-      '<a href="/products/' + escapeAttr(category.slug) + '" class="category-card-link text-decoration-none">' +
+      '<a href="' + escapeAttr(SiteRoutes.href('products/' + category.slug)) + '" class="category-card-link text-decoration-none">' +
         '<div class="category-card p-4 bg-white rounded-4 border border-light-subtle shadow-sm h-100 d-flex flex-column justify-content-between">' +
           '<figure class="category-media"><img src="' + escapeAttr(category.image) + '" alt="' + escapeAttr(category.imageAlt) + '" width="' + category.width + '" height="' + category.height + '" loading="lazy" decoding="async"></figure>' +
           '<div>' +

@@ -12,10 +12,10 @@
 
 A plain HTML/CSS/JS application with path-based navigation. Production builds pre-render each route to HTML for visitors, search engines and social previews.
 
-Routes use URLs without a trailing slash: `/contact/` normalizes to `/contact`.
+Page URLs use a trailing slash: `/contact/` redirects to `/contact/`. The same rule applies to blog articles and product groups.
 Legacy page hashes such as `/#contact` and `/#/products/home_cleaning` migrate to path URLs.
 Each route has its own content template under `pages/`, loaded into the shared `index.html` shell.
-Real content fragments (for example `/faq#faq-answer-0`) remain intact.
+Real content fragments (for example `/faq/#faq-answer-0`) remain intact.
 
 Saf HTML/CSS/JS ile geliştirilmiştir. Yayın öncesi derleme her rota için içerik ve SEO etiketlerini içeren HTML üretir; sayfa içi gezinme mevcut router ile devam eder.
 
@@ -24,13 +24,13 @@ Saf HTML/CSS/JS ile geliştirilmiştir. Yayın öncesi derleme her rota için i�
 | Route | EN | TR |
 |---|---|---|
 | `/` | Home | Ana sayfa |
-| `/about` | About | Hakkımızda |
-| `/products` | Product catalogue | Ürün kataloğu |
-| `/products/<slug>` | Product group detail | Ürün grubu detayı |
-| `/contact` | Contact | İletişim |
-| `/faq` | FAQ | SSS |
-| `/blog` | Blog | Blog |
-| `/blog/<slug>` | Blog article | Blog yazısı |
+| `/about/` | About | Hakkımızda |
+| `/products/` | Product catalogue | Ürün kataloğu |
+| `/products/<slug>/` | Product group detail | Ürün grubu detayı |
+| `/contact/` | Contact | İletişim |
+| `/faq/` | FAQ | SSS |
+| `/blog/` | Blog | Blog |
+| `/blog/<slug>/` | Blog article | Blog yazısı |
 
 ## Folder Structure / Klasör Yapısı
 
@@ -63,13 +63,3 @@ python serve.py 8080     # istediğiniz port
 # npx serve .
 ```
 
-### Production / Canlıya Alma (nginx)
-Yayına alırken doğrudan açılan `/contact` veya `/blog/<slug>` adreslerinin 404 vermemesi için nginx'te şu SPA fallback kuralını kullanın (hazır şablon: `new-probiyom/nginx-probiyom.conf`):
-
-```nginx
-location / {
-    try_files $uri $uri/ /index.html;
-}
-```
-
-Bu kural, gerçek bir dosya yoksa isteği `index.html`'e düşürür; router adresteki gerçek yolu okuyup doğru sayfayı çizer.

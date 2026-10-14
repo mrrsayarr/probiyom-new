@@ -183,23 +183,17 @@ class SPAHandler(http.server.SimpleHTTPRequestHandler):
             (super().do_HEAD if head_only else super().do_GET)()
             return
 
-        # A trailing slash on a public route canonicalizes to its clean URL.
-        if route and route != "/" and path_info.endswith("/"):
-            routes, aliases = self.route_metadata()
-            if route in aliases:
-                self.redirect_to_clean_route(aliases[route])
-                return
-            if route in routes or self.numeric_blog_alias_is_valid(route, routes):
-                self.redirect_to_clean_route(route)
-                return
-
         if route and (not self.has_extension()):
             routes, aliases = self.route_metadata()
             if route in aliases:
-                self.redirect_to_clean_route(aliases[route])
+                self.redirect_to_clean_route(aliases[route].rstrip("/") + "/")
                 return
             route_is_valid = route in routes or self.numeric_blog_alias_is_valid(route, routes)
             if route_is_valid:
+                canonical = route.rstrip("/") + "/" if route != "/" else "/"
+                if path_info != canonical:
+                    self.redirect_to_clean_route(canonical)
+                    return
                 generated = self.safe_seo_file(route)
                 if generated:
                     relative = os.path.relpath(generated, ROOT).replace(os.sep, "/")
@@ -249,9 +243,9 @@ if __name__ == "__main__":
         print("=" * 60)
         print(" Probiyom yerel sunucusu calisiyor (%s)" % note)
         print("    Ana Sayfa      : http://localhost:%d/" % target)
-        print("    Blog           : http://localhost:%d/blog" % target)
-        print("    Urunler        : http://localhost:%d/products" % target)
-        print("    Iletisim       : http://localhost:%d/contact" % target)
+        print("    Blog           : http://localhost:%d/blog/" % target)
+        print("    Urunler        : http://localhost:%d/products/" % target)
+        print("    Iletisim       : http://localhost:%d/contact/" % target)
         print("    Yenilemede alt rotalar ayni URL'de acilir.")
         print("    Durdurmak icin : Ctrl + C")
         print("=" * 60)

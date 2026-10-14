@@ -1,7 +1,7 @@
 /* Shared URL contract. Register each static template in one place. */
 var SiteRoutes = (function () {
   function normalizeRoute(route) {
-    var normalized = (route || 'home').replace(/^\/+/, '').replace(/\/?$/, '');
+    var normalized = (route || 'home').replace(/^\/+/, '').replace(/\/+$/, '');
     return normalized === 'index.html' ? 'home' : (normalized || 'home');
   }
 
@@ -11,7 +11,7 @@ var SiteRoutes = (function () {
       return '/';
     }
 
-    return '/' + normalized;
+    return '/' + normalized + '/';
   }
 
 
