@@ -2,11 +2,10 @@
   "name": "probiyom-site",
   "private": true,
   "scripts": {
-    "prebuild": "playwright install --only-shell chromium",
     "build": "node scripts/build-seo.cjs",
     "start": "node serve.mjs"
   },
   "devDependencies": {
-    "playwright": "1.62.1"
+    "linkedom": "^0.18.13"
   }
 }

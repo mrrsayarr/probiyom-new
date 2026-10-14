@@ -17,6 +17,7 @@ Port doluysa `node serve.mjs 7077` kullanın.
 
 İlk derleme için `npm install`, ardından `npm run build` çalıştırın.
 İçerik değişikliklerinden sonra `npm run build` ile önizleme ve yayın paketini yenileyin.
+Derleme yalnızca Node.js ve HTML işleme paketi kullanır; tarayıcı indirme, Chromium, Playwright veya root yetkisi gerekmez.
 
 Cloudflare build komutu: `npm run build`. Yayın ayarları `wrangler.jsonc`,
 yönlendirmeler `scripts/seo-worker.mjs` içindedir. Eski `/#blog/...` bağlantıları,
