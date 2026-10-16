@@ -1,5 +1,17 @@
 const MANIFEST_PATH = '/seo-pages/manifest.json';
 
+function assetResponse(response, pathname) {
+  const headers = new Headers(response.headers);
+  const immutable = /^\/(?:scripts|styles)\/site\.[a-f0-9]{12}\./.test(pathname) ||
+    /^\/images\/optimized\/.+-[a-f0-9]{8}-\d+\.webp$/.test(pathname);
+  headers.set('Cache-Control', immutable ? 'public, max-age=31536000, immutable' :
+    /\.(?:html|txt|xml|json)$/.test(pathname) || pathname.endsWith('/') ? 'no-cache' : 'public, max-age=604800');
+  headers.set('X-Content-Type-Options', 'nosniff');
+  headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  headers.set('X-Frame-Options', 'SAMEORIGIN');
+  return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+}
+
 function response404(request, html) {
   const headers = new Headers({
     'content-type': 'text/html; charset=utf-8',
@@ -42,6 +54,12 @@ export default {
       return Response.redirect(url, 308);
     }
 
+    // Ordinary files need no page manifest lookup or routing work.
+    if (/^\/(?:images|styles|scripts|data)\//.test(path)) {
+      const response = await env.ASSETS.fetch(request);
+      if (response.ok) return assetResponse(response, path);
+    }
+
     // All page URLs use one trailing slash, including the standalone document.
     const pagePath = path.replace(/\/+$/, '') + '/';
     if (pagePath === '/st/') {
@@ -65,11 +83,11 @@ export default {
 
     // Preserve ordinary assets (and their response headers/cache behavior).
     const asset = await env.ASSETS.fetch(request);
-    if (asset.ok) return asset;
+    if (asset.ok) return assetResponse(asset, path);
 
     if (manifest.routes.includes(path)) {
       const generatedPath = path === '/' ? '/seo-pages/index.html' : `/seo-pages${path}index.html`;
-      return env.ASSETS.fetch(assetRequest(request, generatedPath));
+      return assetResponse(await env.ASSETS.fetch(assetRequest(request, generatedPath)), path);
     }
 
     const notFound = await env.ASSETS.fetch(assetRequest(request, '/seo-pages/404.html', 'GET'));

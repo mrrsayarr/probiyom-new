@@ -11,14 +11,36 @@ const noOp = () => {};
 const excluded = new Set(['scripts/app.js', 'scripts/router.js', 'scripts/contact-map.js']);
 
 async function build() {
+  const imageAssets = require('./image-assets.cjs')(root);
+  await fs.writeFile(path.join(root, 'data/image-assets.js'), 'var ImageAssets = ' + JSON.stringify(imageAssets) + ';\n');
   const shell = await fs.readFile(path.join(root, 'index.html'), 'utf8');
   const { document: sourceDocument } = parseHTML(shell);
   const scripts = [];
+  const runtime = [];
   for (const element of sourceDocument.querySelectorAll('script[src]')) {
     const name = element.getAttribute('src').split('?')[0];
-    if (/^https?:/.test(name) || excluded.has(name)) continue;
-    scripts.push([name, await fs.readFile(path.join(root, name), 'utf8')]);
+    if (/^https?:/.test(name)) continue;
+    const code = await fs.readFile(path.join(root, name), 'utf8');
+    runtime.push(code);
+    if (!excluded.has(name)) scripts.push([name, code]);
   }
+  const crypto = require('node:crypto');
+  const hash = text => crypto.createHash('sha256').update(text).digest('hex').slice(0, 12);
+  const js = runtime.join('\n;\n');
+  const jsName = 'scripts/site.' + hash(js) + '.js';
+  let css = '';
+  for (const link of sourceDocument.querySelectorAll('link[rel="stylesheet"]')) {
+    const name = link.getAttribute('href').split('?')[0];
+    assert.ok(!/^https?:/.test(name), 'Keep critical styles local: ' + name);
+    let content = await fs.readFile(path.join(root, name), 'utf8');
+    // Bundled CSS lives in styles/, so retain each source stylesheet's URL base.
+    content = content.replace(/url\((['"]?)([^)'"\s]+)\1\)/g, (all, quote, value) => {
+      if (/^(data:|https?:|\/|#)/.test(value)) return all;
+      return 'url(/' + path.posix.join(path.posix.dirname(name), value) + ')';
+    });
+    css += '\n' + content;
+  }
+  const cssName = 'styles/site.' + hash(css) + '.css';
   const templates = new Map();
   for (const name of await fs.readdir(path.join(root, 'pages'))) {
     if (name.endsWith('.html')) templates.set('pages/' + name, await fs.readFile(path.join(root, 'pages', name), 'utf8'));
@@ -90,12 +112,50 @@ async function build() {
     document.querySelectorAll('.faq-question').forEach(button => button.setAttribute('aria-expanded', 'true'));
     // Image loading and decoding are properties in the renderers; emit real attributes.
     document.querySelectorAll('img').forEach(img => {
+      const src = img.getAttribute('src') || img.getAttribute('data-src') || '';
+      const item = imageAssets[src.split('?')[0]];
+      if (item) {
+        img.setAttribute('width', item.width);
+        img.setAttribute('height', item.height);
+        if (item.srcset && img.hasAttribute('src') && !img.hasAttribute('srcset')) {
+          img.setAttribute('srcset', item.srcset);
+          img.setAttribute('sizes', '(max-width: 767px) 100vw, 800px');
+        }
+      }
+      if (img.closest('.home-certificates')) {
+        img.setAttribute('loading', 'lazy');
+        img.setAttribute('sizes', '220px');
+      }
       if (img.loading) img.setAttribute('loading', img.loading);
       if (img.decoding) img.setAttribute('decoding', img.decoding);
     });
-    document.querySelectorAll('script[src]').forEach(script => {
-      if (/^https?:/.test(script.getAttribute('src'))) script.remove();
-    });
+    document.querySelectorAll('script[src]').forEach(script => script.remove());
+    const bundle = document.createElement('script');
+    bundle.setAttribute('src', jsName);
+    bundle.setAttribute('defer', '');
+    document.body.appendChild(bundle);
+    document.querySelectorAll('link[rel="stylesheet"]').forEach(link => link.remove());
+    const style = document.createElement('link');
+    style.setAttribute('rel', 'stylesheet'); style.setAttribute('href', cssName);
+    document.head.appendChild(style);
+    document.querySelectorAll('link[rel="preload"][as="image"]').forEach(link => link.remove());
+    if (route === '/') {
+      const hero = document.querySelector('.slider-slide img');
+      const preload = document.createElement('link');
+      preload.setAttribute('rel', 'preload'); preload.setAttribute('as', 'image');
+      preload.setAttribute('href', hero.getAttribute('src'));
+      preload.setAttribute('imagesrcset', hero.getAttribute('srcset'));
+      preload.setAttribute('imagesizes', hero.getAttribute('sizes'));
+      preload.setAttribute('fetchpriority', 'high'); document.head.appendChild(preload);
+    }
+    const popupSource = context.SiteData.storeAnnouncement.image.split('?')[0];
+    const popupAsset = imageAssets[popupSource];
+    const popupPreload = document.createElement('link');
+    popupPreload.setAttribute('rel', 'preload'); popupPreload.setAttribute('as', 'image');
+    popupPreload.setAttribute('href', popupSource);
+    if (popupAsset.srcset) popupPreload.setAttribute('imagesrcset', popupAsset.srcset);
+    popupPreload.setAttribute('imagesizes', '(max-width: 639px) calc(100vw - 32px), 410px');
+    popupPreload.setAttribute('fetchpriority', 'high'); document.head.appendChild(popupPreload);
 
     assert.equal(main.querySelectorAll('h1').length, 1, route + ': expected one main heading');
     assert.ok(!titles.has(document.title), route + ': duplicate page title');
@@ -125,6 +185,16 @@ async function build() {
   await fs.mkdir(path.join(dist, 'scripts'), { recursive: true });
   for (const name of await fs.readdir(path.join(root, 'scripts'))) {
     if (name.endsWith('.js')) await fs.copyFile(path.join(root, 'scripts', name), path.join(dist, 'scripts', name));
+  }
+  await fs.writeFile(path.join(dist, jsName), js);
+  await fs.writeFile(path.join(dist, cssName), css);
+  // Prune only content-addressed bundles generated by this build script.
+  for (const directory of ['styles', 'scripts']) {
+    for (const name of await fs.readdir(path.join(dist, directory))) {
+      if (/^site\.[a-f0-9]{12}\.(css|js)$/.test(name) && ![cssName, jsName].includes(directory + '/' + name)) {
+        await fs.rm(path.join(dist, directory, name));
+      }
+    }
   }
   for (const name of ['robots.txt', 'sitemap.xml', 'llms.txt', '_headers', 'google48726a64ae31bd98.html']) await fs.copyFile(path.join(root, name), path.join(dist, name));
   await fs.copyFile(path.join(output, 'index.html'), path.join(dist, 'index.html'));

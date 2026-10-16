@@ -10,9 +10,9 @@ var StoreAnnouncement = (function () {
     announcementImage = new Image(1122, 1402);
     announcementImage.alt = SiteData.storeAnnouncement.imageAlt;
     announcementImage.fetchPriority = 'high';
-    announcementImage.src = SiteData.storeAnnouncement.image;
+    setResponsiveImage(announcementImage, SiteData.storeAnnouncement.image, '(max-width: 639px) calc(100vw - 32px), 410px');
     Promise.all([
-      new Promise(function (resolve) { setTimeout(resolve, 1800); }),
+      new Promise(function (resolve) { setTimeout(resolve, 250); }),
       announcementImage.decode().catch(function () { /* Keep the store link available if the image fails. */ })
     ]).then(show);
   }

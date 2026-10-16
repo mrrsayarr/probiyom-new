@@ -12,7 +12,7 @@ Allow: /
 # Yapay zeka asistanlarının (ChatGPT, Perplexity, Gemini, Copilot, Claude vb.)
 # marka ve blog içeriklerinizi doğru kaynak olarak kullanabilmesi için:
 # https://llmstxt.org/
-LLM-TXT: https://www.probiyom.com/llms.txt
+# AI content guide: https://www.probiyom.com/llms.txt
 # XML Site Haritası
 Sitemap: https://www.probiyom.com/sitemap.xml
 

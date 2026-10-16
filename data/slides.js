@@ -39,12 +39,3 @@ var homeSlides = [
   }
 ];
 
-(function () {
-  if (typeof window === 'undefined') return;
-  // Sadece ilk görseli ön yükle (LCP için kritik)
-  if (homeSlides[0] && homeSlides[0].src) {
-    var img = new Image();
-    img.src = homeSlides[0].src;
-  }
-  // Diğer görseller sayfa etkileşimine kadar ertelenir
-})();

@@ -31,6 +31,16 @@ function BlogList(container, posts, initialIdentifier) {
   }
 
   // 1. ÖZET KART LİSTESİ GÖRÜNÜMÜ
+  function renderMetadata(post) {
+    var value = post.datePublished;
+    if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return '';
+    var date = new Date(value + 'T00:00:00Z');
+    if (Number.isNaN(date.getTime()) || date.toISOString().slice(0, 10) !== value) return '';
+    var parts = value.split('-');
+    return '<p class="blog-meta small text-muted mb-3"><time datetime="' + escapeAttr(value) + '">' +
+      parts[2] + '.' + parts[1] + '.' + parts[0] + '</time> <span aria-hidden="true">&bull;</span> Probiyom</p>';
+  }
+
   function renderListView() {
     var html = '<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">';
 
@@ -49,7 +59,7 @@ function BlogList(container, posts, initialIdentifier) {
       if (post.imageDir) {
         imageHtml =
           '<div class="blog-post-image position-relative overflow-hidden bg-white">' +
-          '<img src="' + escapeAttr(post.imageDir) + '" alt="' + escapeAttr(imageAlt) + '" class="w-100 h-100 object-fit-contain p-2 transition-all" loading="lazy">' +
+          '<img' + responsiveImageAttributes(post.imageDir, '(max-width: 767px) 100vw, 800px') + ' src="' + escapeAttr(post.imageDir) + '" alt="' + escapeAttr(imageAlt) + '" class="w-100 h-100 object-fit-contain p-2 transition-all" loading="lazy">' +
           '</div>';
       }
 
@@ -60,6 +70,7 @@ function BlogList(container, posts, initialIdentifier) {
         '<div class="blog-post-body p-4 d-flex flex-column justify-content-between flex-grow-1">' +
         '<div>' +
         '<h2 class="blog-post-title fs-5 fw-bold mb-3 text-brand">' + escapeHtml(post.title) + '</h2>' +
+        renderMetadata(post) +
         '<p class="blog-post-text text-muted small lh-relaxed mb-4">' + escapeHtml(snippet) + '</p>' +
         '</div>' +
         '<div class="text-start mt-auto">' +
@@ -108,7 +119,7 @@ function BlogList(container, posts, initialIdentifier) {
     if (post.imageDir) {
       imageHtml =
         '<div class="blog-detail-image rounded-3 overflow-hidden mb-4 shadow-sm bg-white text-center">' +
-        '<img src="' + escapeAttr(post.imageDir) + '" alt="' + escapeAttr(imageAlt) + '" class="img-fluid object-fit-contain p-2" style="max-height: 480px; width: auto; margin: 0 auto;" loading="lazy">' +
+        '<img' + responsiveImageAttributes(post.imageDir, '(max-width: 767px) 100vw, 800px') + ' src="' + escapeAttr(post.imageDir) + '" alt="' + escapeAttr(imageAlt) + '" class="img-fluid object-fit-contain p-2" style="max-height: 480px; width: auto; margin: 0 auto;" loading="lazy">' +
         '</div>';
     }
 
@@ -126,6 +137,7 @@ function BlogList(container, posts, initialIdentifier) {
       /* Başlık & Metin */
       '<div class="blog-detail-body mt-2">' +
       '<h1 class="blog-detail-title text-brand mb-4 fw-bold fs-2">' + escapeHtml(post.title) + '</h1>' +
+      renderMetadata(post) +
       '<div class="blog-detail-text fs-6 text-muted lh-lg">' + formattedTextHtml + '</div>' +
       '</div>' +
 

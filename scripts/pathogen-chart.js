@@ -53,7 +53,7 @@ var PathogenChart = (function () {
     var cleanupTasks = [];
     var selectedPoint = null;
     var hoveredPoint = null;
-    var defaultMessage = 'Bir nokta seçin veya üzerine gelin. Eğriler temsili şemadır; ölçüm verisi değildir.';
+    var defaultMessage = 'Bir nokta seçin veya üzerine gelin.';
     var chart = document.createElement('div');
     chart.className = 'pathogen-chart';
     chart.setAttribute('data-pathogen-chart-instance', String(id));

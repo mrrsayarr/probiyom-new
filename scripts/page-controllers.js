@@ -94,7 +94,7 @@ var PageControllers = (function () {
             var introImageHtml =
               '<div class="group-intro-image">' +
                 '<div class="group-intro-image-inner">' +
-                  '<img src="' + escapeAttr(groupIntro.imageDir) + '" alt="' + escapeAttr(imgAlt) + '">' +
+                  '<img' + responsiveImageAttributes(groupIntro.imageDir, '(max-width: 767px) 100vw, 600px') + ' src="' + escapeAttr(groupIntro.imageDir) + '" alt="' + escapeAttr(imgAlt) + '">' +
                 '</div>' +
               '</div>';
 
@@ -269,6 +269,7 @@ var PageControllers = (function () {
       blog: function () { initBlogPage(parameter); }
     };
     if (Object.prototype.hasOwnProperty.call(initializers, page)) initializers[page]();
+    sizePageImages(root);
     return {
       destroy: function () {
         if (disposed) return;

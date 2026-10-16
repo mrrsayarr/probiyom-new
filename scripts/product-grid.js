@@ -33,7 +33,7 @@ function ProductGrid(container, groupProducts) {
     if (p.imageDir) {
       var src = escapeAttr(p.imageDir);
       imageHtml = '<div class="product-card-image overflow-hidden position-relative">' +
-                    '<img src="' + src + '" alt="' + escapeAttr(p.name) + '" class="w-100 h-100 transition-all" loading="lazy">' +
+                    '<img' + responsiveImageAttributes(p.imageDir, '(max-width: 767px) 100vw, 400px') + ' src="' + src + '" alt="' + escapeAttr(p.name) + '" class="w-100 h-100 transition-all" loading="lazy">' +
                   '</div>';
     }
 

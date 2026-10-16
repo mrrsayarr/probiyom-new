@@ -21,7 +21,6 @@
 
     <!-- SPA path routing -->
     <base href="/">
-    <link rel="preload" as="image" href="images/trendyol-popup.webp?v=20261016-heiq" fetchpriority="high">
 
     <!-- SEO Başlık & Gelişmiş Meta Etiketleri -->
     <title>Probiyotik Temizlik Ürünleri ve Teknolojisi | Probiyom</title>
@@ -55,13 +54,11 @@
     <link rel="icon" type="image/svg+xml" href="images/logo.svg">
 
     <!-- Google Fonts – Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="styles/vendor/inter.css" rel="stylesheet">
 
     <!-- Bootstrap (grid + utilities only) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap-grid.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap-utilities.min.css">
+    <link rel="stylesheet" href="styles/vendor/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="styles/vendor/bootstrap-utilities.min.css">
 
     <!-- DNS Prefetch for external resources -->
     <link rel="dns-prefetch" href="https://api.web3forms.com">
@@ -202,31 +199,32 @@
     </div>
 
     <!-- Data -->
-    <script src="data/site.js?v=20261016-motion-faq"></script>
-    <script src="data/products.js?v=20261008"></script>
-    <script src="data/categories.js?v=20261013-shared"></script>
-    <script src="data/slides.js?v=20261013-slider-selection"></script>
-    <script src="data/subjects.js?v=20261008"></script>
-    <script src="data/faqs.js?v=20261016-motion-faq"></script>
-    <script src="data/blogs.js?v=20261016-blog-catalog"></script>
+    <script src="data/image-assets.js" defer></script>
+    <script src="data/site.js?v=20261016-motion-faq" defer></script>
+    <script src="data/products.js?v=20261008" defer></script>
+    <script src="data/categories.js?v=20261013-shared" defer></script>
+    <script src="data/slides.js?v=20261013-slider-selection" defer></script>
+    <script src="data/subjects.js?v=20261008" defer></script>
+    <script src="data/faqs.js?v=20261016-motion-faq" defer></script>
+    <script src="data/blogs.js?v=20261016-enzyme-date" defer></script>
 
     <!-- App scripts - Critical scripts load first -->
-    <script src="scripts/helpers.js?v=20261016-motion-faq"></script>
-    <script src="scripts/slider.js?v=20261014-slider-dock"></script>
-    <script src="scripts/navbar.js?v=20261016-motion-faq"></script>
-    <script src="scripts/footer.js?v=20261016-social-popup"></script>
-    <script src="scripts/product-grid.js?v=20261008"></script>
-    <script src="scripts/faq.js?v=20261016-motion-faq"></script>
-    <script src="scripts/blog.js?v=20261016-motion-faq"></script>
-    <script src="scripts/site-routes.js?v=20261014-trailing-slash"></script>
-    <script src="scripts/page-seo.js?v=20261013-prerender"></script>
-    <script src="scripts/pathogen-chart.js?v=20261014-comparison"></script>
-    <script src="scripts/category-grid.js?v=20261016-blog-catalog"></script>
-    <script src="scripts/home-page.js?v=20261013-shared"></script>
-    <script src="scripts/page-controllers.js?v=20261016-store"></script>
-    <script src="scripts/router.js?v=20261013-prerender"></script>
-    <script src="scripts/store-announcement.js?v=20261016-fast-popup"></script>
-    <script src="scripts/app.js?v=20261016-store"></script>
+    <script src="scripts/helpers.js?v=20261016-motion-faq" defer></script>
+    <script src="scripts/slider.js?v=20261014-slider-dock" defer></script>
+    <script src="scripts/navbar.js?v=20261016-all-products" defer></script>
+    <script src="scripts/footer.js?v=20261016-social-popup" defer></script>
+    <script src="scripts/product-grid.js?v=20261008" defer></script>
+    <script src="scripts/faq.js?v=20261016-motion-faq" defer></script>
+    <script src="scripts/blog.js?v=20261016-dates" defer></script>
+    <script src="scripts/site-routes.js?v=20261014-trailing-slash" defer></script>
+    <script src="scripts/page-seo.js?v=20261013-prerender" defer></script>
+    <script src="scripts/pathogen-chart.js?v=20261014-comparison" defer></script>
+    <script src="scripts/category-grid.js?v=20261016-blog-catalog" defer></script>
+    <script src="scripts/home-page.js?v=20261013-shared" defer></script>
+    <script src="scripts/page-controllers.js?v=20261016-store" defer></script>
+    <script src="scripts/router.js?v=20261013-prerender" defer></script>
+    <script src="scripts/store-announcement.js?v=20261016-fast-popup" defer></script>
+    <script src="scripts/app.js?v=20261016-store" defer></script>
 
     <!-- Non-critical scripts deferred -->
     <script src="scripts/contact-form.js?v=20261008" defer></script>

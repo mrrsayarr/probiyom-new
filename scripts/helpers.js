@@ -2,6 +2,41 @@
    Utility helpers – must load before any component that renders HTML
    =================================================================== */
 
+function responsiveImageAttributes(src, sizes) {
+  var item = typeof ImageAssets !== 'undefined' && ImageAssets[src.split('?')[0]];
+  if (!item) return '';
+  return ' width="' + item.width + '" height="' + item.height + '"' +
+    (item.srcset ? ' srcset="' + escapeAttr(item.srcset) + '" sizes="' + escapeAttr(sizes || '(max-width: 767px) 100vw, 800px') + '"' : '');
+}
+
+function setResponsiveImage(image, src, sizes) {
+  var item = typeof ImageAssets !== 'undefined' && ImageAssets[src.split('?')[0]];
+  if (item) {
+    image.width = item.width;
+    image.height = item.height;
+    if (item.srcset) {
+      image.sizes = sizes || '(max-width: 767px) 100vw, 800px';
+      image.srcset = item.srcset;
+    }
+  }
+  image.src = src;
+}
+
+function sizePageImages(root) {
+  root.querySelectorAll('img[src]').forEach(function (image) {
+    var src = image.getAttribute('src');
+    var item = typeof ImageAssets !== 'undefined' && ImageAssets[src.split('?')[0]];
+    if (!item) return;
+    image.setAttribute('width', item.width);
+    image.setAttribute('height', item.height);
+    if (item.srcset && !image.hasAttribute('srcset')) {
+      image.setAttribute('sizes', image.closest('.home-certificates') ? '220px' : '(max-width: 767px) 100vw, 800px');
+      image.setAttribute('srcset', item.srcset);
+    }
+    if (image.closest('.home-certificates')) image.setAttribute('loading', 'lazy');
+  });
+}
+
 function escapeHtml(str) {
   if (!str) return '';
   return str

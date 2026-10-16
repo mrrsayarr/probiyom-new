@@ -9,7 +9,7 @@ function CategoryGrid(container) {
     return '<div class="col">' +
       '<a href="' + escapeAttr(SiteRoutes.href('products/' + category.slug)) + '" class="category-card-link text-decoration-none">' +
         '<div class="category-card p-4 bg-white rounded-4 border border-light-subtle shadow-sm h-100 d-flex flex-column justify-content-between">' +
-          '<figure class="category-media"><img src="' + escapeAttr(category.image) + '" alt="' + escapeAttr(category.imageAlt) + '" width="' + category.width + '" height="' + category.height + '" loading="lazy" decoding="async"></figure>' +
+          '<figure class="category-media"><img' + responsiveImageAttributes(category.image, '(max-width: 767px) 100vw, 380px') + ' src="' + escapeAttr(category.image) + '" alt="' + escapeAttr(category.imageAlt) + '" loading="lazy" decoding="async"></figure>' +
           '<div>' +
             '<div class="d-flex align-items-center justify-content-between mb-3">' +
               '<div class="category-icon-box rounded-circle d-flex align-items-center justify-content-center">' + icon + '</div>' +

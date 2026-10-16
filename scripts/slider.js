@@ -16,6 +16,7 @@ function ImageSlider(container, slides, durationMs, options) {
   var counterSpan = null;
   var progressBar = null;
   var destroyed = false;
+  var navigationVersion = 0;
 
   function init() {
     var wrapper = document.createElement('div');
@@ -40,11 +41,12 @@ function ImageSlider(container, slides, durationMs, options) {
       var imageContainer = document.createElement('div');
       imageContainer.className = 'slider-image-container';
       var image = document.createElement('img');
-      image.src = slide.src;
+      image.setAttribute('data-src', slide.src);
       image.alt = slide.alt || '';
       image.loading = index === 0 ? 'eager' : 'lazy';
-      image.decoding = index === 0 ? 'sync' : 'async';
+      image.decoding = 'async';
       if (index === 0) image.setAttribute('fetchpriority', 'high');
+      if (index === 0) setResponsiveImage(image, slide.src, '(max-width: 575px) 100vw, (max-width: 1440px) 84vw, 1140px');
       imageContainer.appendChild(image);
 
       // AKILLI KONTROL: Sadece başlık verisi (title) dolu olan slaytlara metin kutusu ekler
@@ -163,10 +165,11 @@ function ImageSlider(container, slides, durationMs, options) {
     var nextIdx = (currentIdx + 1) % slides.length;
     var nextSlide = slides[nextIdx];
     if (nextSlide && nextSlide.src) {
-      var img = new Image();
-      img.src = nextSlide.src;
-      if (img.decode) {
-        img.decode().catch(function () {});
+      var img = slideElements[nextIdx].querySelector('img');
+      if (!img.getAttribute('src')) {
+        img.loading = 'eager';
+        img.setAttribute('fetchpriority', 'low');
+        setResponsiveImage(img, nextSlide.src, '(max-width: 575px) 100vw, (max-width: 1440px) 84vw, 1140px');
       }
     }
   }
@@ -195,8 +198,10 @@ function ImageSlider(container, slides, durationMs, options) {
 
     if (progressBar) {
       progressBar.style.animationDuration = durationMs + 'ms';
+      var replacement = progressBar.cloneNode(false);
+      progressBar.replaceWith(replacement);
+      progressBar = replacement;
       progressBar.classList.remove('is-animating');
-      void progressBar.offsetWidth; // Reflow
       
       if (!isPaused) {
         progressBar.classList.add('is-animating');
@@ -206,7 +211,6 @@ function ImageSlider(container, slides, durationMs, options) {
       }
     }
 
-    preloadNextSlide(activeIndex);
   }
 
   function togglePause() {
@@ -230,13 +234,21 @@ function ImageSlider(container, slides, durationMs, options) {
 
   function goTo(idx) {
     if (destroyed) return;
-    activeIndex = idx;
     clearTimeout(timer);
     timer = null;
-    updateDOM();
-    if (!isPaused) {
-      scheduleNext();
+    var version = ++navigationVersion;
+    var image = slideElements[idx].querySelector('img');
+    image.loading = 'eager';
+    image.setAttribute('fetchpriority', 'high');
+    if (!image.getAttribute('src')) setResponsiveImage(image, slides[idx].src, '(max-width: 575px) 100vw, (max-width: 1440px) 84vw, 1140px');
+    function commit() {
+      if (destroyed || version !== navigationVersion) return;
+      activeIndex = idx;
+      updateDOM();
+      if (!isPaused) scheduleNext();
     }
+    if (!image.complete && image.decode) image.decode().catch(function () {}).then(commit);
+    else commit();
   }
 
   function scheduleNext() {
@@ -245,13 +257,15 @@ function ImageSlider(container, slides, durationMs, options) {
     if (isPaused) return;
     
     timer = setTimeout(function () {
-      activeIndex = (activeIndex + 1) % slides.length;
-      updateDOM();
-      scheduleNext();
+      goTo((activeIndex + 1) % slides.length);
     }, durationMs);
   }
 
   init();
+  var initialImage = slideElements[0].querySelector('img');
+  if (initialImage.decode) initialImage.decode().catch(function () {}).then(function () {
+    if (!destroyed) preloadNextSlide(0);
+  });
   if (!isPaused) scheduleNext();
 
   return {

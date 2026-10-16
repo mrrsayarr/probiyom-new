@@ -21,8 +21,6 @@ var Router = (function () {
     if (mainContainer) return;
     mainContainer = container;
     
-    // Prefetch shares its request with navigation; failures remain retryable.
-    fetchTemplate(SiteRoutes.pages.home).catch(function () {});
 
     window.addEventListener('popstate', onRoute);
     window.addEventListener('hashchange', function () {

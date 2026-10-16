@@ -17,7 +17,7 @@ function Footer(container) {
           /* 1. SÜTUN: Marka & Slogan & Rozet */
           '<div class="col-lg-4 col-md-12 text-center text-lg-start footer-column footer-brand-column">' +
             '<div class="footer-brand d-inline-flex align-items-center gap-2 mb-3 text-white">' +
-              '<img src="images/logo.svg" alt="Probiyom logo">' +
+              '<img src="images/logo.svg" alt="Probiyom logo" width="858" height="770">' +
               '<span class="fw-bold fs-4 tracking-tight text-white">Probiyom</span>' +
             '</div>' +
             '<p class="small lh-relaxed mb-3 text-white-50 max-w-sm">' +

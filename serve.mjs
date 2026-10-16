@@ -5,6 +5,9 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import worker from './scripts/seo-worker.mjs';
+import { gzip } from 'node:zlib';
+import { promisify } from 'node:util';
+const compress = promisify(gzip);
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), 'dist');
 const check = process.argv.includes('--check');
@@ -14,7 +17,8 @@ const types = {
   '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8',
   '.txt': 'text/plain; charset=utf-8', '.xml': 'application/xml; charset=utf-8',
   '.webp': 'image/webp', '.svg': 'image/svg+xml', '.png': 'image/png',
-  '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.ico': 'image/x-icon', '.pdf': 'application/pdf'
+  '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.ico': 'image/x-icon', '.pdf': 'application/pdf',
+  '.woff2': 'font/woff2'
 };
 
 if (!existsSync(path.join(root, 'seo-pages', 'manifest.json'))) {
@@ -58,8 +62,16 @@ const server = http.createServer(async (incoming, outgoing) => {
       const destination = new URL(headers.location);
       headers.location = destination.pathname + destination.search;
     }
+    let body = incoming.method === 'HEAD' ? undefined : Buffer.from(await response.arrayBuffer());
+    if (body && /\bgzip\b/.test(incoming.headers['accept-encoding'] || '') &&
+        /^(text\/|application\/(?:javascript|json|xml)|image\/svg)/.test(headers['content-type'] || '')) {
+      body = await compress(body);
+      headers['content-encoding'] = 'gzip';
+      headers['content-length'] = String(body.length);
+      headers.vary = 'Accept-Encoding';
+    }
     outgoing.writeHead(response.status, headers);
-    outgoing.end(incoming.method === 'HEAD' ? undefined : Buffer.from(await response.arrayBuffer()));
+    outgoing.end(body);
   } catch (error) {
     console.error('Önizleme hatası:', error.message);
     if (!outgoing.headersSent) outgoing.writeHead(500);

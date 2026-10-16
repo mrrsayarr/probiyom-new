@@ -24,7 +24,7 @@ function Navbar(container) {
   });
 
   function buildDesktopGroupLinks() {
-    return groupItems.map(function (g) {
+    return '<li class="border-bottom border-white border-opacity-10 mb-1 pb-1"><a href="' + routeHref('products') + '" class="text-decoration-none d-block px-3 py-2 fw-bold">Tüm Ürünlerimiz</a></li>' + groupItems.map(function (g) {
       return '<li><a href="' + g.href + '" class="text-decoration-none d-block px-3 py-2 fw-semibold">' + g.label + '</a></li>';
     }).join('');
   }
@@ -43,6 +43,7 @@ function Navbar(container) {
       var subLinks = '';
       if (item.href === routeHref('products')) {
         subLinks = '<ul class="sub-links list-unstyled m-0 ps-3">' +
+          '<li><a href="' + routeHref('products') + '" class="text-decoration-none d-block px-3 py-2 fw-bold">Tüm Ürünlerimiz</a></li>' +
           groupItems.map(function (g) {
             return '<li><a href="' + g.href + '" class="text-decoration-none d-block px-3 py-2 fw-semibold text-secondary">' + g.label + '</a></li>';
           }).join('') +
@@ -62,7 +63,7 @@ function Navbar(container) {
           
           /* Logo */
           '<a href="' + routeHref('home') + '" class="navbar-brand d-flex align-items-center gap-2 text-decoration-none" aria-label="Probiyom ana sayfa">' +
-            '<img src="images/logo.svg" alt="Probiyom logo" style="height: 50px; width: auto;">' +
+            '<img src="images/logo.svg" alt="Probiyom logo" width="858" height="770" style="height: 50px; width: auto;">' +
             '<span class="fs-6 fw-bold tracking-tight text-white">Probiyom</span>' +
           '</a>' +
 
