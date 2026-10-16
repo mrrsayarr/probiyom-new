@@ -175,12 +175,12 @@ header.app-header, .app-header { position: sticky !important; top: 0 !important;
 .navbar-links a:hover { color: var(--color-mint-leaf) !important; opacity: 1; }
 .nav-dropdown-trigger { cursor: pointer; transition: color 0.2s ease; }
 .nav-dropdown-arrow { font-size: 0.75rem; transition: transform 0.25s ease; }
-.nav-dropdown:hover .nav-dropdown-arrow { transform: rotate(180deg); }
+.nav-dropdown:hover .nav-dropdown-arrow, .nav-dropdown:focus-within .nav-dropdown-arrow { transform: rotate(180deg); }
 .nav-dropdown-menu {
   opacity: 0; visibility: hidden; transform: translateY(8px);
   transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease; z-index: 10001 !important;
 }
-.nav-dropdown:hover .nav-dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+.nav-dropdown:hover .nav-dropdown-menu, .nav-dropdown:focus-within .nav-dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
 .nav-dropdown-menu.force-hide { opacity: 0 !important; visibility: hidden !important; transform: translateY(8px) !important; display: none !important; }
 .nav-dropdown-panel {
   min-width: 320px; width: max-content; max-width: 420px;

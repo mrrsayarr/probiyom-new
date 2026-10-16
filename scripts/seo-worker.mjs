@@ -1,5 +1,16 @@
 const MANIFEST_PATH = '/seo-pages/manifest.json';
 
+function normalizedAssetPath(pathname) {
+  try {
+    const segments = [];
+    for (const segment of decodeURIComponent(pathname).replaceAll('\\', '/').split('/')) {
+      if (segment === '..') segments.pop();
+      else if (segment && segment !== '.') segments.push(segment);
+    }
+    return ('/' + segments.join('/')).toLowerCase();
+  } catch { return '/404.html'; }
+}
+
 function assetResponse(response, pathname) {
   const headers = new Headers(response.headers);
   const immutable = /^\/(?:scripts|styles)\/site\.[a-f0-9]{12}\./.test(pathname) ||
@@ -9,6 +20,7 @@ function assetResponse(response, pathname) {
   headers.set('X-Content-Type-Options', 'nosniff');
   headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   headers.set('X-Frame-Options', 'SAMEORIGIN');
+  if (/^\/pages\/.*\.html$/.test(normalizedAssetPath(pathname))) headers.set('X-Robots-Tag', 'noindex, follow');
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
 }
 
@@ -43,14 +55,16 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
 
-    // Never expose the generated document store as a public URL namespace.
-    if (path === '/404.html' || path === '/seo-pages' || path.startsWith('/seo-pages/')) {
+    // Asset providers decode paths; apply the private-path guard to that same form.
+    const decodedPath = normalizedAssetPath(path);
+    // Never expose the generated document store, including percent-encoded aliases.
+    if (decodedPath === '/404.html' || decodedPath === '/seo-pages' || decodedPath.startsWith('/seo-pages/')) {
       const notFound = await env.ASSETS.fetch(assetRequest(request, '/seo-pages/404.html', 'GET'));
       return response404(request, await notFound.text());
     }
 
-    if (path === '/index.html') {
-      url.pathname = '/';
+    if (path === '/index.html' || path === '/st/index.html') {
+      url.pathname = path === '/st/index.html' ? '/st/' : '/';
       return Response.redirect(url, 308);
     }
 
@@ -67,7 +81,7 @@ export default {
         url.pathname = pagePath;
         return Response.redirect(url, 308);
       }
-      return env.ASSETS.fetch(assetRequest(request, '/st/index.html'));
+      return assetResponse(await env.ASSETS.fetch(assetRequest(request, '/st/index.html')), path);
     }
 
     const manifest = await loadManifest(request, env);

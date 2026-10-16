@@ -99,9 +99,14 @@ server.listen(port, '127.0.0.1', async () => {
       }
     }
     assert.equal((await fetch(base + '/images/logo.svg')).status, 200);
-    for (const url of ['/missing/', '/seo-pages/manifest.json', '/serve.mjs', '/scripts/build-seo.cjs', '/%2e%2e%2fpackage.json']) {
+    for (const url of ['/missing/', '/seo-pages/manifest.json', '/%73eo-pages/manifest.json', '/seo%2Dpages/index.html', '/safe%2F..%2Fseo-pages/manifest.json', '/safe%3F%2F..%2Fseo-pages/manifest.json', '/serve.mjs', '/scripts/build-seo.cjs', '/%2e%2e%2fpackage.json']) {
       assert.equal((await fetch(base + url)).status, 404, url);
     }
+    assert.equal((await fetch(base + '/pages/contact.html')).headers.get('x-robots-tag'), 'noindex, follow');
+    assert.equal((await fetch(base + '/p%61ges/contact.html')).headers.get('x-robots-tag'), 'noindex, follow');
+    const standalone = await fetch(base + '/st/index.html?source=test', { redirect: 'manual' });
+    assert.equal(standalone.status, 308);
+    assert.equal(standalone.headers.get('location'), '/st/?source=test');
     console.log('PASS: ' + manifest.routes.length + ' sayfa, GET/HEAD, yönlendirmeler, görseller ve özel dosya erişimi.');
   } catch (error) { console.error(error); process.exitCode = 1; }
   finally { server.close(); }

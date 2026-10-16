@@ -7,6 +7,7 @@ function Navbar(container) {
   var isOpen = false;
   var modalOpener = null;
   var previousBodyOverflow = '';
+  var modalBackground = [];
 
   // DÜZELTİLDİ: Eksik olan routeHref yardımcı fonksiyonu eklendi
   function routeHref(route) {
@@ -326,6 +327,7 @@ function Navbar(container) {
 
   /* Sayfa İçi Pop-Up Modal Oluşturucu ve Yöneticisi */
   function openContactModal() {
+    if (document.querySelector('#contact-modal.is-visible')) return;
     modalOpener = document.activeElement;
     var modal = document.getElementById('contact-modal');
     
@@ -390,6 +392,10 @@ function Navbar(container) {
 
     requestAnimationFrame(function () {
       previousBodyOverflow = document.body.style.overflow;
+      modalBackground = Array.from(document.body.children).filter(function (element) {
+        return element !== modal && !element.hasAttribute('inert') && !element.matches('script, style, link');
+      });
+      modalBackground.forEach(function (element) { element.setAttribute('inert', ''); });
       modal.removeAttribute('inert');
       modal.classList.add('is-visible');
       document.body.style.overflow = 'hidden';
@@ -407,6 +413,8 @@ function Navbar(container) {
     if (modal) {
       modal.classList.remove('is-visible');
       modal.setAttribute('inert', '');
+      modalBackground.forEach(function (element) { element.removeAttribute('inert'); });
+      modalBackground = [];
       document.body.style.overflow = previousBodyOverflow;
       if (modalOpener && typeof modalOpener.focus === 'function') modalOpener.focus();
     }

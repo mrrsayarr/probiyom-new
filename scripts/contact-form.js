@@ -10,6 +10,7 @@ function ContactForm(container) {
     console.warn("ContactForm konteyneri DOM üzerinde bulunamadı.");
     return;
   }
+  var formId = container.id === 'modal-form-container' ? 'modal-contact-form' : 'contact-form';
 
   var form = {
     fullName: '',
@@ -102,7 +103,7 @@ function ContactForm(container) {
         '<p class="text-muted small lh-relaxed mb-4 max-w-4xl">' +
           'Merak ettiğiniz her konuda bize yazabilir veya arayabilirsiniz. Probiyom Ekibi olarak size yardımcı olmaktan memnuniyet duyarız.' +
         '</p>' +
-        '<form class="contact-form row g-4" id="contact-form">' +
+        '<form class="contact-form row g-4" id="' + formId + '">' +
           '<div class="col-md-6">' +
             '<label class="form-field d-flex flex-column gap-2">' +
               '<span class="small fw-bold text-secondary">Adınız Soyadınız <span class="text-danger">*</span></span>' +
@@ -191,7 +192,7 @@ function ContactForm(container) {
       }
     }
 
-    var formEl = container.querySelector('#contact-form');
+    var formEl = container.querySelector('.contact-form');
     if (formEl) {
       formEl.addEventListener('submit', function (e) {
         e.preventDefault();

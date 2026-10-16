@@ -2,10 +2,11 @@
 
 ## Yerel önizleme
 
-Node.js kurulu olmalıdır. Bu klasörde terminal açıp `npm start` çalıştırın.
+Node.js kurulu olmalıdır. İlk kullanımda `npm install`, ardından bu klasörde `npm start` çalıştırın.
+`npm start`, önizlemeyi açmadan önce güncel içeriklerden otomatik build alır.
 Adres: http://localhost:7076/ — kapatmak için Ctrl+C.
 
-Önizleme için tek dosya `serve.mjs`; Python veya ek paket gerekmez.
+Önizleme sunucusu tek dosya `serve.mjs`; Python veya tarayıcı kurulumu gerekmez.
 Port doluysa `node serve.mjs 7077` kullanın.
 
 ## İçerik ve yayın
@@ -25,4 +26,4 @@ sonunda `/` bulunan adresler, sitemap ve SEO etiketleri korunur.
 
 Kontrol: `node serve.mjs --check`.
 
-Trendyol duyurusu: görseli değiştirmek için `images/trendyol-popup.webp` dosyasını yenileyin. Mağaza bağlantısı ve duyuruyu açma/kapatma ayarı `data/site.js` içindedir. Duyuru aynı sekme oturumunda bir kez açılır.
+Trendyol duyurusu: görseli değiştirmek için `images/trendyol-popup.webp` dosyasını yenileyin. Mağaza bağlantısı ve duyuruyu açma/kapatma ayarı `data/site.js` içindedir. Duyuru her tam sayfa açılışında/yenilemede bir kez açılır; site içindeki menü geçişlerinde tekrarlanmaz.

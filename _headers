@@ -17,6 +17,10 @@
 /index.html
   Cache-Control: public, max-age=60
 
+# Router templates are fragments, not independent search landing pages.
+/pages/*
+  X-Robots-Tag: noindex, follow
+
 # A site-wide gizlilik/UX başlıkları
 /*
   X-Content-Type-Options: nosniff
