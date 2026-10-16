@@ -245,6 +245,8 @@ var PageControllers = (function () {
       injectContactPageSchema();
 
       fillContactDetails('contact');
+      var storeLink = root.querySelector('#contact-store-link');
+      if (storeLink) storeLink.href = SiteData.trendyol;
 
       /* Map */
       var mapEl = root.querySelector('#contact-map');

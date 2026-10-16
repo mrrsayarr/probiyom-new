@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "build": "node scripts/build-seo.cjs",
+    "prestart": "npm run build",
     "start": "node serve.mjs"
   },
   "devDependencies": {
