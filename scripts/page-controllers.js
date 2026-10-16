@@ -141,7 +141,7 @@ var PageControllers = (function () {
         element.href = (field === 'phone' ? 'tel:' : 'mailto:') + SiteData[field];
         element.textContent = SiteData[field];
       });
-      ['instagram', 'x', 'linkedin', 'youtube'].forEach(function (field) {
+      ['instagram', 'x', 'linkedin', 'youtube', 'trendyol'].forEach(function (field) {
         var element = root.querySelector('#' + prefix + '-' + field);
         if (element) element.href = SiteData[field];
       });

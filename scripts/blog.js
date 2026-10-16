@@ -240,19 +240,30 @@ function BlogList(container, posts, initialIdentifier) {
 
   function getSnippet(text, maxLength) {
     if (!text) return '';
-    var cleanText = text.replace(/<\/?[^>]+(>|$)/g, "");
+    var cleanText = text.replace(/<\/?[^>]+(>|$)/g, "").replace(/\*\*([^\n*]+)\*\*/g, '$1');
     if (cleanText.length <= maxLength) return cleanText;
     return cleanText.substring(0, maxLength).trim() + '...';
   }
 
   function formatBlogInline(text) {
-    // Keep authored links to local pages, without allowing scripts or arbitrary attributes.
-    return formatText(text).replace(
-      /&lt;a href=&quot;(\/[a-z0-9/_-]+)&quot;&gt;([\s\S]*?)&lt;\/a&gt;/gi,
-      function (match, href, label) {
-        return '<a href="' + escapeAttr(href) + '">' + label + '</a>';
+    // Rebuild authored anchors; never copy arbitrary attributes or unsafe protocols.
+    return text.split(/(<a\b[^>]*>[\s\S]*?<\/a>)/gi).map(function (part) {
+      var link = part.match(/^<a\s+href=(["'])(.*?)\1[^>]*>([\s\S]*?)<\/a>$/i);
+      if (!link) return formatText(part);
+      var href = link[2];
+      var label = formatText(link[3]);
+      if (/^#\/?[a-z0-9/_-]+$/i.test(href)) href = SiteRoutes.href(href.replace(/^#\/?/, ''));
+      if (/^\/(?:[a-z0-9_-]+\/?)*$/i.test(href)) {
+        return '<a href="' + escapeAttr(SiteRoutes.href(href)) + '">' + label + '</a>';
       }
-    );
+      if (/^https?:\/\/[^\s<>"']+$/i.test(href)) {
+        try {
+          href = new URL(href).href;
+          return '<a href="' + escapeAttr(href) + '" target="_blank" rel="noopener noreferrer">' + label + '</a>';
+        } catch (error) { /* Invalid URLs render as plain text. */ }
+      }
+      return label;
+    }).join('');
   }
 
   function formatBlogText(text) {

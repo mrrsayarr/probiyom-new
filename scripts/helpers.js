@@ -27,6 +27,7 @@ function escapeAttr(str) {
 function formatText(str) {
   if (!str) return '';
   return escapeHtml(str)
+    .replace(/\*\*([^\n*]+)\*\*/g, '<strong>$1</strong>')
     .replace(/&lt;(\/?)(strong|em|u)&gt;/g, '<$1$2>')
     .replace(/&lt;br\s*\/?&gt;/g, '<br>');
 }

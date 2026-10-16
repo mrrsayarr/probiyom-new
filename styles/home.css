@@ -23,8 +23,6 @@
   .home-certificates--left img:nth-child(2) { transform: translateX(12px) rotate(-8deg); }
   .home-certificates--right img:first-child { transform: rotate(7deg); }
 }
-.home-opening h1 { font-size: clamp(1.5rem, 3vw, 2.5rem); line-height: 1.2; margin: 1.5rem 0 .75rem; color: var(--color-baltic-blue); }
-.home-opening__intro { max-width: 70ch; color: #475569; line-height: 1.7; margin: 0; }
 
 /* Restored comparison section, with a single-column reading order on small screens. */
 .protection-comparison { padding: clamp(32px, 5vw, 64px) 0; }
@@ -142,4 +140,36 @@
   .home-opening { padding-block: .5rem 1.5rem; }
   #home-slider .slider-wrapper--controls-top-right .slider-control-dock { gap: .1rem; padding: .25rem .3rem; border-radius: 12px; }
   #home-slider .slider-wrapper--controls-top-right .dock-counter { min-width: 2.85rem; font-size: .72rem; }
+}
+
+/* Phone-only opening: full-width artwork and a closer reading section. */
+@media (max-width: 575.98px) {
+  .home-opening { padding-block: 0; margin-top: -1rem; }
+  #home-slider { position: relative; left: 50%; width: 100vw; margin-left: -50vw; }
+  #home-slider .slider-wrapper--controls-top-right .slider-frame {
+    border: 0; border-radius: 0; box-shadow: none;
+  }
+  #home-slider .slider-image-container { aspect-ratio: 16 / 9; }
+  #home-slider .slider-wrapper--controls-top-right .slider-dock-container { margin-top: 10px; }
+  #home-slider .slider-wrapper--controls-top-right .slider-control-dock {
+    gap: 0; padding: 2px 6px; border: 1px solid #e3ebef; border-radius: 999px;
+    background: #fff; color: var(--color-baltic-blue); box-shadow: 0 4px 12px rgb(34 87 122 / 7%);
+  }
+  #home-slider .slider-wrapper--controls-top-right .dock-btn,
+  #home-slider .slider-wrapper--controls-top-right .dock-counter { color: var(--color-baltic-blue); }
+  #home-slider .slider-wrapper--controls-top-right .dock-btn { border-radius: 50%; }
+  #home-slider .slider-wrapper--controls-top-right .dock-btn:hover,
+  #home-slider .slider-wrapper--controls-top-right .dock-btn:focus-visible { background: #eef5f7; color: var(--color-baltic-blue); }
+  .home-opening + .page-section {
+    padding-top: 24px !important; padding-bottom: 24px !important;
+    margin-top: 0 !important; margin-bottom: 24px !important;
+    margin-inline: calc((100% - 100vw) / 2 + 20px);
+  }
+  .home-opening + .page-section > .container { padding-inline: 0; }
+  .home-opening + .page-section .row { --bs-gutter-y: 1.5rem; }
+  .home-opening + .page-section #home-title {
+    font-size: clamp(1.65rem, 6.4vw, 1.95rem) !important;
+    line-height: 1.22 !important; text-wrap: balance;
+  }
+  .home-opening + .page-section p { line-height: 1.7; }
 }

@@ -21,5 +21,6 @@
     if (mainContainer) {
       Router.init(mainContainer);
     }
+    StoreAnnouncement.init();
   });
 })();

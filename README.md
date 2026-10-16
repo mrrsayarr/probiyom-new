@@ -24,3 +24,5 @@ yönlendirmeler `scripts/seo-worker.mjs` içindedir. Eski `/#blog/...` bağlant�
 sonunda `/` bulunan adresler, sitemap ve SEO etiketleri korunur.
 
 Kontrol: `node serve.mjs --check`.
+
+Trendyol duyurusu: görseli değiştirmek için `images/trendyol-popup.webp` dosyasını yenileyin. Mağaza bağlantısı ve duyuruyu açma/kapatma ayarı `data/site.js` içindedir. Duyuru aynı sekme oturumunda bir kez açılır.

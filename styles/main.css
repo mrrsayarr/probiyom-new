@@ -155,14 +155,15 @@ p { font-size: 1.05rem; line-height: 1.75; font-weight: 400; }
 header.app-header, .app-header { position: sticky !important; top: 0 !important; width: 100% !important; z-index: 10000 !important; background: transparent !important; border: none !important; box-shadow: none !important; }
 #navbar-container { background: transparent !important; border: none !important; box-shadow: none !important; width: 100% !important; }
 .navbar {
-  position: relative; top: 0; left: 0; right: 0; width: 100%; z-index: 10000 !important;
-  padding: 0.85rem 0; background: var(--color-baltic-blue); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative; top: 0; left: 0; right: 0; width: 100%; max-width: 100%; margin: 0 auto; z-index: 10000 !important;
+  padding: 0.85rem 0; background: var(--color-baltic-blue); border: 1px solid transparent; border-radius: 0; transform: translateY(0);
+  transition: width 360ms cubic-bezier(.22, 1, .36, 1), max-width 360ms cubic-bezier(.22, 1, .36, 1), transform 360ms cubic-bezier(.22, 1, .36, 1), border-radius 360ms cubic-bezier(.22, 1, .36, 1), padding 360ms cubic-bezier(.22, 1, .36, 1), box-shadow 360ms ease-out, background-color 240ms ease-out, border-color 240ms ease-out;
 }
 .navbar.is-scrolled {
-  position: relative; top: 1rem; width: 92%; max-width: 1200px; margin: 0 auto;
+  top: 0; width: 92%; max-width: 1200px; transform: translateY(12px);
   border-radius: 50px; background: rgba(34,87,122,0.92) !important;
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15); border-color: rgba(255,255,255,0.12);
   padding-left: 1rem !important; padding-right: 1rem !important;
 }
 .navbar-brand { color: #fff; transition: opacity 0.2s ease; z-index: 10000 !important; }
@@ -237,6 +238,44 @@ header.app-header, .app-header { position: sticky !important; top: 0 !important;
 .mobile-fab-socials a:hover, .mobile-fab-socials a:focus-visible { background: var(--color-baltic-blue); color: #fff; }
 .mobile-fab-socials a:active { transform: scale(0.95); background: var(--color-baltic-blue); color: #fff; }
 .fab-icon-switcher { display: inline-flex; align-items: center; }
+.mobile-fab-menu { width: 272px; }
+.mobile-fab-socials { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; padding: 0; }
+.mobile-fab-socials .trendyol-social-link { color: #c45310; background: #fff3e9; }
+.mobile-fab-socials a.trendyol-social-link svg { fill: currentColor; }
+.footer-social-icons { flex-wrap: wrap; }
+@media (min-width: 1200px) {
+  .mobile-fab-container { top: 50%; bottom: auto; left: 0; transform: translateY(-50%); }
+  .mobile-fab-trigger { display: none; }
+  .mobile-fab-menu { position: static; width: 60px; padding: 8px; border-radius: 0 18px 18px 0; background: #5a6b7a; border: 0; box-shadow: 0 8px 24px rgb(15 23 42 / 13%); }
+  .mobile-fab-menu .social-dock-heading,
+  .mobile-fab-menu .mobile-fab-cta-btn,
+  .mobile-fab-menu .mobile-fab-divider { display: none; }
+  .mobile-fab-socials { display: flex; flex-direction: column; gap: 6px; }
+  .mobile-fab-socials a { border-radius: 50%; color: #fff; background: linear-gradient(135deg, #57cc99, #22577a); }
+  .mobile-fab-socials .trendyol-social-link { background: #f27a1a; color: #fff; }
+  .mobile-fab-socials a:hover, .mobile-fab-socials a:focus-visible { background: #22577a; }
+}
+
+/* Store launch announcement. The native dialog supplies focus trapping and Escape. */
+.store-announcement { width: min(820px, calc(100vw - 32px)); max-width: none; max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px); margin: auto; padding: 0; border: 0; border-radius: 22px; background: #fff; color: var(--color-text); overflow-y: auto; box-shadow: 0 24px 80px rgb(15 23 42 / 24%); }
+.store-announcement::backdrop { background: rgb(15 23 42 / 58%); backdrop-filter: blur(3px); }
+.store-announcement__layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.store-announcement__close { position: absolute; top: 12px; right: 12px; z-index: 1; width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid #dce5eb; border-radius: 50%; background: #fff; color: #22577a; }
+.store-announcement__close svg, .store-announcement__link svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.store-announcement__visual { min-width: 0; background: #eaf4ef; }
+.store-announcement__visual img { display: block; width: 100%; height: 100%; min-height: 460px; object-fit: cover; object-position: center 65%; }
+.store-announcement__content { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 64px 36px 36px; }
+.store-announcement__brand { font-size: .8rem; font-weight: 700; color: #b64d11; }
+.store-announcement h2 { margin: 16px 0; font-size: clamp(1.8rem, 3vw, 2.4rem); line-height: 1.15; color: #22577a; letter-spacing: -.025em; }
+.store-announcement p { margin: 0 0 24px; font-size: 1rem; line-height: 1.7; color: #52647a; }
+.store-announcement__link { width: 100%; min-height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 16px; border-radius: 10px; background: #f27a1a; color: #172a3a; font-size: .9rem; font-weight: 700; text-align: center; }
+.store-announcement__link:hover { background: #e76c0b; }
+.store-announcement__continue { align-self: center; min-height: 44px; margin-top: 8px; padding: 8px 16px; color: #52647a; font-size: .9rem; text-decoration: underline; text-underline-offset: 4px; }
+@media (max-width: 639px) {
+  .store-announcement__layout { grid-template-columns: minmax(0, 1fr); }
+  .store-announcement__visual img { height: clamp(220px, 65vw, 300px); min-height: 0; object-position: center 68%; }
+  .store-announcement__content { padding: 24px; }
+}
 
 /* ===== Footer ===== */
 .footer { width: 100%; background: linear-gradient(180deg, var(--color-baltic-blue) 0%, #0f172a 100%); border-top: 1px solid rgba(255,255,255,0.08); }
@@ -590,3 +629,42 @@ html, body { overflow-x: clip !important; }
 @keyframes loaderBar { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 .pulse-animation { animation: pulseLogo 1.4s infinite ease-in-out; }
 .loader-progress-bar { animation: loaderBar 1.2s infinite ease-in-out; }
+
+/* Supplied Trendyol mark keeps its original orange on a neutral surface. */
+.trendyol-brand-icon { display: block; width: 28px; height: 28px; object-fit: contain; flex-shrink: 0; }
+.mobile-fab-socials .trendyol-social-link, .social-icon-btn.trendyol-social-link, .contact-social-btn.trendyol-social-link { background: #fff !important; }
+
+/* Compact social motion: hover feedback and five mobile brand frames. */
+.mobile-fab-socials a { transition: background-color 180ms ease, transform 220ms cubic-bezier(.22,1,.36,1), box-shadow 220ms ease; }
+.mobile-fab-socials a svg, .mobile-fab-socials a img { transition: transform 220ms cubic-bezier(.22,1,.36,1); }
+.fab-icon-switcher { position: relative; width: 28px; height: 28px; }
+.fab-brand-frame { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; animation: fab-brand-cycle 15s infinite; }
+.fab-brand-frame svg { width: 22px; height: 22px; }
+.fab-brand-frame--trendyol { border-radius: 50%; background: #fff; }
+.mobile-fab-trigger[aria-expanded="true"] .fab-brand-frame { animation-play-state: paused; }
+@keyframes fab-brand-cycle {
+  0% { opacity: 0; transform: translateY(5px) scale(.9); }
+  3%, 16% { opacity: 1; transform: translateY(0) scale(1); }
+  20%, 100% { opacity: 0; transform: translateY(-5px) scale(.9); }
+}
+@media (hover: hover) and (pointer: fine) {
+  .mobile-fab-socials a:hover, .mobile-fab-socials a:focus-visible { transform: translateY(-3px) scale(1.06); box-shadow: 0 5px 12px rgb(15 23 42 / 18%); }
+  .mobile-fab-socials a:hover svg, .mobile-fab-socials a:hover img { transform: rotate(-6deg); }
+  .mobile-fab-trigger:hover { transform: translateY(-3px); }
+}
+@media (min-width: 1200px) and (hover: hover) and (pointer: fine) {
+  .mobile-fab-socials a:hover, .mobile-fab-socials a:focus-visible { transform: translateX(4px) scale(1.06); }
+}
+/* FAQ refinement keeps the existing questions and accordion behavior. */
+.faq-question { text-align: left; line-height: 1.55; min-height: 72px; }
+.faq-question > span:first-child { flex: 1; }
+.faq-question:focus-visible { outline: 3px solid var(--color-tropical-teal); outline-offset: -3px; border-radius: inherit; }
+.faq-item.is-open { border-color: rgba(34,87,122,.25) !important; }
+.faq-item.is-open .faq-question { background: #f3f8fa !important; }
+.faq-answer-inner { margin: 0 24px; padding: 18px 0 24px !important; }
+.faq-answer-inner p { max-width: 75ch; }
+@media (max-width: 768px) { .faq-answer-inner { margin-inline: 16px; } }
+@media (prefers-reduced-motion: reduce) {
+  .fab-brand-frame { animation: none !important; opacity: 0; transform: none; }
+  .fab-brand-frame:first-child { opacity: 1; }
+}
